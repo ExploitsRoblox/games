@@ -1,62 +1,253 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EpikGames</title>
+    <title>EpikGames | Jogos</title>
     <style>
-        body{
-            background-image: url('background.png');
-            background-repeat: no-repeat;
-            background-size: cover;
+        :root {
+            --sidebar-width: 300px;
+            --bg-dark: #0f172a;
+            --sidebar-bg: #1e293b;
+            --accent-color: #00d4ff;
+            --text-color: #f8fafc;
+            --card-bg: #1e293b;
         }
-        h1{
-            color: white;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            font-size: 48px;
-        }
-        a {
-         animation: rainbow 5s infinite;
-         color: white;
-         text-align: center;
-         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-         font-size: 50px;
-    }
 
-    @keyframes rainbow {
-      0%   { color: red; }
-      16%  { color: orange; }
-      32%  { color: yellow; }
-      48%  { color: green; }
-      64%  { color: blue; }
-      80%  { color: indigo; }
-      100% { color: violet; }
-    }
-</style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- Barra Lateral --- */
+        #sidebar {
+            position: fixed;
+            left: calc(-1 * var(--sidebar-width));
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100%;
+            background: var(--sidebar-bg);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            z-index: 1000;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #sidebar.active { left: 0; }
+
+        .search-container { margin-top: 60px; margin-bottom: 20px; }
+
+        #searchBox {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: #334155;
+            color: white;
+            outline: none;
+        }
+
+        /* --- Lista da Sidebar --- */
+        .game-list { list-style: none; padding: 0; }
+        .game-item { margin-bottom: 8px; }
+        .game-item a {
+            color: #cbd5e1;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+        .game-item a:hover { background: var(--accent-color); color: #000; }
+
+        /* --- Conteúdo Principal --- */
+        main {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: 0.4s;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            background: var(--accent-color);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1001;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #ff0000, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200%;
+            animation: flow 5s linear infinite;
+        }
+
+        @keyframes flow { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+
+        /* --- Grid de Cards com Imagens --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 15px;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            border-color: var(--accent-color);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .game-card span {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
-    <h1>EpikGames</h1>
-    <div id="games">
-        <div id="gdclicker">
-            <li><a href="https://exploitsroblox.github.io/gdclicker">Clicker De Geometry Dash</a></li>
+
+    <button class="toggle-btn" onclick="toggleSidebar()">☰ MENU</button>
+
+    <nav id="sidebar">
+        <div class="search-container">
+            <input type="text" id="searchBox" placeholder="Buscar jogo..." onkeyup="filterGames()">
         </div>
-        <div id="undertale">
-            <li><a href="https://exploitsroblox.github.io/undertale">Undertale Barato</a></li>
+        <ul class="game-list" id="sideList">
+            <li class="game-item" data-name="Geometry Dash Clicker"><a href="https://exploitsroblox.github.io/gdclicker">Geometry Dash Clicker</a></li>
+            <li class="game-item" data-name="Undertale Barato"><a href="https://exploitsroblox.github.io/undertale">Undertale Barato</a></li>
+            <li class="game-item" data-name="Jogo de UFO"><a href="https://exploitsroblox.github.io/ufo">Jogo de UFO</a></li>
+            <li class="game-item" data-name="Wave Game"><a href="https://exploitsroblox.github.io/wave">Wave Game</a></li>
+            <li class="game-item" data-name="Slither.io"><a href="https://exploitsroblox.github.io/snake">Slither.io</a></li>
+            <li class="game-item" data-name="Level Devil"><a href="https://exploitsroblox.github.io/LevelDevil">Level Devil</a></li>
+            <li class="game-item" data-name="Tomb Of the Mask"><a href="https://exploitsroblox.github.io/totm">Tomb Of the Mask</a></li>
+            <li class="game-item" data-name="Geometry Dash Lite"><a href="https://exploitsroblox.github.io/gdl">Geometry Dash Lite</a></li>
+            <li class="game-item" data-name="Among Us"><a href="https://exploitsroblox.github.io/amongus">Among Us</a></li>
+            <li class="game-item" data-name="FNAF 4"><a href="https://exploitsroblox.github.io/fnaf">FNAF 4</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>EpikGames</h1>
+
+        <div class="grid-container" id="gameGrid">
+            <a href="https://exploitsroblox.github.io/gdclicker" class="game-card" data-name="Geometry Dash Clicker">
+                <img src="gdclicker.png" alt="GD Clicker">
+                <span>GD Clicker</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/undertale" class="game-card" data-name="Undertale Barato">
+                <img src="undertale.png" alt="Undertale">
+                <span>Undertale Barato</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/ufo" class="game-card" data-name="Jogo de UFO">
+                <img src="ufo.png" alt="UFO">
+                <span>Jogo de UFO</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/wave" class="game-card" data-name="Wave Game">
+                <img src="wave.png" alt="Wave">
+                <span>Wave Game</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/snake" class="game-card" data-name="Slither.io">
+                <img src="snake.png" alt="Slither">
+                <span>Slither.io</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/LevelDevil" class="game-card" data-name="Level Devil">
+                <img src="leveldevil.png" alt="Level Devil">
+                <span>Level Devil</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/totm" class="game-card" data-name="Tomb Of the Mask">
+                <img src="tomt.png" alt="Tomb Of the Mask">
+                <span>Tomb Of the Mask</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/gdl" class="game-card" data-name="Geometry Dash Lite">
+                <img src="geoemetrydash.png" alt="Geometry Dash Lite">
+                <span>Geometry Dash Lite</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/amongus" class="game-card" data-name="Among Us">
+                <img src="amongus.png" alt="Among Us">
+                <span>Among Us</span>
+            </a>
+
+            <a href="https://exploitsroblox.github.io/fnaf" class="game-card" data-name="FNAF 4">
+                <img src="fnaf.png" alt="FNAF 4">
+                <span>FNAF 4</span>
+            </a>
+           
         </div>
-        <div id="ufo">
-            <li><a href="https://exploitsroblox.github.io/ufo">Jogo Legal de Ufo</a></li>
-        </div>
-        <div id="wave">
-            <li><a href="https://exploitsroblox.github.io/wave">Jogo Wave</a></li>
-        </div>
-        <div id="snake">
-            <li><a href="https://exploitsroblox.github.io/snake">Slither.io</a></li>
-        </div>
-        <div id="lvd">
-            <li><a href="https://exploitsroblox.github.io/LevelDevil">Level Devil</a></li>
-        </div>
-    </div>
-    
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function filterGames() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            
+            // Filtra os cards na página principal
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                card.classList.toggle('hidden', !name.includes(query));
+            });
+
+            // Filtra os itens na barra lateral
+            const listItems = document.querySelectorAll('.game-item');
+            listItems.forEach(item => {
+                const name = item.getAttribute('data-name').toLowerCase();
+                item.classList.toggle('hidden', !name.includes(query));
+            });
+        }
+    </script>
 </body>
 </html>
