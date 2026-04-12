@@ -9,7 +9,7 @@ app.use(cors());
 
 // 1. CONEXÃO COM O BANCO DE DADOS
 // Substitua 'SEU_USUARIO', 'SUA_SENHA' e o 'LINK_DO_CLUSTER' pelo que você copiou do MongoDB
-const dbURI = "mongodb+srv://supergodmodeo_db_user:QE47pW7qv5IEAPjE@nexusgames.96iuubq.mongodb.net/?appName=nexusgames";
+const dbURI = "mongodb+srv://Admin:cleusaaposentou@nexusgames.96iuubq.mongodb.net/?appName=nexusgames";
 
 mongoose.connect(dbURI)
   .then(() => console.log("✅ Conectado ao MongoDB Atlas!"))

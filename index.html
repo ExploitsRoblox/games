@@ -970,22 +970,42 @@
                 localStorage.setItem('backup', JSON.stringify(localStorage));
                 console.log('Dados salvos!');
         }, 5000);
+
+        const API_URL = "https://login-g50h.onrender.com";
+
         async function carregarBackup() {
-  const usuario = localStorage.getItem("usuarioLogado");
-  if (!usuario) return;
+  const token = localStorage.getItem("token");
+  if (!token) return alert("Você precisa estar logado!");
 
-  const res = await fetch(`/carregarBackup?usuario=${usuario}`);
-  const dados = await res.json();
-
-  // Restaura no localStorage
-  for (const chave in dados) {
-    localStorage.setItem(chave, dados[chave]);
+  const res = await fetch(`${API_URL}/carregarBackup`, {
+    headers: { "Authorization": `Bearer ${token}` }
+  });
+  const resposta = await res.json();
+  if (resposta.ok) {
+    for (const chave in resposta.dados) {
+      localStorage.setItem(chave, resposta.dados[chave]);
+    }
+    console.log("Backup restaurado!");
+  } else {
+    console.log("Nenhum backup encontrado.");
   }
-  console.log("Backup carregado do servidor!");
 }
+async function salvarBackup() {
+  const token = localStorage.getItem("token");
+  if (!token) return alert("Você precisa estar logado!");
 
-carregarBackup();
-
+  const dados = { ...localStorage };
+  const res = await fetch(`${API_URL}/salvarBackup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ dados })
+  });
+  const resposta = await res.json();
+  console.log(resposta.mensagem);
+}
     </script>
 </body>
 </html>
