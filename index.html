@@ -928,6 +928,7 @@
                 // Mostrar botão de logout
                 authBtn.textContent = '🚪 SAIR';
                 authBtn.onclick = function() {
+                    salvarBackup(); // Salva backup antes de sair
                     localStorage.clear();
                     location.reload();
                 };
@@ -956,6 +957,7 @@
             // Verificar se há usuário logado e mostrar nome acima do logo
             const usuario = localStorage.getItem('usuarioLogado');
             if (usuario) {
+                carregarBackup(); // Carrega backup do usuário logado
                 const titleDiv = document.getElementById('title');
                 const userName = document.createElement('h3');
                 userName.textContent = `Bem-vindo, ${usuario}!`;
