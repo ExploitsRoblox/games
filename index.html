@@ -1115,7 +1115,8 @@ function perguntarSave() {
 
             // Verificar se há usuário logado e mostrar nome acima do logo
             const usuario = localStorage.getItem('usuarioLogado');
-            if (usuario) {
+            const token = localStorage.getItem('token');
+            if (usuario && token) {
                 const titleDiv = document.getElementById('title');
                 const userName = document.createElement('h3');
                 userName.textContent = `Bem-vindo, ${usuario}!`;
