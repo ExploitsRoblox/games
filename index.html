@@ -80,7 +80,7 @@
     
     /* Aplicamos a animação que você já criou */
     animation: flow 3s linear infinite;
-    z-index: 9999;
+    z-index: 2;
     
     transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -167,8 +167,8 @@
             font-size: 0.95rem;
             cursor: pointer;
         }
-        .achievements-container {
-             position: fixed;          /* fixa no viewport */
+    .achievements-container {
+    position: fixed;          /* fixa no viewport */
     top: 50%;                 /* posiciona no meio vertical */
     left: 50%;                /* posiciona no meio horizontal */
     transform: translate(-50%, -50%); /* corrige o deslocamento */
@@ -178,8 +178,8 @@
     gap: 15px;
     z-index: 1001;
     background-image: url('ach-bg.png'); /* imagem de fundo temática */
-    padding: 50px;             /* opcional: espaçamento interno */
-    border-radius: 10px;       /* opcional: cantos arredondados */
+    padding: 1000px;             /* opcional: espaçamento interno */
+    border-radius: 0px;       /* opcional: cantos arredondados */
     border: 2px solid #000;
         }
         .achievement {
@@ -191,6 +191,7 @@
             opacity: 0;
             transition: 0.3s;
         }
+
         .achievement.unlocked { opacity: 1; color: var(--gold); }
 
         /* --- Destaque da Semana --- */
@@ -309,7 +310,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
-            z-index: 1001;
+            z-index: 1002;
             color: #000;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: transform 0.2s;
@@ -500,6 +501,9 @@
     <div class="detetiveimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
         <img src="detetive.png" alt="Detetive" >
     </div>
+    <div class="sortudoimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
+        <img src="sortudo.png" alt="Sortudo" >
+    </div>
     <nav id="left-sidebar" class="sidebar">
         <div class="search-container">
             <input type="text" id="searchBox" placeholder="Buscar jogo..." onkeyup="filterGames()">
@@ -527,31 +531,6 @@
 
     <nav id="right-sidebar" class="sidebar">
         <ul class="game-list" id="sideList">
-            <li class="game-item" data-name="Apostilas" data-category="educativo"><a href="https://exploitsroblox.github.io/apostilas">Apostilas</a></li>
-            <li class="game-item" data-name="Geometry Dash Clicker" data-category="arcade"><a href="https://exploitsroblox.github.io/gdclicker">Geometry Dash Clicker</a></li>
-            <li class="game-item" data-name="Undertale Barato" data-category="aventura"><a href="https://exploitsroblox.github.io/undertale">Undertale Barato</a></li>
-            <li class="game-item" data-name="Jogo de UFO" data-category="arcade"><a href="https://exploitsroblox.github.io/ufo">Jogo de UFO</a></li>
-            <li class="game-item" data-name="Wave Game" data-category="arcade"><a href="https://exploitsroblox.github.io/wave">Wave Game</a></li>
-            <li class="game-item" data-name="Slither.io" data-category="multijogador"><a href="https://exploitsroblox.github.io/snake">Slither.io</a></li>
-            <li class="game-item" data-name="Level Devil" data-category="acao"><a href="https://exploitsroblox.github.io/LevelDevil">Level Devil</a></li>
-            <li class="game-item" data-name="Tomb Of the Mask" data-category="aventura"><a href="https://exploitsroblox.github.io/totm">Tomb Of the Mask</a></li>
-            <li class="game-item" data-name="Geometry Dash Lite" data-category="arcade"><a href="https://exploitsroblox.github.io/gdl">Geometry Dash Lite</a></li>
-            <li class="game-item" data-name="Among Us" data-category="multijogador"><a href="https://exploitsroblox.github.io/amongus">Among Us</a></li>
-            <li class="game-item" data-name="FNAF 4" data-category="horror"><a href="https://exploitsroblox.github.io/fnaf">FNAF 4</a></li>
-            <li class="game-item" data-name="Subway Surfers" data-category="arcade">
-            <a href="https://exploitsroblox.github.io/subway">Subway Surfers</a></li>
-            <li class="game-item" data-name="Super Mario 64" data-category="aventura"><a href="https://exploitsroblox.github.io/sm64/sm64">Super Mario 64</a></li>
-            <li class="game-item" data-name="Snow Rider 3D" data-category="arcade"><a href="https://exploitsroblox.github.io/snowrider">Snow Rider 3D</a></li>
-            <li class="game-item" data-name="Bad Time Simulator" data-category="horror"><a href="http://jcw87.github.io/c2-sans-fight/">Bad Time Simulator</a></li>
-            <li class="game-item" data-name="Talking Ben" data-category="arcade"><a href="https://freak-games-studio.github.io/talking-ben/">Talking Ben</a></li>
-            <li class="game-item" data-name="Minecraft" data-category="aventura"><a href="https://exploitsroblox.github.io/minecraft">Minecraft</a></li>
-            <li class="game-item" data-name="Friday Night Funkin" data-category="ritmo"><a href="https://exploitsroblox.github.io/fnf">Friday Night Funkin</a></li>
-            <li class="game-item" data-name="Granny" data-category="horror"><a href="https://exploitsroblox.github.io/granny">Granny</a></li>
-            <li class="game-item" data-name="Block Blast" data-category="arcade"><a href="https://exploitsroblox.github.io/blockblast">Block Blast</a></li>
-            <li class="game-item" data-name="2 3 4 Player Games" data-category="multijogador"><a href="https://exploitsroblox.github.io/1234players">2 3 4 Players Games</a></li>
-            <li class="game-item secret-hidden" id="side-secret1" data-name="Guloso" data-category="secreto"><a href="https://exploitsroblox.github.io/guloso">SECRETO: Guloso</a></li>
-            <li class="game-item secret-hidden" id="side-secret2" data-name="Flappy Div" data-category="secreto"><a href="https://exploitsroblox.github.io/flappydiv">SECRETO: Flappy Div</a></li>
-            <li class="game-item secret-hidden" id="side-secret3" data-name="Bruno" data-category="secreto"><a href="https://exploitsroblox.github.io/secret">SECRETO: Bruno</a></li>
         </ul>
     </nav>
 
@@ -743,12 +722,13 @@
             <span>🎲</span> ESTOU COM SORTE
         </button>
         <div class="achievements-container" style="display: none;" active="false">
-            <p style="color: var(--text-color); font-size: 1.9rem; font-weight: bold; margin-bottom: 10px;">Suas Conquistas</p>
-            <div class="achievement" id="ach-detetive"><img src="detetive.png" alt="aa"></div>
+            <p style="color: var(--text-color); font-size: 1.9rem; font-weight: bold; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Suas Conquistas</p>
+            <div class="achievement" id="ach-detetive"><img src="detetive2.png" alt="aa"></div>
+            <div class="achievement" id="ach-lucky"><img src="sortudo2.png" alt="aa"></div>
         </div>
-        <div class="atua">
-         <h2>Atualizado Dia 23/03/2026</h2>
-        </div>
+    <div class="atua">
+       <h2 id="updateText"></h2>
+    </div>
     </main>
 
     <script>
@@ -802,7 +782,27 @@
                 }
             });
         }
+       async function atualizarDataCommit() {
+    try {
+        const response = await fetch(`${API_URL}/api/ultimo-commit`);
+        const dataJson = await response.json();
+        const data = new Date(dataJson.date);
 
+        const dia = String(data.getDate()).padStart(2, '0');
+        const mes = String(data.getMonth() + 1).padStart(2, '0');
+        const ano = data.getFullYear();
+        const horas = String(data.getHours()).padStart(2, '0');
+        const minutos = String(data.getMinutes()).padStart(2, '0');
+
+        document.getElementById('updateText').textContent =
+            `Atualizado Dia ${dia}/${mes}/${ano}, às ${horas}:${minutos}`;
+    } catch (error) {
+        console.error("Erro ao buscar commit:", error);
+    }
+}
+
+
+atualizarDataCommit();
         // --- SISTEMA DE CÓDIGOS ---
         const DATABASE_CODES = {
             "GULOSO": "secret1",
@@ -834,24 +834,71 @@
                 feedback.style.display = "block";
             }
         }
-        function toggleAchievements() {
+       function toggleAchievements() {
+      const container = document.querySelector('.achievements-container');
+    const isActive = container.getAttribute('active') === "true";
+
+    if (!isActive) {
+        achFadeIn();
+        container.style.display = 'none'; // Começa escondido para a animação
+        setInterval(() => {
+            container.style.display = 'block';
+        }, 300);
+    } else {
+       achFadeOut();
+       setInterval(() => {
+        container.style.display = 'block';
+       }, 300);
+    }
+
+    container.setAttribute('active', (!isActive).toString());
+}
+        function achFadeIn() {
             const container = document.querySelector('.achievements-container');
-            const isActive = container.getAttribute('active') === "true";
-            container.style.display = isActive ? 'none' : 'block';
-            container.setAttribute('active', (!isActive).toString());
-         }
+            let opacity = 0;
+            const interval = setInterval(() => {
+                opacity += 0.1;
+                container.style.opacity = opacity;
+                if (opacity >= 1) clearInterval(interval);
+            }, 30);
+        }
+        function achFadeOut() {
+            const container = document.querySelector('.achievements-container');
+            let opacity = 1;
+            const interval = setInterval(() => {
+                opacity -= 0.1;
+                container.style.opacity = opacity;
+                if (opacity <= 0) {
+                    clearInterval(interval);
+                    container.style.display = 'none';
+                }
+            }, 30);
+        }
         function checkAchievements() {
             // Detetive
             if (localStorage.getItem('destaque') > 0) {
                 document.getElementById('ach-detetive').classList.add('unlocked');
             }
+            // Sortudo
+            if (localStorage.getItem('lucky_used') == 'true') {
+                document.getElementById('ach-lucky').classList.add('unlocked');
+            }
         }
         function imFeelingLucky() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
             if (cards.length > 0) {
-                const randomCard = cards[Math.floor(Math.random() * cards.length)];
+                if (!localStorage.getItem('lucky_used')) {
+                    sortudoAnimation();
+                    localStorage.setItem('lucky_used', 'true');
+                    setInterval(() => {
+                        const randomCard = cards[Math.floor(Math.random() * cards.length)];
+                        window.location.href = randomCard.href;
+                    }, 3000);
+                } else {
+                    const randomCard = cards[Math.floor(Math.random() * cards.length)];
                 localStorage.setItem('lucky_used', 'true');
                 window.location.href = randomCard.href;
+                }
             }
         }
         function destaque() {
@@ -875,17 +922,7 @@
     }
 }
 
-        function destaqueAnimation() {
-            const banner = document.New
-            banner.style.transition = 'transform 0.5s, box-shadow 0.5s';
-            banner.style.transform = 'scale(1.1)';
-            banner.style.boxShadow = '0 0 40px rgba(255, 215, 0, 0.7)';
-            setTimeout(() => {
-                banner.style.transform = 'scale(1)';
-                banner.style.boxShadow = '0 0 30px rgba(255, 215, 0, 0.2)';
-            }, 500);
-        }
-        function destaqueAnimation() {
+function destaqueAnimation() {
     const detetiveDiv = document.querySelector('.detetiveimg');
 
     if (!detetiveDiv) return;
@@ -903,6 +940,26 @@
     // Depois de 3 segundos, volta para baixo
     setTimeout(() => {
         detetiveDiv.style.transform = 'translate(-50%, 0)';
+    }, 3000);
+}
+function sortudoAnimation() {
+    const sortudoDiv = document.querySelector('.sortudoimg');
+
+    if (!sortudoDiv) return;
+
+    // Define a transição suave
+    sortudoDiv.style.transition = 'transform 0.5s ease-out';
+
+    // Move a div para cima (aparecendo)
+    sortudoDiv.style.transform = 'translate(-50%, -100px)';
+
+    // Toca o som
+    const audio = new Audio('achi.mp3');
+    audio.play();
+
+    // Depois de 3 segundos, volta para baixo
+    setTimeout(() => {
+        sortudoDiv.style.transform = 'translate(-50%, 0)';
     }, 3000);
 }
 
@@ -942,7 +999,55 @@
         }
 
         // Verificar jogos já desbloqueados ao abrir a página
+        // === SINCRONIZAÇÃO AUTOMÁTICA DA LISTA COM O GRID ===
+         function syncGameListWithGrid() {
+    const gameGrid = document.querySelectorAll('.game-card');
+    const sideList = document.getElementById('sideList');
+    
+    // Obter nomes dos jogos que já existem na lista lateral
+    const existingNames = new Set();
+    document.querySelectorAll('.game-item').forEach(item => {
+        existingNames.add(item.getAttribute('data-name'));
+    });
+    
+    // Iterar sobre todos os game-cards e adicionar os que faltam
+    gameGrid.forEach(card => {
+        const gameName = card.querySelector('span').textContent.trim();
+        const gameCategory = card.getAttribute('data-category');
+        const gameHref = card.getAttribute('href');
+        const cardId = card.id; // ex: "secret1", "secret2" etc.
+
+        // Se for secreto, verificar se está desbloqueado
+        if (card.classList.contains('secret-hidden')) {
+            if (localStorage.getItem(cardId) === 'unlocked') {
+                card.classList.remove('secret-hidden'); // mostra o jogo
+            } else {
+                return; // não adiciona na lista lateral
+            }
+        }
+
+        // Se o jogo não existe na lista, adicionar
+        if (!existingNames.has(gameName)) {
+            const listItem = document.createElement('li');
+            listItem.className = 'game-item';
+            listItem.setAttribute('data-name', gameName);
+            listItem.setAttribute('data-category', gameCategory);
+            
+            const link = document.createElement('a');
+            link.href = gameHref;
+            link.textContent = gameName;
+            
+            listItem.appendChild(link);
+            sideList.appendChild(listItem);
+        }
+    });
+}
+
+
         window.onload = function() {
+            // Sincronizar lista com grid automaticamente
+            syncGameListWithGrid();
+            
             Object.values(DATABASE_CODES).forEach(gameId => {
                 if (localStorage.getItem(gameId) === "unlocked") {
                     unlockGame(gameId);
