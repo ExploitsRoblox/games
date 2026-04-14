@@ -1155,8 +1155,12 @@ function sortudoAnimation() {
       localStorage.setItem(chave, resposta.dados[chave]);
     }
     console.log("Backup restaurado!");
+    alert("Backup restaurado!");
+
   } else {
     console.log("Nenhum backup encontrado.");
+    alert("Nenhum backup encontrado.");
+
   }
 }
 async function salvarBackup() {
@@ -1174,6 +1178,7 @@ async function salvarBackup() {
   });
   const resposta = await res.json();
   console.log(resposta.mensagem);
+  alert(resposta.mensagem);
 }
     </script>
 </body>
