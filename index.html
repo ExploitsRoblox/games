@@ -888,20 +888,7 @@ atualizarDataCommit();
        function toggleAchievements() {
       const container = document.querySelector('.achievements-container');
     const isActive = container.getAttribute('active') === "true";
-
-    if (!isActive) {
-        achFadeIn();
-        container.style.display = 'none'; // Começa escondido para a animação
-        setInterval(() => {
-            container.style.display = 'block';
-        }, 300);
-    } else {
-       achFadeOut();
-       setInterval(() => {
-        container.style.display = 'block';
-       }, 300);
-    }
-
+    container.style.display = isActive ? 'none' : 'block';
     container.setAttribute('active', (!isActive).toString());
 }
         function achFadeIn() {
