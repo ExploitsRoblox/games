@@ -1084,7 +1084,6 @@ function perguntarBackup() {
     const resposta = confirm("Deseja carregar o backup?");
     if (resposta) {
         carregarBackup();
-        window.location.reload();
     } else {
        alert("Tudo certo! Não esqueça de salvar seu progresso para manter suas conquistas.");
     }
@@ -1160,6 +1159,7 @@ function perguntarSave() {
     }
     console.log("Backup restaurado!");
     alert("Backup restaurado!");
+    window.location.reload();
 
   } else {
     console.log("Nenhum backup encontrado.");
