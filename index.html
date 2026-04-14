@@ -1076,10 +1076,21 @@ function sortudoAnimation() {
             }
         };
        
-        setTimeout(() => {
-                localStorage.setItem('backup', JSON.stringify(localStorage));
-                console.log('Dados salvos!');
-        }, 5000);
+       setTimeout(() => {
+    const dados = {};
+
+    // Percorre todas as chaves do localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+        const chave = localStorage.key(i);
+        if (chave !== 'backup') { // ignora o próprio backup
+            dados[chave] = localStorage.getItem(chave);
+        }
+    }
+
+    localStorage.setItem('backup', JSON.stringify(dados));
+    console.log('Dados salvos!');
+}, 5000);
+
 
         const API_URL = "https://login-g50h.onrender.com";
 
