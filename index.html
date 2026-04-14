@@ -543,8 +543,8 @@
     <button class="toggle-btn toggle-left" onclick="toggleLeftSidebar()">☰ FILTROS</button>
     <button class="toggle-btn toggle-right" onclick="toggleRightSidebar()">☰ LISTA</button>
     <button class="achievements-btn" onclick="toggleAchievements()">Conquistas</button>
-    <button class="loadbck-btn" onclick="carregarBackup()">Carregar Backup</button>
-    <button class="savebck-btn" onclick="salvarBackup()">Salvar Backup</button>
+    <button class="loadbck-btn" onclick="perguntarBackup()">Carregar Backup</button>
+    <button class="savebck-btn" onclick="perguntarSave()">Salvar Backup</button>
     <button id="authBtn" class="action-btn btn-auth" style="position: fixed; top: 20px; right: 120px;"></button>
     <div class="detetiveimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
         <img src="detetive.png" alt="Detetive" >
@@ -1093,7 +1093,23 @@ function sortudoAnimation() {
     });
 }
 
-
+function perguntarBackup() {
+    const resposta = confirm("Deseja carregar o backup?");
+    if (resposta) {
+        carregarBackup();
+        window.location.reload();
+    } else {
+       alert("Tudo certo! Não esqueça de salvar seu progresso para manter suas conquistas.");
+    }
+}
+function perguntarSave() {
+    const resposta = confirm("Deseja salvar um backup?");
+    if (resposta) {
+        salvarBackup();
+    } else {
+       alert("Tudo certo! Lembre-se de salvar seu progresso para não perder suas conquistas.");
+    }
+}
         window.onload = function() {
             // Sincronizar lista com grid automaticamente
             syncGameListWithGrid();
@@ -1113,7 +1129,6 @@ function sortudoAnimation() {
             // Verificar se há usuário logado e mostrar nome acima do logo
             const usuario = localStorage.getItem('usuarioLogado');
             if (usuario) {
-                carregarBackup(); // Carrega backup do usuário logado
                 const titleDiv = document.getElementById('title');
                 const userName = document.createElement('h3');
                 userName.textContent = `Bem-vindo, ${usuario}!`;
@@ -1121,6 +1136,7 @@ function sortudoAnimation() {
                 userName.style.textAlign = 'center';
                 userName.style.marginBottom = '10px';
                 titleDiv.insertBefore(userName, titleDiv.firstChild);
+                perguntarBackup();
             }
         };
        
