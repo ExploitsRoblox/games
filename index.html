@@ -782,8 +782,10 @@
                 }
             });
         }
+      
        async function atualizarDataCommit() {
     try {
+        const API_URL = "https://login-g50h.onrender.com";
         const response = await fetch(`${API_URL}/api/ultimo-commit`);
         const dataJson = await response.json();
         const data = new Date(dataJson.date);
@@ -803,6 +805,7 @@
 
 
 atualizarDataCommit();
+
         // --- SISTEMA DE CÓDIGOS ---
         const DATABASE_CODES = {
             "GULOSO": "secret1",
