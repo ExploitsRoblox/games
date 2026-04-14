@@ -315,6 +315,52 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: transform 0.2s;
         }
+        .loadbck-btn {
+             background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, 
+                linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box;
+             /* A borda precisa ser transparente para o gradiente de baixo aparecer */
+            border: 2px solid transparent; 
+            border-radius: 8px;
+            /* Aumentamos o tamanho do fundo para a animação ter para onde correr */
+            background-size: 200% 100%;
+            /* Aplicamos a animação que você já criou */
+            animation: flow 3s linear infinite;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: fixed;
+            top: 3%;
+            right: 230px;
+            font-weight: bold;
+            z-index: 1000;
+            color: white;
+            padding: 12px 20px;
+        }
+.loadbck-btn:hover {
+    transform: scale(1.05) translateX(0%); /* O translateX mantém o alinhamento central */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+.savebck-btn:hover {
+    transform: scale(1.05) translateX(0%); /* O translateX mantém o alinhamento central */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+        .savebck-btn {
+           background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, 
+                linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box;
+             /* A borda precisa ser transparente para o gradiente de baixo aparecer */
+            border: 2px solid transparent; 
+            border-radius: 8px;
+            /* Aumentamos o tamanho do fundo para a animação ter para onde correr */
+            background-size: 200% 100%;
+            /* Aplicamos a animação que você já criou */
+            animation: flow 3s linear infinite;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: fixed;
+            top: 3%;
+            right: 390px;
+            font-weight: bold;
+            z-index: 1000;
+            color: white;
+            padding: 12px 20px;
+        }
 
         /* Empurra o conteúdo quando as sidebars estão abertas */
         body.left-active main { margin-left: var(--sidebar-width); }
@@ -497,6 +543,8 @@
     <button class="toggle-btn toggle-left" onclick="toggleLeftSidebar()">☰ FILTROS</button>
     <button class="toggle-btn toggle-right" onclick="toggleRightSidebar()">☰ LISTA</button>
     <button class="achievements-btn" onclick="toggleAchievements()">Conquistas</button>
+    <button class="loadbck-btn" onclick="carregarBackup()">Carregar Backup</button>
+    <button class="savebck-btn" onclick="salvarBackup()">Salvar Backup</button>
     <button id="authBtn" class="action-btn btn-auth" style="position: fixed; top: 20px; right: 120px;"></button>
     <div class="detetiveimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
         <img src="detetive.png" alt="Detetive" >
@@ -988,7 +1036,6 @@ function sortudoAnimation() {
                 // Mostrar botão de logout
                 authBtn.textContent = '🚪 SAIR';
                 authBtn.onclick = function() {
-                    salvarBackup(); // Salva backup antes de sair
                     localStorage.clear();
                     location.reload();
                 };
@@ -1058,6 +1105,7 @@ function sortudoAnimation() {
             });
             filterGames(); // aplica filtro inicial de categorias/pesquisa
             checkAchievements(); // verifica conquistas ao carregar
+            
 
             // Atualizar o botão de autenticação
             updateAuthBtn();
