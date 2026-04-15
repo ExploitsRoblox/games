@@ -1305,7 +1305,9 @@
     text-align: center;
     min-width: 120px;
 }
-
+.leaderboard-reward.silver{
+    background: linear-gradient(135deg, #c0c0c0, #e0e0e0);
+}
 .leaderboard-reward.bronze {
     background: linear-gradient(135deg, #cd7f32, #e8a76a);
 }
@@ -2174,7 +2176,7 @@ function sortudoAnimation() {
                 const tempoHoras = Math.floor(tempo / 60);
                 const tempoMinutos = tempo % 60;
                 
-                const rewardClass = index === 0 ? '' : index === 1 || index === 2 ? 'bronze' : 'other';
+                const rewardClass = index === 0 ? '' : index === 1 ? 'silver' : index === 2 ? 'bronze' : 'other';
                 
                 console.log(`[LEADERBOARD-RENDER] #{posicao} ${nome}: ${tempo}m playtime, ${moedas} moedas`);
                 
