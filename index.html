@@ -54,9 +54,11 @@
             font-size: 0.85rem;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             transition: 0.3s;
             text-transform: uppercase;
+            min-height: 40px;
         }
 
         .action-btn:hover {
@@ -66,50 +68,40 @@
         }
 
         /* Destaque para o botão de Login */
-        .btn-auth {
-    /* Criamos um fundo duplo: o primeiro é a cor do botão, o segundo é o gradiente */
-    background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, 
-                linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box;
-    
-    /* A borda precisa ser transparente para o gradiente de baixo aparecer */
-    border: 2px solid transparent; 
-    border-radius: 8px;
-    
-    /* Aumentamos o tamanho do fundo para a animação ter para onde correr */
-    background-size: 200% 100%;
-    
-    /* Aplicamos a animação que você já criou */
-    animation: flow 3s linear infinite;
-    z-index: 2;
-    
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+        #authBtn {
+            position: fixed !important;
+            top: 20px !important;
+            right: 120px !important;
+            z-index: 999 !important;
+        }
 
-.btn-auth:hover {
-    transform: scale(1.05) translateX(-50%); /* O translateX mantém o alinhamento central */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}.btn-auth {
-    /* Criamos um fundo duplo: o primeiro é a cor do botão, o segundo é o gradiente */
-    background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, 
-                linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box;
-    
-    /* A borda precisa ser transparente para o gradiente de baixo aparecer */
-    border: 2px solid transparent; 
-    border-radius: 8px;
-    
-    /* Aumentamos o tamanho do fundo para a animação ter para onde correr */
-    background-size: 200% 100%;
-    
-    /* Aplicamos a animação que você já criou */
-    animation: flow 3s linear infinite;
-    
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+        #authBtn.btn-auth {
+            background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, 
+                        linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box !important;
+            border: 2px solid transparent !important;
+            border-radius: 8px !important;
+            background-size: 200% 100%;
+            animation: flow 3s linear infinite;
+            padding: 10px 18px !important;
+            font-weight: bold !important;
+            font-size: 0.85rem !important;
+            color: var(--text-color) !important;
+            cursor: pointer !important;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+            min-width: 120px !important;
+            min-height: 40px !important;
+            text-align: center;
+            display: inline-block !important;
+            line-height: 1.5;
+            visibility: visible;
+            pointer-events: auto;
+        }
 
-.btn-auth:hover {
-    transform: scale(1.05) translateX(0%); /* O translateX mantém o alinhamento central */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}
+        #authBtn.btn-auth:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
 
         /* Estilo para a medalha de conquistas */
         /* --- Barras Laterais (Base) --- */
@@ -315,51 +307,667 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: transform 0.2s;
         }
-        .loadbck-btn {
-             background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, 
-                linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box;
-             /* A borda precisa ser transparente para o gradiente de baixo aparecer */
-            border: 2px solid transparent; 
-            border-radius: 8px;
-            /* Aumentamos o tamanho do fundo para a animação ter para onde correr */
-            background-size: 200% 100%;
-            /* Aplicamos a animação que você já criou */
-            animation: flow 3s linear infinite;
-            transition: transform 0.2s, box-shadow 0.2s;
+        
+        /* Painel do Usuário */
+        .user-panel-btn {
             position: fixed;
-            top: 3%;
-            right: 230px;
-            font-weight: bold;
-            z-index: 1000;
+            top: 20px;
+            right: 120px;
+            background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
+                        linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box;
+            border: 2px solid transparent;
+            border-radius: 8px;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 999;
+            background-size: 200% 100%;
+            animation: flow 3s linear infinite;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-.loadbck-btn:hover {
-    transform: scale(1.05) translateX(0%); /* O translateX mantém o alinhamento central */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}
-.savebck-btn:hover {
-    transform: scale(1.05) translateX(0%); /* O translateX mantém o alinhamento central */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-}
-        .savebck-btn {
-           background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, 
-                linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box;
-             /* A borda precisa ser transparente para o gradiente de baixo aparecer */
-            border: 2px solid transparent; 
-            border-radius: 8px;
-            /* Aumentamos o tamanho do fundo para a animação ter para onde correr */
-            background-size: 200% 100%;
-            /* Aplicamos a animação que você já criou */
-            animation: flow 3s linear infinite;
-            transition: transform 0.2s, box-shadow 0.2s;
+        
+        .user-panel-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+        
+        .user-panel-btn img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+        }
+        
+        /* Modal do Painel do Usuário */
+        .user-panel-modal {
+            display: none;
             position: fixed;
-            top: 3%;
-            right: 390px;
+            z-index: 2001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .user-panel-modal.active {
+            display: flex;
+        }
+        
+        .user-panel-content {
+            background: var(--sidebar-bg);
+            width: 400px;
+            height: 100vh;
+            padding: 30px;
+            box-sizing: border-box;
+            border-left: 2px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+        
+        .user-panel-close {
+            align-self: flex-end;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 24px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: color 0.2s;
+        }
+        
+        .user-panel-close:hover {
+            color: var(--error-color);
+        }
+        
+        .user-profile-section {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            margin: 0 auto 15px;
+            cursor: pointer;
+            object-fit: cover;
+            transition: transform 0.2s;
+        }
+        
+        .user-profile-pic:hover {
+            transform: scale(1.05);
+        }
+        
+        #profilePicInput {
+            display: none;
+        }
+        
+        .user-profile-name {
+            font-size: 1.5rem;
             font-weight: bold;
-            z-index: 1000;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+        
+        .user-profile-email {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+        
+        .user-stats-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .user-stats-title {
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .stat-label {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        
+        .stat-value {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .user-actions-section {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .panel-btn {
+            padding: 12px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            text-align: center;
+        }
+        
+        .panel-btn-primary {
+            background: var(--accent-color);
+            color: #000;
+        }
+        
+        .panel-btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 85, 247, 0.3);
+        }
+        
+        .panel-btn-secondary {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+        }
+        
+        .panel-btn-secondary:hover {
+            background: rgba(168, 85, 247, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .panel-btn-danger {
+            background: var(--error-color);
             color: white;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .panel-btn-danger:hover {
+            background: #ff3333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 70, 70, 0.3);
+        }
+        
+        /* Sistema de Moedas */
+        .coins-display {
+            position: fixed;
+            top: 15px;
+            left: 20%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            color: #000;
             padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+            border: 2px solid #ffb800;
+        }
+        
+        .coins-display:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+        }
+        
+        /* Modal da Loja */
+        .shop-modal {
+            display: none;
+            position: fixed;
+            z-index: 2002;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .shop-modal.active {
+            display: flex;
+        }
+        
+        .shop-content {
+            background: var(--sidebar-bg);
+            max-width: 1000px;
+            max-height: 90vh;
+            width: 100%;
+            border-radius: 15px;
+            border: 2px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .shop-header h2 {
+            margin: 0;
+            color: var(--gold);
+            font-size: 1.8rem;
+        }
+        
+        .shop-close {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .shop-close:hover {
+            color: var(--error-color);
+        }
+        
+        .shop-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .shop-item {
+            background: var(--card-bg);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .shop-item:hover {
+            border-color: var(--accent-color);
+            background: rgba(168, 85, 247, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .shop-item-icon {
+            font-size: 2.5rem;
+        }
+        
+        .shop-item-name {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        
+        .shop-item-desc {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            flex-grow: 1;
+        }
+        
+        .shop-item-price {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+        
+        .shop-item-btn {
+            padding: 10px;
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .shop-item-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.05);
+        }
+        
+        .shop-item-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        /* Modal de Recompensas Diárias */
+        .daily-reward-modal {
+            display: none;
+            position: fixed;
+            z-index: 2003;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .daily-reward-modal.active {
+            display: flex;
+        }
+        
+        .daily-reward-content {
+            background: var(--sidebar-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border: 3px solid var(--gold);
+            text-align: center;
+            max-width: 400px;
+            animation: popIn 0.3s ease-out;
+        }
+        
+        @keyframes popIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        .daily-reward-content h2 {
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .daily-reward-content .reward-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .daily-reward-content .reward-amount {
+            color: var(--accent-color);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .daily-reward-content button {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .daily-reward-content button:hover {
+            background: #ffed4e;
+            transform: scale(1.05);
+        }
+        
+        .next-reward-time {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        /* Painel de Admin */
+        .admin-panel-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff0000, #ff8800);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3); }
+            50% { box-shadow: 0 4px 25px rgba(255, 0, 0, 0.6); }
+        }
+        
+        .admin-panel-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .admin-modal {
+            display: none;
+            position: fixed;
+            z-index: 2004;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .admin-modal.active {
+            display: flex;
+        }
+        
+        .admin-content {
+            background: var(--sidebar-bg);
+            max-width: 800px;
+            max-height: 90vh;
+            width: 100%;
+            border-radius: 15px;
+            border: 2px solid #ff0000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideDown 0.3s ease-out;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+            background: rgba(255, 0, 0, 0.1);
+        }
+        
+        .admin-header h2 {
+            margin: 0;
+            color: #ff0000;
+            font-size: 1.8rem;
+        }
+        
+        .admin-close {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .admin-close:hover {
+            color: var(--error-color);
+        }
+        
+        .admin-body {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .admin-section {
+            flex: 1;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-section h3 {
+            color: #ff6666;
+            margin-top: 0;
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 10px;
+        }
+        
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .admin-input {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .admin-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .admin-input:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+        
+        .admin-btn {
+            padding: 10px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .admin-btn:hover {
+            background: #ff3333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        
+        .admin-users-list {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            max-height: 300px;
+        }
+        
+        .admin-user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .admin-user-name {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .admin-user-coins {
+            color: var(--gold);
+        }
+        
+        .admin-user-badge {
+            background: #ff0000;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
         }
 
         /* Empurra o conteúdo quando as sidebars estão abertas */
@@ -537,15 +1145,337 @@
     margin-top: 20px;
 }
 
+/* === LEADERBOARD === */
+.leaderboard-modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+.leaderboard-modal.active {
+    display: flex;
+}
+
+.leaderboard-content {
+    background: var(--sidebar-bg);
+    border: 2px solid var(--gold);
+    border-radius: 15px;
+    padding: 30px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+    animation: slideIn 0.3s ease;
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 15px;
+}
+
+.leaderboard-header h2 {
+    color: var(--gold);
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.leaderboard-close {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 28px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.leaderboard-close:hover {
+    color: var(--error-color);
+    transform: scale(1.1);
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid var(--accent-color);
+    transition: 0.3s;
+}
+
+.leaderboard-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.leaderboard-position {
+    font-size: 1.5rem;
+    font-weight: bold;
+    min-width: 50px;
+    text-align: center;
+    margin-right: 15px;
+}
+
+.leaderboard-position.first {
+    color: #ffd700;
+    font-size: 1.8rem;
+}
+
+.leaderboard-position.second {
+    color: #c0c0c0;
+    font-size: 1.7rem;
+}
+
+.leaderboard-position.third {
+    color: #cd7f32;
+    font-size: 1.6rem;
+}
+
+.leaderboard-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.leaderboard-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    border: 2px solid var(--gold);
+    object-fit: cover;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.leaderboard-name {
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.leaderboard-stats {
+    display: flex;
+    gap: 20px;
+    flex: 0.5;
+}
+
+.leaderboard-time {
+    text-align: center;
+}
+
+.leaderboard-time-label {
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+.leaderboard-time-value {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.leaderboard-reward {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    min-width: 120px;
+}
+
+.leaderboard-reward.bronze {
+    background: linear-gradient(135deg, #cd7f32, #e8a76a);
+}
+
+.leaderboard-reward.other {
+    background: linear-gradient(135deg, #a855f7, #c084fc);
+    color: var(--text-color);
+}
+
+.leaderboard-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.leaderboard-list::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 3px;
+}
+
     </style>
 </head>
 <body>
     <button class="toggle-btn toggle-left" onclick="toggleLeftSidebar()">☰ FILTROS</button>
     <button class="toggle-btn toggle-right" onclick="toggleRightSidebar()">☰ LISTA</button>
     <button class="achievements-btn" onclick="toggleAchievements()">Conquistas</button>
-    <button class="loadbck-btn" onclick="perguntarBackup()">Carregar Backup</button>
-    <button class="savebck-btn" onclick="perguntarSave()">Salvar Backup</button>
-    <button id="authBtn" class="action-btn btn-auth" style="position: fixed; top: 20px; right: 120px;"></button>
+    <div class="coins-display" id="coinsDisplay">💰 0 Moedas</div>
+    <button class="toggle-btn" style="top: 20px; right: 250px;" onclick="openShop()">🛍️ LOJA</button>
+    <button class="toggle-btn" style="top: 20px; right: 350px;" onclick="checkDailyReward()">🎁 RECOMPENSA</button>
+    <button class="toggle-btn" style="top: 20px; right: 510px;" onclick="openLeaderboard()">🏆 LEADERBOARD</button>
+    <button id="adminPanelBtn" class="admin-panel-btn" onclick="openAdminPanel()">🔴 PAINEL ADMIN</button>
+    <button id="authBtn" class="action-btn btn-auth" style="position: fixed; top: 20px; right: 120px; z-index: 999;">🔐 LOGIN</button>
+    <button id="userPanelBtn" class="user-panel-btn" style="display: none;" onclick="toggleUserPanel()"></button>
+    
+    <!-- Modal da Loja -->
+    <div id="shopModal" class="shop-modal" onclick="closeShop(event)">
+        <div class="shop-content" onclick="event.stopPropagation();">
+            <div class="shop-header">
+                <h2>🛍️ Loja de Itens</h2>
+                <button class="shop-close" onclick="closeShop()">✕</button>
+            </div>
+            <div class="shop-items" id="shopItems"></div>
+        </div>
+    </div>
+    
+    <!-- Modal de Recompensas Diárias -->
+    <div id="dailyRewardModal" class="daily-reward-modal" onclick="closeDailyReward(event)">
+        <div class="daily-reward-content" onclick="event.stopPropagation();">
+            <h2>🎉 Recompensa Diária!</h2>
+            <div class="reward-icon">💰</div>
+            <div class="reward-amount" id="rewardAmount">100</div>
+            <p style="color: var(--accent-color); margin-bottom: 20px;">Moedas ganhas!</p>
+            <button onclick="claimDailyReward()">Coletar Recompensa</button>
+            <div class="next-reward-time" id="nextRewardTime"></div>
+        </div>
+    </div>
+    
+    <!-- Modal de Leaderboard -->
+    <div id="leaderboardModal" class="leaderboard-modal" onclick="closeLeaderboard(event)">
+        <div class="leaderboard-content" onclick="event.stopPropagation();">
+            <div class="leaderboard-header">
+                <h2>🏆 LEADERBOARD</h2>
+                <button class="leaderboard-close" onclick="closeLeaderboard()">✕</button>
+            </div>
+            <div class="leaderboard-list" id="leaderboardList">
+                <!-- Carregado dinamicamente -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Admin -->
+    <div id="adminModal" class="admin-modal" onclick="closeAdminPanel(event)">
+        <div class="admin-content" onclick="event.stopPropagation();">
+            <div class="admin-header">
+                <h2>🔴 Painel de Administrador</h2>
+                <button class="admin-close" onclick="closeAdminPanel()">✕</button>
+            </div>
+            <div class="admin-body">
+                <!-- Seção de Gerenciamento de Moedas -->
+                <div class="admin-section">
+                    <h3>💰 Adicionar Moedas</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserCoins" placeholder="Nome do usuário">
+                        <input type="number" class="admin-input" id="adminCoinsAmount" placeholder="Quantidade de moedas" min="1">
+                        <button class="admin-btn" onclick="adminAddCoins()">Adicionar Moedas</button>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">🔓 Desbloquear Jogo</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserGame" placeholder="Nome do usuário">
+                        <select class="admin-input" id="adminGameId">
+                            <option value="">Selecione um jogo secreto</option>
+                            <option value="secret1">Guloso</option>
+                            <option value="secret2">Flappy Div</option>
+                            <option value="secret3">Bruno</option>
+                            <option value="secret4">Jogos Indexados</option>
+                            <option value="secret5">Jogos Flash</option>
+                        </select>
+                        <button class="admin-btn" onclick="adminUnlockGame()">Desbloquear Jogo</button>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">🎁 Adicionar Item</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserItem" placeholder="Nome do usuário">
+                        <select class="admin-input" id="adminItemId">
+                            <option value="">Selecione um item</option>
+                            <option value="all-games">Desbloquear Todos os Jogos</option>
+                            <option value="custom-tag">Tag Personalizada</option>
+                            <option value="new-game">Escolher novo jogo</option>
+                        </select>
+                        <button class="admin-btn" onclick="adminAddItem()">Adicionar Item</button>
+                    </div>
+                </div>
+                
+                <!-- Seção de Gerenciamento de Admins -->
+                <div class="admin-section">
+                    <h3>👑 Promover Admin</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserPromote" placeholder="Nome do usuário">
+                        <button class="admin-btn" onclick="adminPromoteUser()">Definir Como Admin</button>
+                    </div>
+                    
+                    <h3 style="margin-top: 20px;">👥 Listar Usuários</h3>
+                    <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
+                    <div class="admin-users-list" id="adminUsersList"></div>
+                </div>
+                
+                <!-- Seção de Inbox de Compras -->
+                <div class="admin-section">
+                    <h3>📦 Inbox de Compras</h3>
+                    <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Últimas 20 compras da loja</p>
+                    <button class="admin-btn" onclick="adminLoadCompras()">Carregar Compras</button>
+                    <div id="adminComprasList" style="margin-top: 15px; max-height: 300px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal do Painel do Usuário -->
+    <div id="userPanelModal" class="user-panel-modal" onclick="closeUserPanelOnBackground(event)">
+        <div class="user-panel-content" onclick="event.stopPropagation();">
+            <button class="user-panel-close" onclick="closeUserPanel()">✕</button>
+            
+            <div class="user-profile-section">
+                <img id="userProfilePic" class="user-profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23a855f7'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='white'%3E👤%3C/text%3E%3C/svg%3E" alt="Perfil" onclick="document.getElementById('profilePicInput').click()">
+                <input type="file" id="profilePicInput" accept="image/*" onchange="changeProfilePicture(event)">
+                <div class="user-profile-name" id="userNameDisplay">Usuário</div>
+            </div>
+            
+            <div class="user-stats-section">
+                <div class="user-stats-title">📊 Estatísticas</div>
+                <div class="stat-item">
+                    <span class="stat-label">Tempo de Jogo</span>
+                    <span class="stat-value" id="playtimeDisplay">0h 0m</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Conquistas</span>
+                    <span class="stat-value" id="achievementsDisplay">0/2</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Itens Comprados</span>
+                    <span class="stat-value" id="unlockedGamesDisplay">0</span>
+                </div>
+            </div>
+            
+            <div class="user-actions-section">
+                <button class="panel-btn panel-btn-secondary" onclick="perguntarBackup()">📥 Carregar Backup</button>
+                <button class="panel-btn panel-btn-secondary" onclick="perguntarSave()">💾 Salvar Backup</button>
+                <button class="panel-btn panel-btn-danger" onclick="logoutUser()">🚪 SAIR</button>
+            </div>
+        </div>
+    </div>
     <div class="detetiveimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
         <img src="detetive.png" alt="Detetive" >
     </div>
@@ -872,7 +1802,10 @@ atualizarDataCommit();
                 const gameId = DATABASE_CODES[code];
                 unlockGame(gameId);
                 
-                feedback.textContent = "🎉 Jogo Desbloqueado!";
+                // Ganhar moedas ao desbloquear um jogo secreto
+                addCoins(50);
+                
+                feedback.textContent = "🎉 Jogo Desbloqueado! +50 moedas";
                 feedback.className = "success";
                 feedback.style.display = "block";
                 input.value = "";
@@ -928,37 +1861,41 @@ atualizarDataCommit();
                 if (!localStorage.getItem('lucky_used')) {
                     sortudoAnimation();
                     localStorage.setItem('lucky_used', 'true');
+                    addCoins(200);
+                    updateCoinsDisplay();
                     setInterval(() => {
                         const randomCard = cards[Math.floor(Math.random() * cards.length)];
                         window.location.href = randomCard.href;
                     }, 3000);
                 } else {
                     const randomCard = cards[Math.floor(Math.random() * cards.length)];
-                localStorage.setItem('lucky_used', 'true');
-                window.location.href = randomCard.href;
+                    localStorage.setItem('lucky_used', 'true');
+                    window.location.href = randomCard.href;
                 }
             }
         }
         function destaque() {
-    // Incrementa o contador de destaque
-    let valor = parseInt(localStorage.getItem('destaque') || '0');
-    valor++;
-    localStorage.setItem('destaque', valor);
+            // Incrementa o contador de destaque
+            let valor = parseInt(localStorage.getItem('destaque') || '0');
+            valor++;
+            localStorage.setItem('destaque', valor);
 
-    // Checa conquistas
-    checkAchievements();
+            // Checa conquistas
+            checkAchievements();
 
-    // Se for a primeira vez (valor == 1), roda animação e redireciona após 3s
-    if (valor === 1) {
-        destaqueAnimation();
-        setTimeout(() => {
-            window.location.href = 'https://exploitsroblox.github.io/survival';
-        }, 3000);
-    } else {
-        // Caso contrário, redireciona imediatamente
-        window.location.href = 'https://exploitsroblox.github.io/survival';
-    }
-}
+            // Se for a primeira vez (valor == 1), roda animação, ganha moedas e redireciona após 3s
+            if (valor === 1) {
+                addCoins(100);
+                updateCoinsDisplay();
+                destaqueAnimation();
+                setTimeout(() => {
+                    window.location.href = 'https://exploitsroblox.github.io/survival';
+                }, 3000);
+            } else {
+                // Caso contrário, redireciona imediatamente
+                window.location.href = 'https://exploitsroblox.github.io/survival';
+            }
+        }
 
 function destaqueAnimation() {
     const detetiveDiv = document.querySelector('.detetiveimg');
@@ -1015,23 +1952,607 @@ function sortudoAnimation() {
             checkAchievements();
         }
 
-        function updateAuthBtn() {
-            const authBtn = document.getElementById('authBtn');
+        // === SISTEMA DE MOEDAS ===
+        const SHOP_ITEMS = [
+            { id: 'all-games', name: 'Desbloquear Todos os Jogos', desc: 'Desbloqueie todos os jogos secretos', icon: '🔓', price: 300 },
+            { id: 'custom-tag', name: 'Tag Personalizada', desc: 'Uma tag única para o seu perfil', icon: '🏷️', price: 2500 },
+            { id: 'new-game', name: 'Escolher novo jogo', desc: 'Escolha um novo jogo para ser adicionado ao site!', icon: '🎮', price: 10000 },
+        ];
+
+        function getCoins() {
+            return parseInt(localStorage.getItem('userCoins') || '0');
+        }
+
+        function setCoins(amount) {
+            localStorage.setItem('userCoins', amount);
+            updateCoinsDisplay();
+        }
+
+        function addCoins(amount) {
+            const current = getCoins();
+            setCoins(current + amount);
+        }
+
+        function updateCoinsDisplay() {
+            const coins = getCoins();
+            document.getElementById('coinsDisplay').textContent = `💰 ${coins} Moedas`;
+        }
+
+        function initializeShop() {
+            const shopItems = document.getElementById('shopItems');
+            shopItems.innerHTML = '';
+            
+            SHOP_ITEMS.forEach(item => {
+                const owned = localStorage.getItem(`item-${item.id}`) === 'owned';
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'shop-item';
+                itemDiv.innerHTML = `
+                    <div class="shop-item-icon">${item.icon}</div>
+                    <div class="shop-item-name">${item.name}</div>
+                    <div class="shop-item-desc">${item.desc}</div>
+                    <div class="shop-item-price">💰 ${item.price}</div>
+                    <button class="shop-item-btn" onclick="buyItem('${item.id}', ${item.price})" ${owned ? 'disabled' : ''}>
+                        ${owned ? '✓ Possuído' : 'Comprar'}
+                    </button>
+                `;
+                shopItems.appendChild(itemDiv);
+            });
+        }
+
+        function buyItem(itemId, price) {
+            const coins = getCoins();
+            const token = localStorage.getItem('token');
             const usuario = localStorage.getItem('usuarioLogado');
             
+            if (coins < price) {
+                alert('❌ Moedas insuficientes!');
+                return;
+            }
+            
+            if (localStorage.getItem(`item-${itemId}`) === 'owned') {
+                alert('✓ Você já possui este item!');
+                return;
+            }
+            
+            // Encontrar o item para obter o nome
+            const item = SHOP_ITEMS.find(i => i.id === itemId);
+            if (!item) return;
+            
+            setCoins(coins - price);
+            localStorage.setItem(`item-${itemId}`, 'owned');
+            
+            // Registrar compra no backend se logado
+            if (token) {
+                const API_URL = "https://login-g50h.onrender.com";
+                fetch(`${API_URL}/registrar-compra`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        itemId: itemId,
+                        itemNome: item.name,
+                        preco: price
+                    })
+                }).catch(err => console.error('Erro ao registrar compra:', err));
+            }
+            
+            alert('🎉 Item comprado com sucesso!');
+            
+            // Se for tag personalizada, abrir modal para escolher a tag
+            if (itemId === 'custom-tag') {
+                setTimeout(() => {
+                    promptCustomTag();
+                }, 500);
+            }
+            
+            initializeShop();
+            updateUserPanelInfo();
+        }
+
+        function promptCustomTag() {
+            const tag = prompt('Escolha sua tag personalizada (1-10 caracteres):', '');
+            if (tag !== null) {
+                if (tag.length < 1 || tag.length > 10) {
+                    alert('❌ A tag deve ter entre 1 e 10 caracteres!');
+                    return;
+                }
+                
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const API_URL = "https://login-g50h.onrender.com";
+                    fetch(`${API_URL}/definir-tag`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ tag })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        alert(data.mensagem);
+                        localStorage.setItem('userTag', tag);
+                        updateUserPanelInfo();
+                    })
+                    .catch(err => console.error('Erro:', err));
+                }
+            }
+        }
+
+        function openShop() {
+            const modal = document.getElementById('shopModal');
+            modal.classList.add('active');
+            initializeShop();
+        }
+
+        function closeShop(event) {
+            if (event && event.target !== document.getElementById('shopModal')) {
+                return;
+            }
+            const modal = document.getElementById('shopModal');
+            modal.classList.remove('active');
+        }
+
+        // === SISTEMA DE RECOMPENSAS DIÁRIAS ===
+        function checkDailyReward() {
+            const lastClaimDate = localStorage.getItem('lastDailyRewardDate');
+            const today = new Date().toDateString();
+            
+            if (lastClaimDate === today) {
+                alert('⏰ Você já coletou sua recompensa hoje! Volte amanhã.');
+                return;
+            }
+            
+            document.getElementById('dailyRewardModal').classList.add('active');
+        }
+
+        function claimDailyReward() {
+            const today = new Date().toDateString();
+            const rewardAmount = 150;
+            
+            addCoins(rewardAmount);
+            localStorage.setItem('lastDailyRewardDate', today);
+            
+            document.getElementById('dailyRewardModal').classList.remove('active');
+            alert(`🎉 Você ganhou ${rewardAmount} moedas!`);
+            updateUserPanelInfo();
+        }
+
+        function closeDailyReward(event) {
+            if (event && event.target !== document.getElementById('dailyRewardModal')) {
+                return;
+            }
+            document.getElementById('dailyRewardModal').classList.remove('active');
+        }
+
+        // === SISTEMA DE LEADERBOARD ===
+        async function openLeaderboard() {
+            document.getElementById('leaderboardModal').classList.add('active');
+            await loadLeaderboard();
+        }
+
+        function closeLeaderboard(event) {
+            if (event && event.target !== document.getElementById('leaderboardModal')) {
+                return;
+            }
+            document.getElementById('leaderboardModal').classList.remove('active');
+        }
+
+        async function loadLeaderboard() {
+            try {
+                const API_URL = "https://login-g50h.onrender.com";
+                const response = await fetch(`${API_URL}/leaderboard`);
+                const res = await response.json();
+                
+                if (res.ok) {
+                    renderLeaderboard(res.usuarios);
+                } else {
+                    alert('Erro ao carregar leaderboard');
+                }
+            } catch (err) {
+                console.error('Erro:', err);
+                alert('Erro ao conectar ao servidor');
+            }
+        }
+
+        function renderLeaderboard(usuarios) {
+            const leaderboardList = document.getElementById('leaderboardList');
+            leaderboardList.innerHTML = '';
+            
+            usuarios.forEach((user, index) => {
+                const medalEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '📊';
+                const positionClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
+                
+                const tempoHoras = Math.floor(user.tempo_jogo / 60);
+                const tempoMinutos = user.tempo_jogo % 60;
+                
+                const rewardClass = index === 0 ? '' : index === 1 || index === 2 ? 'bronze' : 'other';
+                
+                const item = document.createElement('div');
+                item.className = 'leaderboard-item';
+                item.innerHTML = `
+                    <div class="leaderboard-position ${positionClass}">${medalEmoji} #${user.posicao}</div>
+                    <div class="leaderboard-profile">
+                        <div class="leaderboard-pic">${user.foto_perfil ? `<img src="${user.foto_perfil}" alt="${user.nome}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : '👤'}</div>
+                        <div class="leaderboard-name">${user.nome}</div>
+                    </div>
+                    <div class="leaderboard-stats">
+                        <div class="leaderboard-time">
+                            <div class="leaderboard-time-label">Tempo de Jogo</div>
+                            <div class="leaderboard-time-value">${tempoHoras}h ${tempoMinutos}m</div>
+                        </div>
+                    </div>
+                    <div class="leaderboard-reward ${rewardClass}">
+                        💰 ${user.premio} moedas
+                    </div>
+                `;
+                leaderboardList.appendChild(item);
+            });
+        }
+
+        function updateAuthBtn() {
+            const authBtn = document.getElementById('authBtn');
+            const userPanelBtn = document.getElementById('userPanelBtn');
+            const adminBtn = document.getElementById('adminPanelBtn');
+            const usuario = localStorage.getItem('usuarioLogado');
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            
+            console.log('updateAuthBtn - usuário:', usuario);
+            console.log('updateAuthBtn - isAdmin:', isAdmin);
+            
             if (usuario) {
-                // Mostrar botão de logout
-                authBtn.textContent = '🚪 SAIR';
-                authBtn.onclick = function() {
-                    localStorage.clear();
-                    location.reload();
-                };
+                // Usuário logado: mostrar botão do painel
+                authBtn.style.visibility = 'hidden';
+                authBtn.style.pointerEvents = 'none';
+                userPanelBtn.style.display = 'flex';
+                userPanelBtn.style.visibility = 'visible';
+                
+                // Mostrar botão de admin se for admin
+                if (isAdmin) {
+                    adminBtn.style.display = 'block';
+                } else {
+                    adminBtn.style.display = 'none';
+                }
+                
+                updateUserPanelButton();
+                updateUserPanelInfo();
             } else {
-                // Mostrar botão de login
-                authBtn.textContent = '🔐 LOGIN';
-                authBtn.onclick = function() {
+                // Usuário não logado: mostrar botão de login
+                authBtn.style.visibility = 'visible';
+                authBtn.style.pointerEvents = 'auto';
+                userPanelBtn.style.display = 'none';
+                userPanelBtn.style.visibility = 'hidden';
+                adminBtn.style.display = 'none';
+                
+                // Garantir que mantém as classes CSS
+                authBtn.className = 'action-btn btn-auth';
+                authBtn.innerHTML = '<i>🔐</i> LOGIN';
+                
+                // Log para debug
+                console.log('Botão de login visível. innerHTML:', authBtn.innerHTML);
+                
+                // Adicionar listener de clique
+                authBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Clique no botão LOGIN detectado');
                     window.location.href = 'https://exploitsroblox.github.io/login';
                 };
+            }
+        }
+        
+        function updateUserPanelButton() {
+            const userPanelBtn = document.getElementById('userPanelBtn');
+            const usuario = localStorage.getItem('usuarioLogado');
+            const profilePic = localStorage.getItem('userProfilePic');
+            
+            userPanelBtn.innerHTML = '';
+            
+            // Adicionar foto de perfil se existir
+            if (profilePic) {
+                const img = document.createElement('img');
+                img.src = profilePic;
+                img.style.width = '32px';
+                img.style.height = '32px';
+                img.style.borderRadius = '50%';
+                img.style.border = '2px solid var(--accent-color)';
+                userPanelBtn.appendChild(img);
+            }
+            
+            // Adicionar nome
+            const span = document.createElement('span');
+            span.textContent = usuario?.split(' ')[0] || 'Perfil';
+            userPanelBtn.appendChild(span);
+        }
+        
+        function updateUserPanelInfo() {
+            const usuario = localStorage.getItem('usuarioLogado') || 'Usuário';
+            const profilePic = localStorage.getItem('userProfilePic');
+            const playtime = parseInt(localStorage.getItem('userPlaytime') || '0');
+            
+            // Atualizar foto
+            const profileImg = document.getElementById('userProfilePic');
+            if (profilePic) {
+                profileImg.src = profilePic;
+            }
+            
+            // Atualizar nome
+            document.getElementById('userNameDisplay').textContent = usuario;
+            
+            // Calcular tempo de jogo em horas e minutos
+            const horas = Math.floor(playtime / 60);
+            const minutos = playtime % 60;
+            document.getElementById('playtimeDisplay').textContent = `${horas}h ${minutos}m`;
+            
+            // Contar conquistas desbloqueadas
+            const ach1 = localStorage.getItem('ach-detetive') ? 1 : 0;
+            const ach2 = localStorage.getItem('ach-lucky') ? 1 : 0;
+            const totalAch = ach1 + ach2;
+            document.getElementById('achievementsDisplay').textContent = `${totalAch}/2`;
+            
+            // Contar itens comprados
+            let ownedItems = 0;
+            SHOP_ITEMS.forEach(item => {
+                if (localStorage.getItem(`item-${item.id}`) === 'owned') {
+                    ownedItems++;
+                }
+            });
+            document.getElementById('unlockedGamesDisplay').textContent = ownedItems.toString();
+        }
+        
+        function toggleUserPanel() {
+            const modal = document.getElementById('userPanelModal');
+            modal.classList.toggle('active');
+        }
+        
+        function closeUserPanel() {
+            const modal = document.getElementById('userPanelModal');
+            modal.classList.remove('active');
+        }
+        
+        function closeUserPanelOnBackground(event) {
+            if (event.target === document.getElementById('userPanelModal')) {
+                closeUserPanel();
+            }
+        }
+        
+        function changeProfilePicture(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const profilePic = e.target.result;
+                    localStorage.setItem('userProfilePic', profilePic);
+                    document.getElementById('userProfilePic').src = profilePic;
+                    updateUserPanelButton();
+                    alert('📄 Foto de perfil alterada com sucesso!');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function logoutUser() {
+            const resposta = confirm('⚠️ Deseja realmente sair?');
+            if (resposta) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // === PAINEL DE ADMIN ===
+        const API_ADMIN = "https://login-g50h.onrender.com";
+
+        function openAdminPanel() {
+            document.getElementById('adminModal').classList.add('active');
+        }
+
+        function closeAdminPanel(event) {
+            if (event && event.target !== document.getElementById('adminModal')) {
+                return;
+            }
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        async function adminAddCoins() {
+            const nomeUsuario = document.getElementById('adminUserCoins').value;
+            const quantidade = parseInt(document.getElementById('adminCoinsAmount').value);
+            const token = localStorage.getItem('token');
+
+            if (!nomeUsuario || !quantidade) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_ADMIN}/admin/adicionar-moedas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, quantidade })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserCoins').value = '';
+                    document.getElementById('adminCoinsAmount').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminUnlockGame() {
+            const nomeUsuario = document.getElementById('adminUserGame').value;
+            const jogoId = document.getElementById('adminGameId').value;
+            const token = localStorage.getItem('token');
+
+            if (!nomeUsuario || !jogoId) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_ADMIN}/admin/desbloquear-jogo`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, jogoId })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserGame').value = '';
+                    document.getElementById('adminGameId').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminAddItem() {
+            const nomeUsuario = document.getElementById('adminUserItem').value;
+            const itemId = document.getElementById('adminItemId').value;
+            const token = localStorage.getItem('token');
+
+            if (!nomeUsuario || !itemId) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_ADMIN}/admin/adicionar-item`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, itemId })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserItem').value = '';
+                    document.getElementById('adminItemId').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminPromoteUser() {
+            const nomeUsuario = document.getElementById('adminUserPromote').value;
+            const token = localStorage.getItem('token');
+
+            if (!nomeUsuario) {
+                alert('❌ Digite o nome do usuário!');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_ADMIN}/admin/definir-admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserPromote').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminListUsers() {
+            const token = localStorage.getItem('token');
+
+            try {
+                const res = await fetch(`${API_ADMIN}/admin/listar-usuarios`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const resposta = await res.json();
+
+                if (!resposta.ok) {
+                    alert('❌ Erro ao carregar usuários');
+                    return;
+                }
+
+                const usersList = document.getElementById('adminUsersList');
+                usersList.innerHTML = '';
+
+                resposta.usuarios.forEach(user => {
+                    const userDiv = document.createElement('div');
+                    userDiv.className = 'admin-user-item';
+                    userDiv.innerHTML = `
+                        <div>
+                            <span class="admin-user-name">${user.nome}</span>
+                            <span style="margin-left: 15px;" class="admin-user-coins">💰 ${user.moedas || 0}</span>
+                        </div>
+                        <div>
+                            ${user.isAdmin ? '<span class="admin-user-badge">ADMIN</span>' : ''}
+                        </div>
+                    `;
+                    usersList.appendChild(userDiv);
+                });
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminLoadCompras() {
+            const token = localStorage.getItem('token');
+
+            try {
+                const res = await fetch(`${API_ADMIN}/admin/compras`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const resposta = await res.json();
+
+                if (!resposta.ok) {
+                    alert('❌ Erro ao carregar compras');
+                    return;
+                }
+
+                const comprasList = document.getElementById('adminComprasList');
+                if (!comprasList) return;
+                
+                comprasList.innerHTML = '';
+
+                if (resposta.compras.length === 0) {
+                    comprasList.innerHTML = '<p style="text-align: center; color: #aaa; padding: 20px;">Nenhuma compra registrada</p>';
+                    return;
+                }
+
+                resposta.compras.forEach(compra => {
+                    const data = new Date(compra.data);
+                    const dataFormatada = data.toLocaleDateString('pt-BR') + ' ' + data.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    
+                    const compraDiv = document.createElement('div');
+                    compraDiv.className = 'admin-compra-item';
+                    compraDiv.style.cssText = 'padding: 12px; background: rgba(255,255,255,0.05); border-left: 3px solid var(--gold); margin-bottom: 10px; border-radius: 4px; font-size: 0.9rem;';
+                    compraDiv.innerHTML = `
+                        <div style="color: var(--gold); font-weight: bold;">${compra.usuario}</div>
+                        <div style="color: var(--text-color); margin: 5px 0;">comprou <strong>${compra.itemNome}</strong></div>
+                        <div style="color: #888; font-size: 0.8rem;">💰 ${compra.preco} moedas · ${dataFormatada}</div>
+                    `;
+                    comprasList.appendChild(compraDiv);
+                });
+            } catch (err) {
+                console.error('Erro:', err);
             }
         }
 
@@ -1096,6 +2617,54 @@ function perguntarSave() {
        alert("Tudo certo! Lembre-se de salvar seu progresso para não perder suas conquistas.");
     }
 }
+        // Rastrear tempo de jogo
+        let sessionStartTime = Date.now();
+        
+        function trackPlaytime() {
+            const usuario = localStorage.getItem('usuarioLogado');
+            const token = localStorage.getItem('token');
+            if (usuario) {
+                const currentTime = Date.now();
+                const elapsedMinutes = Math.floor((currentTime - sessionStartTime) / 60000);
+                
+                if (elapsedMinutes > 0) {
+                    const currentPlaytime = parseInt(localStorage.getItem('userPlaytime') || '0');
+                    localStorage.setItem('userPlaytime', currentPlaytime + elapsedMinutes);
+                    
+                    // Sincronizar com o backend se logado
+                    if (token) {
+                        const API_URL = "https://login-g50h.onrender.com";
+                        fetch(`${API_URL}/atualizar-tempo-jogo`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ minutos: elapsedMinutes })
+                        }).catch(err => console.error('Erro ao atualizar tempo:', err));
+                    }
+                    
+                    sessionStartTime = Date.now();
+                }
+            }
+        }
+        
+        // Rastrear tempo a cada 5 minutos
+        setInterval(trackPlaytime, 5 * 60 * 1000);
+        
+        // Rastrear tempo ao descarregar a página
+        window.addEventListener('beforeunload', trackPlaytime);
+        
+        // Inicializar o botão de login imediatamente
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const authBtn = document.getElementById('authBtn');
+                if (authBtn && authBtn.innerHTML.trim() === '') {
+                    authBtn.innerHTML = '🔐 LOGIN';
+                }
+            }, 100);
+        });
+        
         window.onload = function() {
             // Sincronizar lista com grid automaticamente
             syncGameListWithGrid();
@@ -1108,9 +2677,21 @@ function perguntarSave() {
             filterGames(); // aplica filtro inicial de categorias/pesquisa
             checkAchievements(); // verifica conquistas ao carregar
             
+            // Atualizar display de moedas
+            updateCoinsDisplay();
 
             // Atualizar o botão de autenticação
             updateAuthBtn();
+            
+            // Garante que o botão LOGIN tem conteúdo
+            setTimeout(() => {
+                const authBtn = document.getElementById('authBtn');
+                const usuario = localStorage.getItem('usuarioLogado');
+                if (!usuario && authBtn.innerHTML.trim() === '') {
+                    authBtn.innerHTML = '🔐 LOGIN';
+                    console.log('Botão LOGIN restaurado após timeout');
+                }
+            }, 200);
 
             // Verificar se há usuário logado e mostrar nome acima do logo
             const usuario = localStorage.getItem('usuarioLogado');
@@ -1123,6 +2704,13 @@ function perguntarSave() {
                 userName.style.textAlign = 'center';
                 userName.style.marginBottom = '10px';
                 titleDiv.insertBefore(userName, titleDiv.firstChild);
+            } else if (usuario && !token) {
+                alert("Parece que você está logado, mas ocorreu um erro ao carregar seu token. Por motivos de segurança, faça login novamente para garantir que suas conquistas e progresso sejam salvos corretamente.")
+                localStorage.removeItem('usuarioLogado')
+                localStorage.removeItem('isAdmin')
+                setTimeout(() => {
+                    window.location.href = 'https://exploitsroblox.github.io/login';
+                }, 2000);
             }
         };
        
@@ -1184,5 +2772,7 @@ async function salvarBackup() {
   alert(resposta.mensagem);
 }
     </script>
+</body>
+</html>
 </body>
 </html>
