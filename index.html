@@ -783,7 +783,7 @@
         /* Painel de Admin */
         .admin-panel-btn {
             position: fixed;
-            top: 20px;
+            top: 90%;
             right: 20px;
             background: linear-gradient(135deg, #ff0000, #ff8800);
             color: white;
@@ -2363,10 +2363,22 @@ function sortudoAnimation() {
             document.getElementById('adminModal').classList.remove('active');
         }
 
+        async function getAdminToken() {
+            let adminToken = localStorage.getItem('adminToken');
+            if (!adminToken) {
+                adminToken = prompt('🔐 Digite o token de administrador:');
+                if (adminToken) {
+                    localStorage.setItem('adminToken', adminToken);
+                } else {
+                    throw new Error('Token de admin não fornecido');
+                }
+            }
+            return adminToken;
+        }
+
         async function adminAddCoins() {
             const nomeUsuario = document.getElementById('adminUserCoins').value;
             const quantidade = parseInt(document.getElementById('adminCoinsAmount').value);
-            const token = localStorage.getItem('token');
 
             if (!nomeUsuario || !quantidade) {
                 alert('❌ Preencha todos os campos!');
@@ -2374,11 +2386,13 @@ function sortudoAnimation() {
             }
 
             try {
+                const adminToken = await getAdminToken();
+                const userToken = localStorage.getItem('token');
                 const res = await fetch(`${API_ADMIN}/admin/adicionar-moedas`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${adminToken}`
                     },
                     body: JSON.stringify({ nomeUsuario, quantidade })
                 });
@@ -2396,7 +2410,6 @@ function sortudoAnimation() {
         async function adminUnlockGame() {
             const nomeUsuario = document.getElementById('adminUserGame').value;
             const jogoId = document.getElementById('adminGameId').value;
-            const token = localStorage.getItem('token');
 
             if (!nomeUsuario || !jogoId) {
                 alert('❌ Preencha todos os campos!');
@@ -2404,11 +2417,12 @@ function sortudoAnimation() {
             }
 
             try {
+                const adminToken = await getAdminToken();
                 const res = await fetch(`${API_ADMIN}/admin/desbloquear-jogo`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${adminToken}`
                     },
                     body: JSON.stringify({ nomeUsuario, jogoId })
                 });
@@ -2426,7 +2440,6 @@ function sortudoAnimation() {
         async function adminAddItem() {
             const nomeUsuario = document.getElementById('adminUserItem').value;
             const itemId = document.getElementById('adminItemId').value;
-            const token = localStorage.getItem('token');
 
             if (!nomeUsuario || !itemId) {
                 alert('❌ Preencha todos os campos!');
@@ -2434,11 +2447,12 @@ function sortudoAnimation() {
             }
 
             try {
+                const adminToken = await getAdminToken();
                 const res = await fetch(`${API_ADMIN}/admin/adicionar-item`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${adminToken}`
                     },
                     body: JSON.stringify({ nomeUsuario, itemId })
                 });
@@ -2455,7 +2469,6 @@ function sortudoAnimation() {
 
         async function adminPromoteUser() {
             const nomeUsuario = document.getElementById('adminUserPromote').value;
-            const token = localStorage.getItem('token');
 
             if (!nomeUsuario) {
                 alert('❌ Digite o nome do usuário!');
@@ -2463,11 +2476,12 @@ function sortudoAnimation() {
             }
 
             try {
+                const adminToken = await getAdminToken();
                 const res = await fetch(`${API_ADMIN}/admin/definir-admin`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${adminToken}`
                     },
                     body: JSON.stringify({ nomeUsuario })
                 });
@@ -2482,12 +2496,11 @@ function sortudoAnimation() {
         }
 
         async function adminListUsers() {
-            const token = localStorage.getItem('token');
-
             try {
+                const adminToken = await getAdminToken();
                 const res = await fetch(`${API_ADMIN}/admin/listar-usuarios`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${adminToken}`
                     }
                 });
                 const resposta = await res.json();
@@ -2520,12 +2533,11 @@ function sortudoAnimation() {
         }
 
         async function adminLoadCompras() {
-            const token = localStorage.getItem('token');
-
             try {
+                const adminToken = await getAdminToken();
                 const res = await fetch(`${API_ADMIN}/admin/compras`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        'Authorization': `Bearer ${adminToken}`
                     }
                 });
                 const resposta = await res.json();
@@ -2724,32 +2736,6 @@ function perguntarSave() {
        
         const API_URL = "https://login-g50h.onrender.com";
 
-        // Renovar token se expirado
-        async function renovarTokenSeNecessario() {
-          const token = localStorage.getItem("token");
-          if (!token) return false;
-
-          try {
-            const res = await fetch(`${API_URL}/renovar-token`, {
-              method: "POST",
-              headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-              }
-            });
-
-            if (res.ok) {
-              const data = await res.json();
-              localStorage.setItem("token", data.token);
-              localStorage.setItem("isAdmin", data.isAdmin);
-              console.log("✅ Token renovado!");
-              return true;
-            }
-          } catch (err) {
-            console.error("Erro ao renovar token:", err);
-          }
-          return false;
-        }
 
         async function carregarBackup() {
   const tokenAnterior = localStorage.getItem("token");
