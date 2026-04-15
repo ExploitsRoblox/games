@@ -2750,7 +2750,6 @@ function perguntarSave() {
 
   try {
     // Tentar renovar token
-    await renovarTokenSeNecessario();
     const token = localStorage.getItem("token");
 
     const res = await fetch(`${API_URL}/carregarBackup`, {
