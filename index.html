@@ -2686,6 +2686,13 @@ function perguntarSave() {
                 }
             }, 100);
         });
+
+        function reloadAchievements() {
+            const ach1 = localStorage.getItem('ach-detetive') ? 1 : 0;
+            const ach2 = localStorage.getItem('ach-lucky') ? 1 : 0;
+            const totalAch = ach1 + ach2;
+            document.getElementById('achievementsDisplay').textContent = `${totalAch}/2`;
+        }
         
         window.onload = function() {
             // Sincronizar lista com grid automaticamente
