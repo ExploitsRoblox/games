@@ -2688,8 +2688,8 @@ function perguntarSave() {
         });
 
         function reloadAchievements() {
-            const ach1 = localStorage.getItem('ach-detetive') ? 1 : 0;
-            const ach2 = localStorage.getItem('ach-lucky') ? 1 : 0;
+            const ach1 = localStorage.getItem('destaque') ? 1 : 0;
+            const ach2 = localStorage.getItem('lucky_used') ? 1 : 0;
             const totalAch = ach1 + ach2;
             document.getElementById('achievementsDisplay').textContent = `${totalAch}/2`;
         }
