@@ -2783,8 +2783,6 @@ async function salvarBackup() {
   if (!tokenAnterior) return alert("Você precisa estar logado!");
 
   try {
-    // Tentar renovar token
-    await renovarTokenSeNecessario();
     const token = localStorage.getItem("token");
 
     // Filtrar apenas os dados importantes para evitar payload muito grande
