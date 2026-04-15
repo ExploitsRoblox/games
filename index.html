@@ -1484,6 +1484,9 @@
     <div class="sortudoimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
         <img src="sortudo.png" alt="Sortudo" >
     </div>
+    <div class="infinityimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
+        <img src="infinity.png" alt="Infinity" >
+    </div>
     <nav id="left-sidebar" class="sidebar">
         <div class="search-container">
             <input type="text" id="searchBox" placeholder="Buscar jogo..." onkeyup="filterGames()">
@@ -1705,6 +1708,7 @@
             <p style="color: var(--text-color); font-size: 1.9rem; font-weight: bold; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Suas Conquistas</p>
             <div class="achievement" id="ach-detetive"><img src="detetive2.png" alt="aa"></div>
             <div class="achievement" id="ach-lucky"><img src="sortudo2.png" alt="aa"></div>
+            <div class="achievement" id="ach-infinity"><img src="infinity2.png" alt="aa"></div>
         </div>
     <div class="atua">
        <h2 id="updateText"></h2>
@@ -1856,12 +1860,16 @@ atualizarDataCommit();
             if (localStorage.getItem('lucky_used') == 'true') {
                 document.getElementById('ach-lucky').classList.add('unlocked');
             }
+            // Infinity
+            if (localStorage.getItem('infinity_get') == 'true') {
+                document.getElementById('ach-infinity').classList.add('unlocked');
+            }
         }
         function imFeelingLucky() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
             if (cards.length > 0) {
                 if (!localStorage.getItem('lucky_used')) {
-                    sortudoAnimation();
+                    conquistaAnimacao('sortudo');
                     localStorage.setItem('lucky_used', 'true');
                     addCoins(200);
                     updateCoinsDisplay();
@@ -1889,7 +1897,7 @@ atualizarDataCommit();
             if (valor === 1) {
                 addCoins(100);
                 updateCoinsDisplay();
-                destaqueAnimation();
+                conquistaAnimacao('detetive');
                 setTimeout(() => {
                     window.location.href = 'https://exploitsroblox.github.io/survival';
                 }, 3000);
@@ -1899,16 +1907,24 @@ atualizarDataCommit();
             }
         }
 
-function destaqueAnimation() {
-    const detetiveDiv = document.querySelector('.detetiveimg');
-
-    if (!detetiveDiv) return;
+function conquistaAnimacao(tipo) {
+    const selectorMap = {
+        'detetive': '.detetiveimg',
+        'sortudo': '.sortudoimg',
+        'infinity': '.infinityimg'
+    };
+    
+    const selector = selectorMap[tipo];
+    if (!selector) return;
+    
+    const div = document.querySelector(selector);
+    if (!div) return;
 
     // Define a transição suave
-    detetiveDiv.style.transition = 'transform 0.5s ease-out';
+    div.style.transition = 'transform 0.5s ease-out';
 
     // Move a div para cima (aparecendo)
-    detetiveDiv.style.transform = 'translate(-50%, -100px)';
+    div.style.transform = 'translate(-50%, -100px)';
 
     // Toca o som
     const audio = new Audio('achi.mp3');
@@ -1916,27 +1932,7 @@ function destaqueAnimation() {
 
     // Depois de 3 segundos, volta para baixo
     setTimeout(() => {
-        detetiveDiv.style.transform = 'translate(-50%, 0)';
-    }, 3000);
-}
-function sortudoAnimation() {
-    const sortudoDiv = document.querySelector('.sortudoimg');
-
-    if (!sortudoDiv) return;
-
-    // Define a transição suave
-    sortudoDiv.style.transition = 'transform 0.5s ease-out';
-
-    // Move a div para cima (aparecendo)
-    sortudoDiv.style.transform = 'translate(-50%, -100px)';
-
-    // Toca o som
-    const audio = new Audio('achi.mp3');
-    audio.play();
-
-    // Depois de 3 segundos, volta para baixo
-    setTimeout(() => {
-        sortudoDiv.style.transform = 'translate(-50%, 0)';
+        div.style.transform = 'translate(-50%, 0)';
     }, 3000);
 }
 
@@ -2297,10 +2293,11 @@ function sortudoAnimation() {
             document.getElementById('playtimeDisplay').textContent = `${horas}h ${minutos}m`;
             
             // Contar conquistas desbloqueadas
-            const ach1 = localStorage.getItem('ach-detetive') ? 1 : 0;
-            const ach2 = localStorage.getItem('ach-lucky') ? 1 : 0;
-            const totalAch = ach1 + ach2;
-            document.getElementById('achievementsDisplay').textContent = `${totalAch}/2`;
+            const ach1 = localStorage.getItem('destaque') ? 1 : 0;
+            const ach2 = localStorage.getItem('lucky_used') ? 1 : 0;
+            const ach3 = localStorage.getItem('infinity_get') ? 1 : 0;
+            const totalAch = ach1 + ach2 + ach3;
+            document.getElementById('achievementsDisplay').textContent = `${totalAch}/3`;
             
             // Contar itens comprados
             let ownedItems = 0;
@@ -2705,6 +2702,7 @@ function perguntarSave() {
             });
             filterGames(); // aplica filtro inicial de categorias/pesquisa
             checkAchievements(); // verifica conquistas ao carregar
+            reloadAchievements(); // atualiza display de conquistas
             
             // Atualizar display de moedas
             updateCoinsDisplay();
