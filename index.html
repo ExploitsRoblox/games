@@ -2162,21 +2162,29 @@ function sortudoAnimation() {
             leaderboardList.innerHTML = '';
             
             usuarios.forEach((user, index) => {
+                // Tratamento defensivo para valores undefined
+                const tempo = (user.tempo_jogo !== undefined && user.tempo_jogo !== null) ? user.tempo_jogo : 0;
+                const moedas = (user.premio !== undefined && user.premio !== null) ? user.premio : 0;
+                const posicao = (user.posicao !== undefined && user.posicao !== null) ? user.posicao : index + 1;
+                const nome = user.nome || 'Desconhecido';
+                
                 const medalEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '📊';
                 const positionClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
                 
-                const tempoHoras = Math.floor(user.tempo_jogo / 60);
-                const tempoMinutos = user.tempo_jogo % 60;
+                const tempoHoras = Math.floor(tempo / 60);
+                const tempoMinutos = tempo % 60;
                 
                 const rewardClass = index === 0 ? '' : index === 1 || index === 2 ? 'bronze' : 'other';
+                
+                console.log(`[LEADERBOARD-RENDER] #{posicao} ${nome}: ${tempo}m playtime, ${moedas} moedas`);
                 
                 const item = document.createElement('div');
                 item.className = 'leaderboard-item';
                 item.innerHTML = `
-                    <div class="leaderboard-position ${positionClass}">${medalEmoji} #${user.posicao}</div>
+                    <div class="leaderboard-position ${positionClass}">${medalEmoji} #${posicao}</div>
                     <div class="leaderboard-profile">
-                        <div class="leaderboard-pic">${user.foto_perfil ? `<img src="${user.foto_perfil}" alt="${user.nome}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : '👤'}</div>
-                        <div class="leaderboard-name">${user.nome}</div>
+                        <div class="leaderboard-pic">${user.foto_perfil ? `<img src="${user.foto_perfil}" alt="${nome}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : '👤'}</div>
+                        <div class="leaderboard-name">${nome}</div>
                     </div>
                     <div class="leaderboard-stats">
                         <div class="leaderboard-time">
@@ -2185,7 +2193,7 @@ function sortudoAnimation() {
                         </div>
                     </div>
                     <div class="leaderboard-reward ${rewardClass}">
-                        💰 ${user.premio} moedas
+                        💰 ${moedas} moedas
                     </div>
                 `;
                 leaderboardList.appendChild(item);
@@ -2714,62 +2722,137 @@ function perguntarSave() {
             }
         };
        
-       setTimeout(() => {
-    const dados = {};
-
-    // Percorre todas as chaves do localStorage
-    for (let i = 0; i < localStorage.length; i++) {
-        const chave = localStorage.key(i);
-        if (chave !== 'backup') { // ignora o próprio backup
-            dados[chave] = localStorage.getItem(chave);
-        }
-    }
-
-    localStorage.setItem('backup', JSON.stringify(dados));
-    console.log('Dados salvos!');
-}, 5000);
-
-
         const API_URL = "https://login-g50h.onrender.com";
 
+        // Renovar token se expirado
+        async function renovarTokenSeNecessario() {
+          const token = localStorage.getItem("token");
+          if (!token) return false;
+
+          try {
+            const res = await fetch(`${API_URL}/renovar-token`, {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+              }
+            });
+
+            if (res.ok) {
+              const data = await res.json();
+              localStorage.setItem("token", data.token);
+              localStorage.setItem("isAdmin", data.isAdmin);
+              console.log("✅ Token renovado!");
+              return true;
+            }
+          } catch (err) {
+            console.error("Erro ao renovar token:", err);
+          }
+          return false;
+        }
+
         async function carregarBackup() {
-  const token = localStorage.getItem("token");
-  if (!token) return alert("Você precisa estar logado!");
+  const tokenAnterior = localStorage.getItem("token");
+  if (!tokenAnterior) return alert("Você precisa estar logado!");
 
-  const res = await fetch(`${API_URL}/carregarBackup`, {
-    headers: { "Authorization": `Bearer ${token}` }
-  });
-  const resposta = await res.json();
-  if (resposta.ok) {
-    for (const chave in resposta.dados) {
-      localStorage.setItem(chave, resposta.dados[chave]);
+  try {
+    // Tentar renovar token
+    await renovarTokenSeNecessario();
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(`${API_URL}/carregarBackup`, {
+      method: "GET",
+      credentials: "include",
+      headers: { 
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!res.ok) {
+      throw new Error(`Erro HTTP: ${res.status} ${res.statusText}`);
     }
-    console.log("Backup restaurado!");
-    alert("Backup restaurado!");
-    window.location.reload();
 
-  } else {
-    console.log("Nenhum backup encontrado.");
-    alert("Nenhum backup encontrado.");
-
+    const resposta = await res.json();
+    if (resposta.ok) {
+      for (const chave in resposta.dados) {
+        localStorage.setItem(chave, resposta.dados[chave]);
+      }
+      console.log("✅ Backup restaurado!");
+      alert("✅ Backup restaurado com sucesso!");
+      window.location.reload();
+    } else {
+      console.log("Nenhum backup encontrado.");
+      alert("⚠️ Nenhum backup encontrado.");
+    }
+  } catch (err) {
+    console.error("Erro ao carregar backup:", err);
+    alert(`❌ Erro ao carregar backup: ${err.message}`);
   }
 }
 async function salvarBackup() {
-  const token = localStorage.getItem("token");
-  if (!token) return alert("Você precisa estar logado!");
+  const tokenAnterior = localStorage.getItem("token");
+  if (!tokenAnterior) return alert("Você precisa estar logado!");
 
-  const dados = { ...localStorage };
-  const res = await fetch(`${API_URL}/salvarBackup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: JSON.stringify({ dados })
-  });
-  const resposta = await res.json();
-  console.log(resposta.mensagem);
-  alert(resposta.mensagem);
+  try {
+    // Tentar renovar token
+    await renovarTokenSeNecessario();
+    const token = localStorage.getItem("token");
+
+    // Filtrar apenas os dados importantes para evitar payload muito grande
+    const dadosImportantes = {
+      userCoins: localStorage.getItem('userCoins'),
+      userPlaytime: localStorage.getItem('userPlaytime'),
+      userTag: localStorage.getItem('userTag'),
+      userProfilePic: localStorage.getItem('userProfilePic'),
+      destaque: localStorage.getItem('destaque'),
+      lucky_used: localStorage.getItem('lucky_used'),
+      lastDailyRewardDate: localStorage.getItem('lastDailyRewardDate')
+    };
+
+    // Adicionar itens comprados
+    const SHOP_ITEMS = ['all-games', 'custom-tag', 'new-game'];
+    SHOP_ITEMS.forEach(itemId => {
+      const key = `item-${itemId}`;
+      if (localStorage.getItem(key)) {
+        dadosImportantes[key] = localStorage.getItem(key);
+      }
+    });
+
+    // Adicionar jogos secretos desbloqueados
+    ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'].forEach(gameId => {
+      if (localStorage.getItem(gameId) === 'unlocked') {
+        dadosImportantes[gameId] = 'unlocked';
+      }
+    });
+
+    console.log('📦 Enviando backup com', Object.keys(dadosImportantes).length, 'campos');
+
+    const res = await fetch(`${API_URL}/salvarBackup`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ dados: dadosImportantes })
+    });
+
+    if (!res.ok) {
+      throw new Error(`Erro HTTP: ${res.status} ${res.statusText}`);
+    }
+
+    const resposta = await res.json();
+    if (resposta.ok) {
+      console.log("✅ " + resposta.mensagem);
+      alert("✅ " + resposta.mensagem);
+    } else {
+      alert("❌ " + (resposta.mensagem || "Erro ao salvar backup"));
+    }
+  } catch (err) {
+    console.error("Erro ao salvar backup:", err);
+    alert(`❌ Erro ao salvar backup: ${err.message}`);
+  }
 }
     </script>
 </body>
