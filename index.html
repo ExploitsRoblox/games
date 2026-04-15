@@ -2036,7 +2036,17 @@ function conquistaAnimacao(tipo) {
                 }).catch(err => console.error('Erro ao registrar compra:', err));
             }
             
-            alert('🎉 Item comprado com sucesso!');
+            // Se for "all-games", desbloquear todos os jogos secretos
+            if (itemId === 'all-games') {
+                const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
+                allSecretGames.forEach(gameId => {
+                    localStorage.setItem(gameId, 'unlocked');
+                    unlockGame(gameId);
+                });
+                alert('🔓 Todos os jogos secretos foram desbloqueados!');
+            } else {
+                alert('🎉 Item comprado com sucesso!');
+            }
             
             // Se for tag personalizada, abrir modal para escolher a tag
             if (itemId === 'custom-tag') {
@@ -2695,6 +2705,16 @@ function perguntarSave() {
                     unlockGame(gameId);
                 }
             });
+
+            // Se o item "all-games" foi comprado, desbloquear todos os jogos secretos
+            if (localStorage.getItem('item-all-games') === 'owned') {
+                const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
+                allSecretGames.forEach(gameId => {
+                    localStorage.setItem(gameId, 'unlocked');
+                    unlockGame(gameId);
+                });
+            }
+
             filterGames(); // aplica filtro inicial de categorias/pesquisa
             checkAchievements(); // verifica conquistas ao carregar
             reloadAchievements(); // atualiza display de conquistas
@@ -2744,7 +2764,6 @@ function perguntarSave() {
   if (!tokenAnterior) return alert("Você precisa estar logado!");
 
   try {
-    // Tentar renovar token
     const token = localStorage.getItem("token");
 
     const res = await fetch(`${API_URL}/carregarBackup`, {
@@ -2761,10 +2780,49 @@ function perguntarSave() {
     }
 
     const resposta = await res.json();
-    if (resposta.ok) {
-      for (const chave in resposta.dados) {
-        localStorage.setItem(chave, resposta.dados[chave]);
+    if (resposta.ok && resposta.dados) {
+      // Restaurar dados principais
+      const dadosBackup = resposta.dados;
+      
+      // Restaurar dados simples
+      for (const chave in dadosBackup.dados) {
+        localStorage.setItem(chave, dadosBackup.dados[chave]);
       }
+
+      // Restaurar itens comprados
+      if (dadosBackup.purchasedItems && Array.isArray(dadosBackup.purchasedItems)) {
+        dadosBackup.purchasedItems.forEach(itemId => {
+          localStorage.setItem(`item-${itemId}`, 'owned');
+        });
+      }
+
+      // Restaurar conquistas (se existirem)
+      if (dadosBackup.achievements && Array.isArray(dadosBackup.achievements)) {
+        dadosBackup.achievements.forEach(ach => {
+          localStorage.setItem(`ach-${ach}`, 'unlocked');
+        });
+      }
+
+      // Restaurar preferências
+      if (dadosBackup.preferences) {
+        localStorage.setItem('userPreferences', JSON.stringify(dadosBackup.preferences));
+      }
+
+      // Restaurar jogos desbloqueados por código
+      if (dadosBackup.unlockedGames && Array.isArray(dadosBackup.unlockedGames)) {
+        dadosBackup.unlockedGames.forEach(gameId => {
+          localStorage.setItem(gameId, 'unlocked');
+        });
+      }
+
+      // Se "all-games" foi comprado, desbloquear todos os jogos secretos
+      if (dadosBackup.purchasedItems && dadosBackup.purchasedItems.includes('all-games')) {
+        const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
+        allSecretGames.forEach(gameId => {
+          localStorage.setItem(gameId, 'unlocked');
+        });
+      }
+
       console.log("✅ Backup restaurado!");
       alert("✅ Backup restaurado com sucesso!");
       window.location.reload();
@@ -2784,8 +2842,8 @@ async function salvarBackup() {
   try {
     const token = localStorage.getItem("token");
 
-    // Filtrar apenas os dados importantes para evitar payload muito grande
-    const dadosImportantes = {
+    // 1. DADOS PRINCIPAIS (simples)
+    const dadosSimples = {
       userCoins: localStorage.getItem('userCoins'),
       userPlaytime: localStorage.getItem('userPlaytime'),
       userTag: localStorage.getItem('userTag'),
@@ -2795,23 +2853,55 @@ async function salvarBackup() {
       lastDailyRewardDate: localStorage.getItem('lastDailyRewardDate')
     };
 
-    // Adicionar itens comprados
+    // 2. ITENS COMPRADOS
+    const itensComprados = [];
     const SHOP_ITEMS = ['all-games', 'custom-tag', 'new-game'];
     SHOP_ITEMS.forEach(itemId => {
       const key = `item-${itemId}`;
-      if (localStorage.getItem(key)) {
-        dadosImportantes[key] = localStorage.getItem(key);
+      if (localStorage.getItem(key) === 'owned') {
+        itensComprados.push(itemId);
       }
     });
 
-    // Adicionar jogos secretos desbloqueados
+    // 3. JOGOS SECRETOS DESBLOQUEADOS
+    const jogosDesbloqueados = [];
     ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'].forEach(gameId => {
       if (localStorage.getItem(gameId) === 'unlocked') {
-        dadosImportantes[gameId] = 'unlocked';
+        jogosDesbloqueados.push(gameId);
       }
     });
 
-    console.log('📦 Enviando backup com', Object.keys(dadosImportantes).length, 'campos');
+    // 4. CONQUISTAS DESBLOQUEADAS
+    const conquistas = [];
+    const achiList = [
+      'detective', 'lucky', 'infinity', 'timeMaster', 'richGuy', 
+      'socialButterfly', 'gameCollector', 'weeklyWarrior'
+    ];
+    achiList.forEach(achi => {
+      if (localStorage.getItem(`ach-${achi}`) === 'unlocked') {
+        conquistas.push(achi);
+      }
+    });
+
+    // 5. PREFERÊNCIAS (filtros de categorias)
+    const preferences = {
+      darkMode: localStorage.getItem('darkMode'),
+      soundEnabled: localStorage.getItem('soundEnabled'),
+      selectedCategories: localStorage.getItem('selectedCategories')
+    };
+
+    // Montar o payload otimizado
+    const backupData = {
+      dados: dadosSimples,
+      achievements: conquistas,
+      unlockedGames: jogosDesbloqueados,
+      purchasedItems: itensComprados,
+      preferences: preferences,
+      timestamp: new Date().toISOString()
+    };
+
+    const tamanhoKB = (JSON.stringify(backupData).length / 1024).toFixed(2);
+    console.log(`📦 Backup: ${tamanhoKB}KB com ${Object.keys(dadosSimples).length + conquistas.length + jogosDesbloqueados.length} itens`);
 
     const res = await fetch(`${API_URL}/salvarBackup`, {
       method: "POST",
@@ -2820,7 +2910,7 @@ async function salvarBackup() {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`
       },
-      body: JSON.stringify({ dados: dadosImportantes })
+      body: JSON.stringify({ dados: backupData })
     });
 
     if (!res.ok) {
@@ -2830,7 +2920,7 @@ async function salvarBackup() {
     const resposta = await res.json();
     if (resposta.ok) {
       console.log("✅ " + resposta.mensagem);
-      alert("✅ " + resposta.mensagem);
+      alert("✅ " + resposta.mensagem + ` (${tamanhoKB}KB)`);
     } else {
       alert("❌ " + (resposta.mensagem || "Erro ao salvar backup"));
     }
