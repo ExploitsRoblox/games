@@ -2002,7 +2002,7 @@ function conquistaAnimacao(tipo) {
 
         async function syncCoinsFromDatabase() {
             const token = localStorage.getItem('token');
-            if (!token) return; // Não sincroniza se não estiver logado
+            if (!token) return; // Não sincroniza senão estiver logado
             
             try {
                 const API_URL = "https://login-g50h.onrender.com";
