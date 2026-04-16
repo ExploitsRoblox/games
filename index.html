@@ -3194,9 +3194,9 @@ function conquistaAnimacao(tipo) {
                 let borderStyle = '';
                 if (corBorda.includes('linear-gradient')) {
                     // Arco-iris
-                    borderStyle = `border: 5px solid transparent; background: ${corBorda} padding-box, ${corBorda} border-box; background-size: 200% 100%; animation: gradient-shift 3s ease-in-out infinite;`;
+                    borderStyle = `border: 3px solid transparent; background: ${corBorda} padding-box, ${corBorda} border-box; background-size: 200% 100%; animation: gradient-shift 3s ease-in-out infinite;`;
                 } else {
-                    borderStyle = `border: 5px solid ${corBorda};`;
+                    borderStyle = `border: 3px solid ${corBorda};`;
                 }
                 
                 const tagStyle = tipoCorTag === 'especial' && corTag.includes('linear-gradient') 
