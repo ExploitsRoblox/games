@@ -2035,12 +2035,14 @@ function conquistaAnimacao(tipo) {
                 console.error('Erro ao sincronizar moedas do servidor:', err);
             }
         }
+
+        function syncCoinsToDatabase(amount) {
             const token = localStorage.getItem('token');
             if (!token) return; // Não sincroniza se não estiver logado
             
             try {
                 const API_URL = "https://login-g50h.onrender.com";
-                const res = await fetch(`${API_URL}/sincronizar-moedas`, {
+                const res = fetch(`${API_URL}/sincronizar-moedas`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
