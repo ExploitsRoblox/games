@@ -2212,6 +2212,13 @@ function conquistaAnimacao(tipo) {
         }
 
         async function promptTagColor(tipo) {
+            // Validar se o usuário possui o item
+            const itemId = tipo === 'especial' ? 'cor-especial' : 'cor-comum';
+            if (localStorage.getItem(`item-${itemId}`) !== 'owned') {
+                alert(`❌ Você não possui o item "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"! Compre na loja primeiro.`);
+                return;
+            }
+
             const coresComuns = [
                 { nome: 'Roxo', hex: '#a855f7' },
                 { nome: 'Azul', hex: '#3b82f6' },
