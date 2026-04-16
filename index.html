@@ -3796,6 +3796,37 @@ function conquistaAnimacao(tipo) {
             }
         }
 
+        async function adminChangeBorderColor() {
+            const nomeUsuario = document.getElementById('adminUserChangeBorder').value;
+            const corId = document.getElementById('adminBorderColor').value;
+
+            if (!nomeUsuario || !corId) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/mudar-cor-borda-usuario`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, corId })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserChangeBorder').value = '';
+                    document.getElementById('adminBorderColor').value = '';
+                    loadLeaderboard(); // Recarregar leaderboard para ver a mudança
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
         async function adminEmergencyReset() {
             const confirmacao = confirm('⚠️ ACIONADOR DE EMERGÊNCIA!\n\nVocê tem certeza? Todos os admins serão removidos.\nApenas Yohanan permanecerá como admin.\n\nClique OK para confirmar.');
             
