@@ -2072,15 +2072,33 @@ function conquistaAnimacao(tipo) {
             
             SHOP_ITEMS.forEach(item => {
                 const owned = localStorage.getItem(`item-${item.id}`) === 'owned';
+                const isReusable = item.id === 'cor-comum' || item.id === 'cor-especial';
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'shop-item';
+                
+                let buttonText = 'Comprar';
+                let buttonDisabled = false;
+                let buttonOnclick = `buyItem('${item.id}', ${item.price})`;
+                
+                if (owned) {
+                    if (isReusable) {
+                        // Para cores, mostrar "Usar" e permitir clicar novamente
+                        buttonText = '✓ Usar';
+                        buttonOnclick = `promptTagColor('${item.id === 'cor-comum' ? 'comum' : 'especial'}')`;
+                    } else {
+                        // Para outros itens, mostrar "Possuído" e desabilitar
+                        buttonText = '✓ Possuído';
+                        buttonDisabled = true;
+                    }
+                }
+                
                 itemDiv.innerHTML = `
                     <div class="shop-item-icon">${item.icon}</div>
                     <div class="shop-item-name">${item.name}</div>
                     <div class="shop-item-desc">${item.desc}</div>
                     <div class="shop-item-price">💰 ${item.price}</div>
-                    <button class="shop-item-btn" onclick="buyItem('${item.id}', ${item.price})" ${owned ? 'disabled' : ''}>
-                        ${owned ? '✓ Possuído' : 'Comprar'}
+                    <button class="shop-item-btn" onclick="${buttonOnclick}" ${buttonDisabled ? 'disabled' : ''}>
+                        ${buttonText}
                     </button>
                 `;
                 shopItems.appendChild(itemDiv);
