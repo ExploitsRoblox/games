@@ -2490,7 +2490,7 @@ function conquistaAnimacao(tipo) {
             content.appendChild(title);
 
             const colorGrid = document.createElement('div');
-            colorGrid.style.cssText = 'display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;';
+            colorGrid.style.cssText = 'display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; max-height: 350px; overflow-y: auto;';
             
             cores.forEach(cor => {
                 const btn = document.createElement('button');
@@ -3425,7 +3425,7 @@ function perguntarSave() {
                 let tagHTML = '';
                 if (userTag) {
                     if (userTagColorType === 'especial' && userTagColor.includes('linear-gradient')) {
-                        tagHTML = ` <span style="font-size: 0.85em; background: ${userTagColor}; font-weight: bold; padding: 4px 10px; border-radius: 4px; background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🏷️ ${userTag}</span>`;
+                        tagHTML = ` <span style="font-size: 0.85em; background: ${userTagColor}; font-weight: bold; padding: 4px 10px; border-radius: 4px; background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${userTag}</span>`;
                     } else {
                         tagHTML = ` <span style="font-size: 0.85em; color: ${userTagColor}; font-weight: bold;"> ${userTag}</span>`;
                     }
