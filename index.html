@@ -2036,6 +2036,33 @@ function conquistaAnimacao(tipo) {
             }
         }
 
+        async function syncItemsFromDatabase() {
+            const token = localStorage.getItem('token');
+            if (!token) return; // Não sincroniza senão estiver logado
+            
+            try {
+                const API_URL = "https://login-g50h.onrender.com";
+                const res = await fetch(`${API_URL}/itens-comprados`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.ok && data.itens) {
+                        // Sincronizar itens comprados do backend com localStorage
+                        data.itens.forEach(itemId => {
+                            localStorage.setItem(`item-${itemId}`, 'owned');
+                        });
+                        console.log(`[SYNC] ${data.itens.length} itens sincronizados do servidor:`, data.itens);
+                    }
+                }
+            } catch (err) {
+                console.error('Erro ao sincronizar itens do servidor:', err);
+            }
+        }
+
         async function syncCoinsToDatabase(amount) {
             const token = localStorage.getItem('token');
             if (!token) return; // Não sincroniza se não estiver logado
@@ -2105,7 +2132,7 @@ function conquistaAnimacao(tipo) {
             });
         }
 
-        function buyItem(itemId, price) {
+        async function buyItem(itemId, price) {
             const coins = getCoins();
             const token = localStorage.getItem('token');
             const usuario = localStorage.getItem('usuarioLogado');
@@ -2130,18 +2157,26 @@ function conquistaAnimacao(tipo) {
             // Registrar compra no backend se logado
             if (token) {
                 const API_URL = "https://login-g50h.onrender.com";
-                fetch(`${API_URL}/registrar-compra`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        itemId: itemId,
-                        itemNome: item.name,
-                        preco: price
-                    })
-                }).catch(err => console.error('Erro ao registrar compra:', err));
+                try {
+                    const res = await fetch(`${API_URL}/registrar-compra`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            itemId: itemId,
+                            itemNome: item.name,
+                            preco: price
+                        })
+                    });
+                    
+                    if (!res.ok) {
+                        console.error('Erro ao registrar compra:', res.status);
+                    }
+                } catch (err) {
+                    console.error('Erro ao registrar compra:', err);
+                }
             }
             
             // Se for "all-games", desbloquear todos os jogos secretos
@@ -2155,23 +2190,17 @@ function conquistaAnimacao(tipo) {
             } 
             // Se for cor comum, abrir seletor de cores
             else if (itemId === 'cor-comum') {
-                setTimeout(() => {
-                    promptTagColor('comum');
-                }, 500);
+                promptTagColor('comum');
                 alert('🎨 Você agora pode customizar a cor da sua tag!');
             }
             // Se for cor especial, abrir seletor de cores especiais
             else if (itemId === 'cor-especial') {
-                setTimeout(() => {
-                    promptTagColor('especial');
-                }, 500);
+                promptTagColor('especial');
                 alert('✨ Você agora tem acesso a cores especiais!');
             }
             // Se for tag personalizada, abrir modal para escolher a tag
             else if (itemId === 'custom-tag') {
-                setTimeout(() => {
-                    promptCustomTag();
-                }, 500);
+                promptCustomTag();
                 alert('🎉 Item comprado com sucesso!');
             } else {
                 alert('🎉 Item comprado com sucesso!');
@@ -3037,8 +3066,9 @@ function perguntarSave() {
                 userName.style.marginBottom = '10px';
                 titleDiv.insertBefore(userName, titleDiv.firstChild);
 
-                // Sincronizar moedas com o servidor
+                // Sincronizar moedas e itens comprados com o servidor
                 syncCoinsFromDatabase();
+                syncItemsFromDatabase();
             } else if (usuario && !token) {
                 alert("Parece que você está logado, mas ocorreu um erro ao carregar seu token. Por motivos de segurança, faça login novamente para garantir que suas conquistas e progresso sejam salvos corretamente.")
                 localStorage.removeItem('usuarioLogado')
