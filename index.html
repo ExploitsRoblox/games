@@ -397,6 +397,115 @@
         .user-panel-close:hover {
             color: var(--error-color);
         }
+
+        /* Modal de Foto de Perfil */
+        .profile-pic-modal {
+            display: none;
+            position: fixed;
+            z-index: 2002;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .profile-pic-modal.active {
+            display: flex;
+        }
+        
+        .profile-pic-modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .profile-pic-modal-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+        
+        .profile-pic-modal-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        #profilePicUrl {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--accent-color);
+            background: var(--bg-dark);
+            color: var(--text-color);
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            outline: none;
+        }
+        
+        #profilePicUrl:focus {
+            border-color: var(--accent-hover);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        
+        .profile-pic-modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .profile-pic-modal-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .btn-save {
+            background: var(--accent-color);
+            color: #000;
+        }
+        
+        .btn-save:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+        
+        .btn-cancel {
+            background: var(--sidebar-bg);
+            color: var(--text-color);
+            border: 1px solid #666;
+        }
+        
+        .btn-cancel:hover {
+            background: #333;
+        }
         
         .user-profile-section {
             text-align: center;
@@ -1475,8 +1584,7 @@
             <button class="user-panel-close" onclick="closeUserPanel()">✕</button>
             
             <div class="user-profile-section">
-                <img id="userProfilePic" class="user-profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23a855f7'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='white'%3E👤%3C/text%3E%3C/svg%3E" alt="Perfil" onclick="document.getElementById('profilePicInput').click()">
-                <input type="file" id="profilePicInput" accept="image/*" onchange="changeProfilePicture(event)">
+                <img id="userProfilePic" class="user-profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23a855f7'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='white'%3E👤%3C/text%3E%3C/svg%3E" alt="Perfil" onclick="openProfilePictureModal()">
                 <div class="user-profile-name" id="userNameDisplay">Usuário</div>
             </div>
             
@@ -1503,6 +1611,20 @@
             </div>
         </div>
     </div>
+    
+    <!-- Modal de Foto de Perfil -->
+    <div id="profilePicModal" class="profile-pic-modal" onclick="closeProfilePictureModal(event)">
+        <div class="profile-pic-modal-content" onclick="event.stopPropagation();">
+            <div class="profile-pic-modal-title">🖼️ Alterar Foto de Perfil</div>
+            <label class="profile-pic-modal-label">Cole o link da sua imagem:</label>
+            <input type="text" id="profilePicUrl" placeholder="https://exemplo.com/minha-foto.jpg" autocomplete="off">
+            <div class="profile-pic-modal-buttons">
+                <button class="btn-save" onclick="updateProfilePictureFromUrl()">✓ Confirmar</button>
+                <button class="btn-cancel" onclick="closeProfilePictureModal()">✕ Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="detetiveimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
         <img src="detetive.png" alt="Detetive" >
     </div>
@@ -2608,6 +2730,71 @@ function conquistaAnimacao(tipo) {
         function closeUserPanelOnBackground(event) {
             if (event.target === document.getElementById('userPanelModal')) {
                 closeUserPanel();
+            }
+        }
+        
+        function openProfilePictureModal() {
+            const modal = document.getElementById('profilePicModal');
+            modal.classList.add('active');
+            document.getElementById('profilePicUrl').focus();
+        }
+        
+        function closeProfilePictureModal(event) {
+            if (event && event.target !== document.getElementById('profilePicModal')) return;
+            const modal = document.getElementById('profilePicModal');
+            modal.classList.remove('active');
+        }
+        
+        async function updateProfilePictureFromUrl() {
+            const url = document.getElementById('profilePicUrl').value.trim();
+            
+            if (!url) {
+                alert('⚠️ Por favor, insira um link da imagem!');
+                return;
+            }
+            
+            try {
+                // Validar se é uma URL válida
+                new URL(url);
+                
+                const token = localStorage.getItem('token');
+                
+                // Salvar localmente
+                localStorage.setItem('userProfilePic', url);
+                document.getElementById('userProfilePic').src = url;
+                updateUserPanelButton();
+                
+                // Sincronizar com o backend se logado
+                if (token) {
+                    try {
+                        const API_URL = "https://login-g50h.onrender.com";
+                        const res = await fetch(`${API_URL}/atualizar-foto-perfil`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ foto_perfil: url })
+                        });
+                        
+                        if (res.ok) {
+                            console.log('[PHOTO] Foto de perfil sincronizada com o servidor');
+                            // Recarregar leaderboard para mostrar a foto atualizada
+                            const leaderboardModal = document.getElementById('leaderboardModal');
+                            if (leaderboardModal && leaderboardModal.classList.contains('active')) {
+                                await loadLeaderboard();
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Erro ao sincronizar foto:', err);
+                    }
+                }
+                
+                alert('✓ Foto de perfil alterada com sucesso!');
+                closeProfilePictureModal();
+            } catch (err) {
+                alert('❌ URL inválida! Por favor, insira um link válido.');
+                console.error('Erro:', err);
             }
         }
         
