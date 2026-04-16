@@ -937,6 +937,24 @@
             100% { background-position: 0% 50%; }
         }
         
+        @keyframes admin-glow {
+            0% { 
+                background-position: 0% 50%;
+                filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8)) drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
+                transform: scale(1);
+            }
+            50% { 
+                background-position: 100% 50%;
+                filter: drop-shadow(0 0 20px rgba(255, 0, 255, 1)) drop-shadow(0 0 30px rgba(0, 255, 255, 0.8)) drop-shadow(0 0 40px rgba(255, 255, 0, 0.6));
+                transform: scale(1.02);
+            }
+            100% { 
+                background-position: 0% 50%;
+                filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8)) drop-shadow(0 0 20px rgba(0, 255, 255, 0.6));
+                transform: scale(1);
+            }
+        }
+        
         .admin-panel-btn:hover {
             transform: scale(1.05);
         }
@@ -1102,6 +1120,21 @@
             border-radius: 4px;
             font-size: 0.75rem;
             font-weight: bold;
+        }
+        
+        .admin-tag-special {
+            background: linear-gradient(135deg, #ff00ff, #00ffff, #ffff00, #ff0080, #00ff00, #ff6600, #ff00ff);
+            background-size: 200% 100%;
+            animation: admin-glow 2s ease-in-out infinite;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 900;
+            border: 2px solid rgba(255, 0, 255, 0.8);
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.6);
+            letter-spacing: 0.5px;
         }
 
         /* Empurra o conteúdo quando as sidebars estão abertas */
@@ -1489,9 +1522,11 @@
     <div id="dailyRewardModal" class="daily-reward-modal" onclick="closeDailyReward(event)">
         <div class="daily-reward-content" onclick="event.stopPropagation();">
             <h2>🎉 Recompensa Diária!</h2>
-            <div class="reward-icon">💰</div>
-            <div class="reward-amount" id="rewardAmount">100</div>
-            <p style="color: var(--accent-color); margin-bottom: 20px;">Moedas ganhas!</p>
+            <div style="color: var(--gold); font-size: 1.1rem; margin-bottom: 15px; font-weight: bold;" id="dayCounter">Dia 1 de 30</div>
+            <div class="reward-icon" id="rewardIcon">💰</div>
+            <div class="reward-amount" id="rewardAmount">150</div>
+            <p style="color: var(--accent-color); margin-bottom: 10px;" id="rewardDescription">Moedas ganhas!</p>
+            <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 20px;" id="bonusDescription"></div>
             <button onclick="claimDailyReward()">Coletar Recompensa</button>
             <div class="next-reward-time" id="nextRewardTime"></div>
         </div>
@@ -2382,6 +2417,7 @@ function conquistaAnimacao(tipo) {
             ];
 
             const coresEspeciais = [
+                // Original
                 { nome: 'Arco-íris', hex: 'linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #8000ff)' },
                 { nome: 'Fogo', hex: 'linear-gradient(90deg, #ff0000, #ffaa00, #ffff00)' },
                 { nome: 'Oceano', hex: 'linear-gradient(90deg, #0055ff, #00aaff, #00ffff)' },
@@ -2389,8 +2425,49 @@ function conquistaAnimacao(tipo) {
                 { nome: 'Preto', hex: '#000000' },
                 { nome: 'Branco', hex: '#ffffff' },
                 { nome: 'Gradiente Roxo', hex: 'linear-gradient(90deg, #a855f7, #ec4899)' },
-                { nome: 'Gradiente Rosa', hex: 'linear-gradient(90deg, #ec4899, #f97316)' }
+                { nome: 'Gradiente Rosa', hex: 'linear-gradient(90deg, #ec4899, #f97316)' },
+                
+                // Novos Gradientes - Sunset/Aurora
+                { nome: 'Sunset Quente', hex: 'linear-gradient(90deg, #ff6b6b, #ffa500, #ffeb3b)' },
+                { nome: 'Aurora Boreal', hex: 'linear-gradient(90deg, #00ff88, #00ffff, #0055ff)' },
+                { nome: 'Crepúsculo', hex: 'linear-gradient(90deg, #ff0066, #6600ff, #0066ff)' },
+                { nome: 'Alvorecer', hex: 'linear-gradient(90deg, #ffaa00, #ff6600, #ff0000)' },
+                
+                // Neon Vibrante
+                { nome: 'Neon Cyber', hex: 'linear-gradient(90deg, #00ff00, #00ffff, #ff00ff)' },
+                { nome: 'Neon Elétrico', hex: 'linear-gradient(90deg, #ff0080, #ff0080, #ffff00)' },
+                { nome: 'Neon Gelo', hex: 'linear-gradient(90deg, #00ffff, #0099ff, #6600ff)' },
+                
+                // Pastel Suave
+                { nome: 'Pastel Arco', hex: 'linear-gradient(90deg, #ffccdd, #ffddcc, #ddffcc, #ccffdd, #ccddff, #ddccff)' },
+                { nome: 'Pastel Doce', hex: 'linear-gradient(90deg, #ffb3d9, #ffccb3, #ffffe0)' },
+                { nome: 'Pastel Sonho', hex: 'linear-gradient(90deg, #b3d9ff, #d9b3ff, #ffd9ff)' },
+                
+                // Gradientes Avançados
+                { nome: 'Phantom', hex: 'linear-gradient(90deg, #001a4d, #0033cc, #6600ff)' },
+                { nome: 'Inferno', hex: 'linear-gradient(90deg, #330000, #ff3300, #ffff00)' },
+                { nome: 'Congelante', hex: 'linear-gradient(90deg, #003366, #00ccff, #00ffff)' },
+                { nome: 'Veneno', hex: 'linear-gradient(90deg, #330033, #00ff00, #ffff00)' },
+                { nome: 'Cosmic', hex: 'linear-gradient(90deg, #1a0033, #663399, #ff00ff)' },
+                { nome: 'Abismo', hex: 'linear-gradient(90deg, #0a0a2e, #16213e, #0f3460)' },
+                { nome: 'Sakura', hex: 'linear-gradient(90deg, #ff69b4, #ffc0cb, #ffe4e1)' },
+                { nome: 'Ameixa', hex: 'linear-gradient(90deg, #9932cc, #da70d6, #ee82ee)' },
+                
+                // Monocromáticos Gradiente
+                { nome: 'Cinza Metálico', hex: 'linear-gradient(90deg, #808080, #c0c0c0, #e8e8e8)' },
+                { nome: 'Ouro', hex: 'linear-gradient(90deg, #daa520, #ffd700, #ffed4e)' },
+                { nome: 'Cobre', hex: 'linear-gradient(90deg, #b87333, #cd7f32, #ff6347)' }
             ];
+            
+            // Verificar se é admin e adicionar cor exclusiva
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if (isAdmin) {
+                coresEspeciais.push({
+                    nome: '👑 EXCLUSIVA ADMIN',
+                    hex: 'linear-gradient(135deg, #ff00ff, #00ffff, #ffff00, #ff0080, #00ff00, #ff6600, #ff00ff)',
+                    isAdmin: true
+                });
+            }
 
             const cores = tipo === 'especial' ? coresEspeciais : coresComuns;
             
@@ -2418,19 +2495,32 @@ function conquistaAnimacao(tipo) {
             cores.forEach(cor => {
                 const btn = document.createElement('button');
                 btn.textContent = cor.nome;
+                
+                const isAdminColor = cor.isAdmin === true;
+                const animationStyle = isAdminColor 
+                    ? 'animation: admin-glow 2s ease-in-out infinite; background-size: 200% 100%;'
+                    : cor.hex.includes('linear-gradient') 
+                        ? 'background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite;' 
+                        : '';
+                
+                const borderStyle = isAdminColor 
+                    ? 'border: 3px solid rgba(255, 0, 255, 0.8);'
+                    : 'border: 2px solid var(--accent-color);';
+                
                 btn.style.cssText = `
                     padding: 12px;
-                    border: 2px solid var(--accent-color);
+                    ${borderStyle}
                     border-radius: 8px;
                     background: ${cor.hex};
-                    color: ${cor.nome === 'Preto' ? '#fff' : cor.nome === 'Branco' ? '#000' : 'var(--text-color)'};
+                    color: ${cor.nome === 'Preto' ? '#fff' : cor.nome === 'Branco' ? '#000' : cor.nome.includes('ADMIN') ? '#fff' : 'var(--text-color)'};
                     cursor: pointer;
-                    font-weight: bold;
+                    font-weight: ${isAdminColor ? '900' : 'bold'};
                     transition: 0.3s;
-                    ${cor.hex.includes('linear-gradient') ? 'background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite;' : ''}
+                    font-size: ${isAdminColor ? '1.1rem' : '1rem'};
+                    ${animationStyle}
                 `;
                 
-                btn.onmouseover = () => btn.style.transform = 'scale(1.05)';
+                btn.onmouseover = () => btn.style.transform = 'scale(1.1)';
                 btn.onmouseout = () => btn.style.transform = 'scale(1)';
                 
                 btn.onclick = async () => {
@@ -2442,13 +2532,14 @@ function conquistaAnimacao(tipo) {
                                 'Content-Type': 'application/json',
                                 'Authorization': `Bearer ${token}`
                             },
-                            body: JSON.stringify({ cor: cor.hex, tipo })
+                            body: JSON.stringify({ cor: cor.hex, tipo, isAdmin: isAdminColor })
                         });
                         
                         const data = await res.json();
                         if (data.ok) {
                             localStorage.setItem('userTagColor', cor.hex);
                             localStorage.setItem('userTagColorType', tipo);
+                            localStorage.setItem('userTagColorIsAdmin', isAdminColor.toString());
                             alert(`✅ Cor da tag atualizada para ${cor.nome}!`);
                             document.body.removeChild(modal);
                             updateUserPanelInfo();
@@ -2495,7 +2586,72 @@ function conquistaAnimacao(tipo) {
             modal.classList.remove('active');
         }
 
-        // === SISTEMA DE RECOMPENSAS DIÁRIAS ===
+        // === SISTEMA DE RECOMPENSAS DIÁRIAS (30 DIAS) ===
+        function getDailyRewardDay() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            let sequenceStartDate = localStorage.getItem('dailyRewardStartDate');
+            
+            if (!sequenceStartDate) {
+                // Primeira vez que o usuário acessa, iniciar sequência
+                sequenceStartDate = today.getTime();
+                localStorage.setItem('dailyRewardStartDate', sequenceStartDate);
+            } else {
+                sequenceStartDate = parseInt(sequenceStartDate);
+            }
+            
+            const startDate = new Date(sequenceStartDate);
+            startDate.setHours(0, 0, 0, 0);
+            
+            const daysDiff = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+            const currentDay = (daysDiff % 30) + 1; // Dia de 1 a 30, depois reseta
+            
+            return currentDay;
+        }
+        
+        function getRewardForDay(day) {
+            const coins = 150;
+            let reward = { coins: coins, item: null, description: 'Moedas ganhas!', icon: '💰' };
+            
+            if (day === 15) {
+                reward.item = 'custom-tag';
+                reward.description = 'Moedas + Tag Personalizada!';
+                reward.icon = '🏷️';
+            } else if (day === 20) {
+                reward.item = 'cor-comum';
+                reward.description = 'Moedas + Cor da Tag (Comum)!';
+                reward.icon = '🎨';
+            } else if (day === 30) {
+                reward.item = 'cor-especial';
+                reward.description = 'Moedas + Cor da Tag (Especial)!';
+                reward.icon = '✨';
+            }
+            
+            return reward;
+        }
+        
+        function updateDailyRewardModal() {
+            const currentDay = getDailyRewardDay();
+            const reward = getRewardForDay(currentDay);
+            
+            document.getElementById('dayCounter').textContent = `Dia ${currentDay} de 30`;
+            document.getElementById('rewardAmount').textContent = reward.coins;
+            document.getElementById('rewardIcon').textContent = reward.icon;
+            document.getElementById('rewardDescription').textContent = reward.description;
+            
+            if (reward.item) {
+                const itemNames = {
+                    'custom-tag': '🏷️ Tag Personalizada',
+                    'cor-comum': '🎨 Cor da Tag (Comum)',
+                    'cor-especial': '✨ Cor da Tag (Especial)'
+                };
+                document.getElementById('bonusDescription').textContent = `Bônus: ${itemNames[reward.item]}`;
+            } else {
+                document.getElementById('bonusDescription').textContent = '';
+            }
+        }
+        
         function checkDailyReward() {
             const lastClaimDate = localStorage.getItem('lastDailyRewardDate');
             const today = new Date().toDateString();
@@ -2505,19 +2661,47 @@ function conquistaAnimacao(tipo) {
                 return;
             }
             
+            updateDailyRewardModal();
             document.getElementById('dailyRewardModal').classList.add('active');
         }
 
         function claimDailyReward() {
+            const lastClaimDate = localStorage.getItem('lastDailyRewardDate');
             const today = new Date().toDateString();
-            const rewardAmount = 150;
             
-            addCoins(rewardAmount);
+            if (lastClaimDate === today) {
+                alert('⏰ Você já coletou sua recompensa hoje! Volte amanhã.');
+                return;
+            }
+            
+            const currentDay = getDailyRewardDay();
+            const reward = getRewardForDay(currentDay);
+            
+            // Adicionar moedas
+            addCoins(reward.coins);
+            
+            // Adicionar item bônus se aplicável
+            if (reward.item) {
+                localStorage.setItem(`item-${reward.item}`, 'owned');
+            }
+            
             localStorage.setItem('lastDailyRewardDate', today);
             
             document.getElementById('dailyRewardModal').classList.remove('active');
-            alert(`🎉 Você ganhou ${rewardAmount} moedas!`);
+            
+            let mensagem = `🎉 Você ganhou ${reward.coins} moedas!`;
+            if (reward.item) {
+                const itemNames = {
+                    'custom-tag': 'Tag Personalizada',
+                    'cor-comum': 'Cor da Tag (Comum)',
+                    'cor-especial': 'Cor da Tag (Especial)'
+                };
+                mensagem += `\n✨ Bônus: ${itemNames[reward.item]}`;
+            }
+            
+            alert(mensagem);
             updateUserPanelInfo();
+            initializeShop();
         }
 
         function closeDailyReward(event) {
