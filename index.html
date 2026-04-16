@@ -967,11 +967,11 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             backdrop-filter: blur(5px);
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 0;
         }
         
         .admin-modal.active {
@@ -980,9 +980,10 @@
         
         .admin-content {
             background: var(--sidebar-bg);
-            max-width: 800px;
-            max-height: 90vh;
-            width: 100%;
+            width: 95vw;
+            height: 95vh;
+            max-width: none;
+            max-height: none;
             border-radius: 15px;
             border: 2px solid #ff0000;
             display: flex;
@@ -995,15 +996,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 30px;
+            padding: 25px 40px;
             border-bottom: 2px solid rgba(255, 0, 0, 0.3);
             background: rgba(255, 0, 0, 0.1);
+            flex-shrink: 0;
         }
         
         .admin-header h2 {
             margin: 0;
             color: #ff0000;
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
         
         .admin-close {
@@ -1020,105 +1022,150 @@
         }
         
         .admin-body {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            padding: 30px;
             overflow-y: auto;
             flex: 1;
         }
+
+        @media (max-width: 1400px) {
+            .admin-body {
+                grid-template-columns: 1fr;
+            }
+        }
         
         .admin-section {
-            flex: 1;
             background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
         
         .admin-section h3 {
             color: #ff6666;
-            margin-top: 0;
+            margin: 0;
             border-bottom: 2px solid #ff0000;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            font-size: 1.1rem;
         }
         
         .admin-form {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
+            padding: 15px 0;
         }
         
         .admin-input {
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 0, 0, 0.4);
+            border-radius: 8px;
             color: white;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .admin-input[type="text"],
+        .admin-input[type="number"],
+        select.admin-input {
+            padding: 14px 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 0, 0, 0.4);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        select.admin-input option {
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 10px;
         }
         
         .admin-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
         }
         
         .admin-input:focus {
             outline: none;
             border-color: #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.5);
         }
         
         .admin-btn {
-            padding: 10px;
-            background: #ff0000;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #ff0000, #ff6666);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.2s;
+            font-size: 1rem;
         }
         
         .admin-btn:hover {
-            background: #ff3333;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            background: linear-gradient(135deg, #ff3333, #ff8888);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.4);
         }
         
         .admin-users-list {
-            background: var(--card-bg);
-            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
             border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.2);
             overflow-y: auto;
-            max-height: 300px;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
         
         .admin-user-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            margin-bottom: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-            font-size: 0.9rem;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .admin-user-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateX(5px);
         }
         
         .admin-user-name {
             color: var(--accent-color);
             font-weight: bold;
+            font-size: 1.05rem;
         }
         
         .admin-user-coins {
             color: var(--gold);
+            font-weight: 600;
+            font-size: 0.95rem;
         }
         
         .admin-user-badge {
-            background: #ff0000;
+            background: linear-gradient(135deg, #ff0000, #ff6666);
             color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
             font-weight: bold;
         }
         
@@ -1135,6 +1182,47 @@
             text-shadow: 0 0 5px rgba(0, 255, 255, 0.8);
             box-shadow: 0 0 10px rgba(255, 0, 255, 0.6);
             letter-spacing: 0.5px;
+        }
+
+        /* Botão de Emergência especial */
+        .admin-btn-emergency {
+            background: linear-gradient(135deg, #ff0000, #ff3333, #ff0000) !important;
+            border: 3px solid #ff0000 !important;
+            font-size: 1.1rem !important;
+            padding: 18px 30px !important;
+            animation: pulse 2s infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 900 !important;
+        }
+
+        .admin-btn-emergency:hover {
+            background: linear-gradient(135deg, #ff3333, #ff6666, #ff3333) !important;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.8) !important;
+            animation: none;
+        }
+
+        /* Estilo para lista de compras */
+        #adminComprasList {
+            display: flex;
+            flex-direction: column;
+            gap: 12px !important;
+        }
+
+        .admin-compra-item {
+            padding: 16px !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-left: 4px solid var(--gold) !important;
+            margin-bottom: 0 !important;
+            border-radius: 8px !important;
+            font-size: 0.95rem !important;
+            transition: all 0.2s;
+        }
+
+        .admin-compra-item:hover {
+            background: rgba(255, 255, 255, 0.12) !important;
+            transform: translateX(5px);
+        }
         }
 
         /* Empurra o conteúdo quando as sidebars estão abertas */
@@ -1562,7 +1650,7 @@
                         <button class="admin-btn" onclick="adminAddCoins()">Adicionar Moedas</button>
                     </div>
                     
-                    <h3 style="margin-top: 20px;">🔓 Desbloquear Jogo</h3>
+                    <h3>🔓 Desbloquear Jogo</h3>
                     <div class="admin-form">
                         <input type="text" class="admin-input" id="adminUserGame" placeholder="Nome do usuário">
                         <select class="admin-input" id="adminGameId">
@@ -1576,7 +1664,7 @@
                         <button class="admin-btn" onclick="adminUnlockGame()">Desbloquear Jogo</button>
                     </div>
                     
-                    <h3 style="margin-top: 20px;">🎁 Adicionar Item</h3>
+                    <h3>🎁 Adicionar Item</h3>
                     <div class="admin-form">
                         <input type="text" class="admin-input" id="adminUserItem" placeholder="Nome do usuário">
                         <select class="admin-input" id="adminItemId">
@@ -1597,27 +1685,27 @@
                         <button class="admin-btn" onclick="adminPromoteUser()">Definir Como Admin</button>
                     </div>
 
-                    <h3 style="margin-top: 20px;">🚫 Remover Admin</h3>
+                    <h3>🚫 Remover Admin</h3>
                     <div class="admin-form">
                         <input type="text" class="admin-input" id="adminUserRemove" placeholder="Nome do usuário">
-                        <button class="admin-btn" onclick="adminRemoveAdmin()" style="background: #ff6b6b;">Remover Admin</button>
+                        <button class="admin-btn" onclick="adminRemoveAdmin()">Remover Admin</button>
                     </div>
 
-                    <h3 style="margin-top: 20px;">🏷️ Mudar Tag de Usuário</h3>
+                    <h3>🏷️ Mudar Tag de Usuário</h3>
                     <div class="admin-form">
                         <input type="text" class="admin-input" id="adminUserChangeTag" placeholder="Nome do usuário">
                         <input type="text" class="admin-input" id="adminNewTag" placeholder="Nova tag (máx. 10 caracteres)" maxlength="10">
                         <button class="admin-btn" onclick="adminChangeUserTag()">Mudar Tag</button>
                     </div>
 
-                    <h3 style="margin-top: 20px;">📸 Mudar Foto de Perfil</h3>
+                    <h3>📸 Mudar Foto de Perfil</h3>
                     <div class="admin-form">
                         <input type="text" class="admin-input" id="adminUserChangePhoto" placeholder="Nome do usuário">
                         <input type="text" class="admin-input" id="adminNewPhoto" placeholder="URL da nova foto">
                         <button class="admin-btn" onclick="adminChangeUserPhoto()">Mudar Foto</button>
                     </div>
                     
-                    <h3 style="margin-top: 20px;">👥 Listar Usuários</h3>
+                    <h3>👥 Listar Usuários</h3>
                     <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
                     <div class="admin-users-list" id="adminUsersList"></div>
                 </div>
@@ -1632,9 +1720,9 @@
 
                 <!-- Seção de Emergência -->
                 <div class="admin-section">
-                    <h3 style="color: #ff4646;">🚨 BOTÃO DE EMERGÊNCIA</h3>
-                    <p style="color: #ff8a8a; font-size: 0.9rem; margin-bottom: 15px;">Reseta todos os admins. Apenas Yohanan permanecerá como admin.</p>
-                    <button class="admin-btn" onclick="adminEmergencyReset()" style="background: linear-gradient(135deg, #ff0000, #ff6b6b); border: 2px solid #ff0000; font-weight: bold; font-size: 1.1rem;">⚠️ ACIONADOR DE EMERGÊNCIA</button>
+                    <h3>🚨 BOTÃO DE EMERGÊNCIA</h3>
+                    <p style="color: #ff8a8a; font-size: 0.95rem; margin: 15px 0; line-height: 1.6;">⚠️ Reseta todos os admins. Apenas Yohanan permanecerá como admin. Use com cuidado!</p>
+                    <button class="admin-btn admin-btn-emergency" onclick="adminEmergencyReset()">⚠️ ACIONADOR DE EMERGÊNCIA</button>
                 </div>
             </div>
         </div>
