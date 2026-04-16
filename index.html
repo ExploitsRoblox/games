@@ -1596,6 +1596,26 @@
                         <input type="text" class="admin-input" id="adminUserPromote" placeholder="Nome do usuário">
                         <button class="admin-btn" onclick="adminPromoteUser()">Definir Como Admin</button>
                     </div>
+
+                    <h3 style="margin-top: 20px;">🚫 Remover Admin</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserRemove" placeholder="Nome do usuário">
+                        <button class="admin-btn" onclick="adminRemoveAdmin()" style="background: #ff6b6b;">Remover Admin</button>
+                    </div>
+
+                    <h3 style="margin-top: 20px;">🏷️ Mudar Tag de Usuário</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserChangeTag" placeholder="Nome do usuário">
+                        <input type="text" class="admin-input" id="adminNewTag" placeholder="Nova tag (máx. 10 caracteres)" maxlength="10">
+                        <button class="admin-btn" onclick="adminChangeUserTag()">Mudar Tag</button>
+                    </div>
+
+                    <h3 style="margin-top: 20px;">📸 Mudar Foto de Perfil</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserChangePhoto" placeholder="Nome do usuário">
+                        <input type="text" class="admin-input" id="adminNewPhoto" placeholder="URL da nova foto">
+                        <button class="admin-btn" onclick="adminChangeUserPhoto()">Mudar Foto</button>
+                    </div>
                     
                     <h3 style="margin-top: 20px;">👥 Listar Usuários</h3>
                     <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
@@ -1608,6 +1628,13 @@
                     <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Últimas 20 compras da loja</p>
                     <button class="admin-btn" onclick="adminLoadCompras()">Carregar Compras</button>
                     <div id="adminComprasList" style="margin-top: 15px; max-height: 300px; overflow-y: auto;"></div>
+                </div>
+
+                <!-- Seção de Emergência -->
+                <div class="admin-section">
+                    <h3 style="color: #ff4646;">🚨 BOTÃO DE EMERGÊNCIA</h3>
+                    <p style="color: #ff8a8a; font-size: 0.9rem; margin-bottom: 15px;">Reseta todos os admins. Apenas Yohanan permanecerá como admin.</p>
+                    <button class="admin-btn" onclick="adminEmergencyReset()" style="background: linear-gradient(135deg, #ff0000, #ff6b6b); border: 2px solid #ff0000; font-weight: bold; font-size: 1.1rem;">⚠️ ACIONADOR DE EMERGÊNCIA</button>
                 </div>
             </div>
         </div>
@@ -3254,6 +3281,121 @@ function conquistaAnimacao(tipo) {
                 });
             } catch (err) {
                 console.error('Erro:', err);
+            }
+        }
+
+        // === NOVAS FUNÇÕES DE ADMIN ===
+        async function adminRemoveAdmin() {
+            const nomeUsuario = document.getElementById('adminUserRemove').value;
+
+            if (!nomeUsuario) {
+                alert('❌ Digite o nome do usuário!');
+                return;
+            }
+
+            if (nomeUsuario === "Yohanan") {
+                alert('❌ Você não pode remover admin de Yohanan!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/remover-admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserRemove').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminChangeUserTag() {
+            const nomeUsuario = document.getElementById('adminUserChangeTag').value;
+            const novaTag = document.getElementById('adminNewTag').value;
+
+            if (!nomeUsuario || !novaTag) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/mudar-tag-usuario`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, novaTag })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserChangeTag').value = '';
+                    document.getElementById('adminNewTag').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminChangeUserPhoto() {
+            const nomeUsuario = document.getElementById('adminUserChangePhoto').value;
+            const novaFoto = document.getElementById('adminNewPhoto').value;
+
+            if (!nomeUsuario || !novaFoto) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/mudar-foto-usuario`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, novaFoto })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserChangePhoto').value = '';
+                    document.getElementById('adminNewPhoto').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminEmergencyReset() {
+            const confirmacao = confirm('⚠️ ACIONADOR DE EMERGÊNCIA!\n\nVocê tem certeza? Todos os admins serão removidos.\nApenas Yohanan permanecerá como admin.\n\nClique OK para confirmar.');
+            
+            if (!confirmacao) return;
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/emergencia-reset`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
             }
         }
 
