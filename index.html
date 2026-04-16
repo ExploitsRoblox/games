@@ -802,6 +802,31 @@
             0%, 100% { box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3); }
             50% { box-shadow: 0 4px 25px rgba(255, 0, 0, 0.6); }
         }
+
+        /* Gradientes animados para tags especiais */
+        @keyframes gradient-rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes gradient-fire {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes gradient-ocean {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes gradient-purple {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
         
         .admin-panel-btn:hover {
             transform: scale(1.05);
@@ -1954,6 +1979,8 @@ function conquistaAnimacao(tipo) {
         const SHOP_ITEMS = [
             { id: 'all-games', name: 'Desbloquear Todos os Jogos', desc: 'Desbloqueie todos os jogos secretos', icon: '🔓', price: 300 },
             { id: 'custom-tag', name: 'Tag Personalizada', desc: 'Uma tag única para o seu perfil', icon: '🏷️', price: 2500 },
+            { id: 'cor-comum', name: 'Cor da Tag (Comum)', desc: 'Customize a cor da sua tag com cores normais', icon: '🎨', price: 1500 },
+            { id: 'cor-especial', name: 'Cor da Tag (Especial)', desc: 'Cores especiais, gradientes animados e mais!', icon: '✨', price: 5000 },
             { id: 'new-game', name: 'Escolher novo jogo', desc: 'Escolha um novo jogo para ser adicionado ao site!', icon: '🎮', price: 10000 },
         ];
 
@@ -1964,11 +1991,72 @@ function conquistaAnimacao(tipo) {
         function setCoins(amount) {
             localStorage.setItem('userCoins', amount);
             updateCoinsDisplay();
+            // Sincronizar com o backend se logado
+            syncCoinsToDatabase(amount);
         }
 
         function addCoins(amount) {
             const current = getCoins();
             setCoins(current + amount);
+        }
+
+        async function syncCoinsFromDatabase() {
+            const token = localStorage.getItem('token');
+            if (!token) return; // Não sincroniza se não estiver logado
+            
+            try {
+                const API_URL = "https://login-g50h.onrender.com";
+                const res = await fetch(`${API_URL}/dados-usuario`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.ok && data.usuario) {
+                        const user = data.usuario;
+                        localStorage.setItem('userCoins', user.moedas);
+                        
+                        // Sincronizar cores da tag
+                        if (user.corTagPersonalizada) {
+                            localStorage.setItem('userTagColor', user.corTagPersonalizada);
+                        }
+                        if (user.tipoCorTag) {
+                            localStorage.setItem('userTagColorType', user.tipoCorTag);
+                        }
+                        
+                        updateCoinsDisplay();
+                        console.log(`[SYNC] Moedas sincronizadas do servidor: ${user.moedas}`);
+                        console.log(`[SYNC] Cor da tag sincronizada: ${user.corTagPersonalizada}`);
+                    }
+                }
+            } catch (err) {
+                console.error('Erro ao sincronizar moedas do servidor:', err);
+            }
+        }
+            const token = localStorage.getItem('token');
+            if (!token) return; // Não sincroniza se não estiver logado
+            
+            try {
+                const API_URL = "https://login-g50h.onrender.com";
+                const res = await fetch(`${API_URL}/sincronizar-moedas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ moedas: amount })
+                });
+                
+                if (res.ok) {
+                    console.log(`[SYNC] Moedas sincronizadas: ${amount}`);
+                } else {
+                    console.error('Erro ao sincronizar moedas');
+                }
+            } catch (err) {
+                console.error('Erro na sincronização de moedas:', err);
+            }
         }
 
         function updateCoinsDisplay() {
@@ -2044,15 +2132,29 @@ function conquistaAnimacao(tipo) {
                     unlockGame(gameId);
                 });
                 alert('🔓 Todos os jogos secretos foram desbloqueados!');
-            } else {
-                alert('🎉 Item comprado com sucesso!');
+            } 
+            // Se for cor comum, abrir seletor de cores
+            else if (itemId === 'cor-comum') {
+                setTimeout(() => {
+                    promptTagColor('comum');
+                }, 500);
+                alert('🎨 Você agora pode customizar a cor da sua tag!');
             }
-            
+            // Se for cor especial, abrir seletor de cores especiais
+            else if (itemId === 'cor-especial') {
+                setTimeout(() => {
+                    promptTagColor('especial');
+                }, 500);
+                alert('✨ Você agora tem acesso a cores especiais!');
+            }
             // Se for tag personalizada, abrir modal para escolher a tag
-            if (itemId === 'custom-tag') {
+            else if (itemId === 'custom-tag') {
                 setTimeout(() => {
                     promptCustomTag();
                 }, 500);
+                alert('🎉 Item comprado com sucesso!');
+            } else {
+                alert('🎉 Item comprado com sucesso!');
             }
             
             initializeShop();
@@ -2087,6 +2189,118 @@ function conquistaAnimacao(tipo) {
                     .catch(err => console.error('Erro:', err));
                 }
             }
+        }
+
+        async function promptTagColor(tipo) {
+            const coresComuns = [
+                { nome: 'Roxo', hex: '#a855f7' },
+                { nome: 'Azul', hex: '#3b82f6' },
+                { nome: 'Verde', hex: '#22c55e' },
+                { nome: 'Vermelho', hex: '#ef4444' },
+                { nome: 'Laranja', hex: '#f97316' },
+                { nome: 'Rosa', hex: '#ec4899' },
+                { nome: 'Amarelo', hex: '#eab308' },
+                { nome: 'Ciano', hex: '#06b6d4' }
+            ];
+
+            const coresEspeciais = [
+                { nome: 'Arco-íris', hex: 'linear-gradient(90deg, #ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #8000ff)' },
+                { nome: 'Fogo', hex: 'linear-gradient(90deg, #ff0000, #ffaa00, #ffff00)' },
+                { nome: 'Oceano', hex: 'linear-gradient(90deg, #0055ff, #00aaff, #00ffff)' },
+                { nome: 'Floresta', hex: 'linear-gradient(90deg, #00aa00, #00ff00, #00aa00)' },
+                { nome: 'Preto', hex: '#000000' },
+                { nome: 'Branco', hex: '#ffffff' },
+                { nome: 'Gradiente Roxo', hex: 'linear-gradient(90deg, #a855f7, #ec4899)' },
+                { nome: 'Gradiente Rosa', hex: 'linear-gradient(90deg, #ec4899, #f97316)' }
+            ];
+
+            const cores = tipo === 'especial' ? coresEspeciais : coresComuns;
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('❌ Você precisa estar logado!');
+                return;
+            }
+
+            // Criar modal para escolher cor
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 3000; backdrop-filter: blur(5px);';
+            
+            const content = document.createElement('div');
+            content.style.cssText = 'background: var(--sidebar-bg); padding: 30px; border-radius: 15px; border: 2px solid var(--gold); max-width: 400px; width: 90%;';
+            
+            const title = document.createElement('h3');
+            title.textContent = tipo === 'especial' ? '✨ Escolha uma Cor Especial' : '🎨 Escolha uma Cor';
+            title.style.cssText = 'color: var(--gold); text-align: center; margin-bottom: 20px;';
+            content.appendChild(title);
+
+            const colorGrid = document.createElement('div');
+            colorGrid.style.cssText = 'display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;';
+            
+            cores.forEach(cor => {
+                const btn = document.createElement('button');
+                btn.textContent = cor.nome;
+                btn.style.cssText = `
+                    padding: 12px;
+                    border: 2px solid var(--accent-color);
+                    border-radius: 8px;
+                    background: ${cor.hex};
+                    color: ${cor.nome === 'Preto' ? '#fff' : cor.nome === 'Branco' ? '#000' : 'var(--text-color)'};
+                    cursor: pointer;
+                    font-weight: bold;
+                    transition: 0.3s;
+                    ${cor.hex.includes('linear-gradient') ? 'background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite;' : ''}
+                `;
+                
+                btn.onmouseover = () => btn.style.transform = 'scale(1.05)';
+                btn.onmouseout = () => btn.style.transform = 'scale(1)';
+                
+                btn.onclick = async () => {
+                    const API_URL = "https://login-g50h.onrender.com";
+                    try {
+                        const res = await fetch(`${API_URL}/definir-cor-tag`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ cor: cor.hex, tipo })
+                        });
+                        
+                        const data = await res.json();
+                        if (data.ok) {
+                            localStorage.setItem('userTagColor', cor.hex);
+                            localStorage.setItem('userTagColorType', tipo);
+                            alert(`✅ Cor da tag atualizada para ${cor.nome}!`);
+                            document.body.removeChild(modal);
+                            updateUserPanelInfo();
+                        } else {
+                            alert('❌ ' + data.mensagem);
+                        }
+                    } catch (err) {
+                        console.error('Erro:', err);
+                        alert('❌ Erro ao atualizar cor da tag');
+                    }
+                };
+                
+                colorGrid.appendChild(btn);
+            });
+            
+            content.appendChild(colorGrid);
+
+            // Botão fechar
+            const closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕ Cancelar';
+            closeBtn.style.cssText = 'width: 100%; padding: 12px; background: var(--error-color); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;';
+            closeBtn.onclick = () => document.body.removeChild(modal);
+            content.appendChild(closeBtn);
+
+            modal.appendChild(content);
+            modal.onclick = (e) => {
+                if (e.target === modal) document.body.removeChild(modal);
+            };
+            
+            document.body.appendChild(modal);
         }
 
         function openShop() {
@@ -2175,7 +2389,12 @@ function conquistaAnimacao(tipo) {
                 const moedas = (user.premio !== undefined && user.premio !== null) ? user.premio : 0;
                 const posicao = (user.posicao !== undefined && user.posicao !== null) ? user.posicao : index + 1;
                 const nome = user.nome || 'Desconhecido';
-                const tag = user.tagPersonalizada ? `<span style="font-size: 0.8em; color: var(--accent-color); margin-left: 8px; font-weight: bold;">🏷️ ${user.tagPersonalizada}</span>` : '';
+                const corTag = user.corTagPersonalizada || '#a855f7';
+                const tipoCorTag = user.tipoCorTag || 'comum';
+                const tagStyle = tipoCorTag === 'especial' && corTag.includes('linear-gradient') 
+                    ? `style="font-size: 0.8em; background: ${corTag}; margin-left: 8px; font-weight: bold; padding: 2px 8px; border-radius: 4px; background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"` 
+                    : `style="font-size: 0.8em; color: ${corTag}; margin-left: 8px; font-weight: bold;"`;
+                const tag = user.tagPersonalizada ? `<span ${tagStyle}> ${user.tagPersonalizada}</span>` : '';
                 
                 const medalEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '📊';
                 const positionClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
@@ -2192,7 +2411,7 @@ function conquistaAnimacao(tipo) {
                 item.innerHTML = `
                     <div class="leaderboard-position ${positionClass}">${medalEmoji} #${posicao}</div>
                     <div class="leaderboard-profile">
-                        <div class="leaderboard-pic">${user.foto_perfil ? `<img src="${user.foto_perfil}" alt="${nome}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : '👤'}</div>
+                        <div class="leaderboard-pic">${user.foto_perfil ? `<img src="${user.foto_perfil}?t=${Date.now()}" alt="${nome}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : '👤'}</div>
                         <div class="leaderboard-name">${nome}${tag}</div>
                     </div>
                     <div class="leaderboard-stats">
@@ -2336,15 +2555,45 @@ function conquistaAnimacao(tipo) {
             }
         }
         
-        function changeProfilePicture(event) {
+        async function changeProfilePicture(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
                     const profilePic = e.target.result;
+                    const token = localStorage.getItem('token');
+                    
+                    // Salvar localmente
                     localStorage.setItem('userProfilePic', profilePic);
                     document.getElementById('userProfilePic').src = profilePic;
                     updateUserPanelButton();
+                    
+                    // Sincronizar com o backend se logado
+                    if (token) {
+                        try {
+                            const API_URL = "https://login-g50h.onrender.com";
+                            const res = await fetch(`${API_URL}/atualizar-foto-perfil`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                },
+                                body: JSON.stringify({ foto_perfil: profilePic })
+                            });
+                            
+                            if (res.ok) {
+                                console.log('[PHOTO] Foto de perfil sincronizada com o servidor');
+                                // Recarregar leaderboard para mostrar a foto atualizada
+                                const leaderboardModal = document.getElementById('leaderboardModal');
+                                if (leaderboardModal && leaderboardModal.classList.contains('active')) {
+                                    await loadLeaderboard();
+                                }
+                            }
+                        } catch (err) {
+                            console.error('Erro ao sincronizar foto:', err);
+                        }
+                    }
+                    
                     alert('📄 Foto de perfil alterada com sucesso!');
                 };
                 reader.readAsDataURL(file);
@@ -2743,12 +2992,26 @@ function perguntarSave() {
                 const titleDiv = document.getElementById('title');
                 const userName = document.createElement('h3');
                 const userTag = localStorage.getItem('userTag');
-                const tagHTML = userTag ? ` <span style="font-size: 0.85em; color: var(--accent-color); font-weight: bold;">🏷️ ${userTag}</span>` : '';
+                const userTagColor = localStorage.getItem('userTagColor') || '#a855f7';
+                const userTagColorType = localStorage.getItem('userTagColorType') || 'comum';
+                
+                let tagHTML = '';
+                if (userTag) {
+                    if (userTagColorType === 'especial' && userTagColor.includes('linear-gradient')) {
+                        tagHTML = ` <span style="font-size: 0.85em; background: ${userTagColor}; font-weight: bold; padding: 4px 10px; border-radius: 4px; background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">🏷️ ${userTag}</span>`;
+                    } else {
+                        tagHTML = ` <span style="font-size: 0.85em; color: ${userTagColor}; font-weight: bold;"> ${userTag}</span>`;
+                    }
+                }
+                
                 userName.innerHTML = `Bem-vindo, ${usuario}!${tagHTML}`;
                 userName.style.color = 'var(--text-color)';
                 userName.style.textAlign = 'center';
                 userName.style.marginBottom = '10px';
                 titleDiv.insertBefore(userName, titleDiv.firstChild);
+
+                // Sincronizar moedas com o servidor
+                syncCoinsFromDatabase();
             } else if (usuario && !token) {
                 alert("Parece que você está logado, mas ocorreu um erro ao carregar seu token. Por motivos de segurança, faça login novamente para garantir que suas conquistas e progresso sejam salvos corretamente.")
                 localStorage.removeItem('usuarioLogado')
@@ -2850,6 +3113,8 @@ async function salvarBackup() {
       userCoins: localStorage.getItem('userCoins'),
       userPlaytime: localStorage.getItem('userPlaytime'),
       userTag: localStorage.getItem('userTag'),
+      userTagColor: localStorage.getItem('userTagColor'),
+      userTagColorType: localStorage.getItem('userTagColorType'),
       userProfilePic: localStorage.getItem('userProfilePic'),
       destaque: localStorage.getItem('destaque'),
       lucky_used: localStorage.getItem('lucky_used'),
@@ -2858,7 +3123,7 @@ async function salvarBackup() {
 
     // 2. ITENS COMPRADOS
     const itensComprados = [];
-    const SHOP_ITEMS = ['all-games', 'custom-tag', 'new-game'];
+    const SHOP_ITEMS = ['all-games', 'custom-tag', 'cor-comum', 'cor-especial', 'new-game'];
     SHOP_ITEMS.forEach(itemId => {
       const key = `item-${itemId}`;
       if (localStorage.getItem(key) === 'owned') {
