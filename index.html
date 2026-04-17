@@ -1806,6 +1806,124 @@
     100% { background-position: 0% 50%; }
 }
 
+        /* === SISTEMA DE AUTORIZAÇÃO/SOLICITAÇÕES === */
+        .admin-solicitacao-item {
+            padding: 16px !important;
+            background: rgba(168, 85, 247, 0.1) !important;
+            border-left: 4px solid var(--accent-color) !important;
+            border-radius: 8px !important;
+            margin-bottom: 12px !important;
+            transition: all 0.2s;
+        }
+
+        .admin-solicitacao-item:hover {
+            background: rgba(168, 85, 247, 0.2) !important;
+            transform: translateX(5px);
+        }
+
+        .solicitacao-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .solicitacao-user {
+            color: var(--accent-color);
+            font-size: 1.05rem;
+        }
+
+        .solicitacao-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .solicitacao-status.pendente {
+            background: rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .solicitacao-status.aprovada {
+            background: rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+            border: 1px solid #22c55e;
+        }
+
+        .solicitacao-status.rejeitada {
+            background: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        .solicitacao-details {
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .solicitacao-details strong {
+            color: var(--gold);
+        }
+
+        .solicitacao-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .solicitacao-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .solicitacao-btn-approve {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .solicitacao-btn-approve:hover {
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 197, 94, 0.3);
+        }
+
+        .solicitacao-btn-reject {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .solicitacao-btn-reject:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .solicitacao-historico-item {
+            padding: 14px !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border-left: 4px solid #aaa !important;
+            border-radius: 8px !important;
+            margin-bottom: 10px !important;
+            font-size: 0.9rem !important;
+        }
+
+        .solicitacao-historico-item:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+        }
+
     </style>
 </head>
 <body>
@@ -1990,6 +2108,35 @@
                     <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Últimas 20 compras da loja</p>
                     <button class="admin-btn" onclick="adminLoadCompras()">Carregar Compras</button>
                     <div id="adminComprasList" style="margin-top: 15px; max-height: 300px; overflow-y: auto;"></div>
+                </div>
+
+                <!-- Seção de Sistema de Autorização (Solicitações) -->
+                <div class="admin-section">
+                    <h3>📋 Sistema de Autorização</h3>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h4 style="color: #a855f7; margin: 0 0 15px 0;">Criar Solicitação de Moedas</h4>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="solicitacaoUserCoins" placeholder="Nome do usuário">
+                            <input type="number" class="admin-input" id="solicitacaoCoinsAmount" placeholder="Quantidade de moedas" min="1">
+                            <input type="text" class="admin-input" id="solicitacaoMotivo" placeholder="Motivo (opcional)">
+                            <button class="admin-btn" onclick="criarSolicitacaoMoedas()">Enviar Solicitação</button>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px;">
+                        <h4 style="color: #a855f7; margin: 0 0 15px 0;">Solicitações Pendentes</h4>
+                        <p style="color: #aaa; font-size: 0.85rem; margin-bottom: 10px;">⚠️ Apenas para Yohanan</p>
+                        <button class="admin-btn" onclick="carregarSolicitacoesPendentes()">Carregar Solicitações</button>
+                        <div id="adminSolicitacoesList" style="margin-top: 15px; max-height: 350px; overflow-y: auto;"></div>
+                    </div>
+
+                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px; margin-top: 15px;">
+                        <h4 style="color: #a855f7; margin: 0 0 15px 0;">Histórico de Solicitações</h4>
+                        <p style="color: #aaa; font-size: 0.85rem; margin-bottom: 10px;">⚠️ Apenas para Yohanan</p>
+                        <button class="admin-btn" onclick="carregarHistoricoSolicitacoes()">Carregar Histórico</button>
+                        <div id="adminHistoricoSolicitacoesList" style="margin-top: 15px; max-height: 350px; overflow-y: auto;"></div>
+                    </div>
                 </div>
 
                 <!-- Seção de Emergência -->
@@ -4463,6 +4610,253 @@ async function salvarBackup() {
     alert(`❌ Erro ao salvar backup: ${err.message}`);
   }
 }
+
+        // === SISTEMA DE AUTORIZAÇÃO/SOLICITAÇÕES ===
+        
+        async function criarSolicitacaoMoedas() {
+            const nomeUsuario = document.getElementById('solicitacaoUserCoins').value.trim();
+            const quantidade = parseInt(document.getElementById('solicitacaoCoinsAmount').value);
+            const motivo = document.getElementById('solicitacaoMotivo').value.trim();
+            
+            if (!nomeUsuario || !quantidade || quantidade <= 0) {
+                alert('❌ Preencha os campos obrigatórios corretamente!');
+                return;
+            }
+            
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('❌ Você precisa estar logado!');
+                    return;
+                }
+                
+                const res = await fetch(`${API_ADMIN}/criar-solicitacao-moedas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        nomeUsuario,
+                        quantidade,
+                        motivo: motivo || 'Sem motivo especificado'
+                    })
+                });
+                
+                const resposta = await res.json();
+                alert(resposta.mensagem || (resposta.ok ? '✅ Solicitação criada com sucesso!' : '❌ Erro ao criar solicitação'));
+                
+                if (resposta.ok) {
+                    document.getElementById('solicitacaoUserCoins').value = '';
+                    document.getElementById('solicitacaoCoinsAmount').value = '';
+                    document.getElementById('solicitacaoMotivo').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+                console.error('Erro ao criar solicitação:', err);
+            }
+        }
+        
+        async function carregarSolicitacoesPendentes() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('❌ Você precisa estar logado!');
+                    return;
+                }
+                
+                const res = await fetch(`${API_ADMIN}/minhas-solicitacoes`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const resposta = await res.json();
+                
+                if (!resposta.ok) {
+                    alert(resposta.mensagem || '❌ Erro ao carregar solicitações');
+                    return;
+                }
+                
+                renderSolicitacoesPendentes(resposta.solicitacoes || []);
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+                console.error('Erro ao carregar solicitações:', err);
+            }
+        }
+        
+        function renderSolicitacoesPendentes(solicitacoes) {
+            const container = document.getElementById('adminSolicitacoesList');
+            container.innerHTML = '';
+            
+            if (solicitacoes.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #aaa; padding: 20px;">Nenhuma solicitação pendente</p>';
+                return;
+            }
+            
+            solicitacoes.forEach(sol => {
+                const dataFormatada = new Date(sol.criadaEm).toLocaleDateString('pt-BR');
+                const div = document.createElement('div');
+                div.className = 'admin-solicitacao-item';
+                
+                const statusClass = sol.status || 'pendente';
+                
+                div.innerHTML = `
+                    <div class="solicitacao-header">
+                        <span class="solicitacao-user">${sol.solicitadoPor || 'Desconhecido'}</span>
+                        <span class="solicitacao-status ${statusClass}">${statusClass.toUpperCase()}</span>
+                    </div>
+                    <div class="solicitacao-details">
+                        <div><strong>Para:</strong> ${sol.destinatario || 'N/A'}</div>
+                        <div><strong>Moedas:</strong> ${sol.detalhes?.quantidade || 0}</div>
+                        <div><strong>Motivo:</strong> ${sol.descricao || 'Sem motivo'}</div>
+                        <div style="font-size: 0.85rem; color: #999;">Criada em: ${dataFormatada}</div>
+                    </div>
+                    ${statusClass === 'pendente' ? `
+                    <div class="solicitacao-actions">
+                        <button class="solicitacao-btn solicitacao-btn-approve" onclick="aprovarSolicitacao('${sol._id}')">✓ Aprovar</button>
+                        <button class="solicitacao-btn solicitacao-btn-reject" onclick="rejeitarSolicitacao('${sol._id}')">✕ Rejeitar</button>
+                    </div>
+                    ` : ''}
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+        
+        async function carregarHistoricoSolicitacoes() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('❌ Você precisa estar logado!');
+                    return;
+                }
+                
+                const res = await fetch(`${API_ADMIN}/historico-solicitacoes`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const resposta = await res.json();
+                
+                if (!resposta.ok) {
+                    alert(resposta.mensagem || '❌ Erro ao carregar histórico');
+                    return;
+                }
+                
+                renderHistoricoSolicitacoes(resposta.solicitacoes || []);
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+                console.error('Erro ao carregar histórico:', err);
+            }
+        }
+        
+        function renderHistoricoSolicitacoes(solicitacoes) {
+            const container = document.getElementById('adminHistoricoSolicitacoesList');
+            container.innerHTML = '';
+            
+            if (solicitacoes.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #aaa; padding: 20px;">Nenhum histórico disponível</p>';
+                return;
+            }
+            
+            solicitacoes.forEach(sol => {
+                const dataFormatada = new Date(sol.criadaEm).toLocaleDateString('pt-BR');
+                const dataResposta = sol.respondidaEm ? new Date(sol.respondidaEm).toLocaleDateString('pt-BR') : 'N/A';
+                const div = document.createElement('div');
+                div.className = 'solicitacao-historico-item';
+                
+                const statusClass = sol.status || 'pendente';
+                let statusText = statusClass.toUpperCase();
+                if (statusClass === 'aprovada') statusText = '✓ APROVADA';
+                if (statusClass === 'rejeitada') statusText = '✕ REJEITADA';
+                
+                div.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <strong style="color: #a855f7;">${sol.solicitadoPor || 'Desconhecido'}</strong>
+                        <span class="solicitacao-status ${statusClass}">${statusText}</span>
+                    </div>
+                    <div style="color: #cbd5e1; font-size: 0.9rem; line-height: 1.4;">
+                        <div><strong>Para:</strong> ${sol.destinatario || 'N/A'}</div>
+                        <div><strong>Moedas:</strong> ${sol.detalhes?.quantidade || 0}</div>
+                        <div><strong>Motivo:</strong> ${sol.descricao || 'Sem motivo'}</div>
+                        <div style="font-size: 0.8rem; color: #999;">Criada em ${dataFormatada}</div>
+                        ${sol.respondidaPor ? `<div style="font-size: 0.8rem; color: #aaa;">Respondida por ${sol.respondidaPor} em ${dataResposta}</div>` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+        
+        async function aprovarSolicitacao(solicitacaoId) {
+            const confirmacao = confirm('✓ Deseja aprovar esta solicitação?');
+            if (!confirmacao) return;
+            
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('❌ Você precisa estar logado!');
+                    return;
+                }
+                
+                const res = await fetch(`${API_ADMIN}/aprovar-solicitacao`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ solicitacaoId })
+                });
+                
+                const resposta = await res.json();
+                alert(resposta.mensagem || (resposta.ok ? '✅ Solicitação aprovada!' : '❌ Erro ao aprovar'));
+                
+                if (resposta.ok) {
+                    carregarSolicitacoesPendentes();
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+                console.error('Erro ao aprovar solicitação:', err);
+            }
+        }
+        
+        async function rejeitarSolicitacao(solicitacaoId) {
+            const motivo = prompt('Motivo da rejeição (opcional):');
+            if (motivo === null) return; // Usuário cancelou
+            
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('❌ Você precisa estar logado!');
+                    return;
+                }
+                
+                const res = await fetch(`${API_ADMIN}/rejeitar-solicitacao`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        solicitacaoId,
+                        motivo: motivo || 'Sem motivo especificado'
+                    })
+                });
+                
+                const resposta = await res.json();
+                alert(resposta.mensagem || (resposta.ok ? '✕ Solicitação rejeitada!' : '❌ Erro ao rejeitar'));
+                
+                if (resposta.ok) {
+                    carregarSolicitacoesPendentes();
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+                console.error('Erro ao rejeitar solicitação:', err);
+            }
+        }
+        
     </script>
 </body>
 </html>
