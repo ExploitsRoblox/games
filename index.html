@@ -2012,11 +2012,25 @@
             <div class="admin-body">
                 <!-- Seção de Gerenciamento de Moedas -->
                 <div class="admin-section">
-                    <h3>💰 Adicionar Moedas</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserCoins" placeholder="Nome do usuário">
-                        <input type="number" class="admin-input" id="adminCoinsAmount" placeholder="Quantidade de moedas" min="1">
-                        <button class="admin-btn" onclick="adminAddCoins()">Adicionar Moedas</button>
+                    <!-- Seção para Yohanan (Dono) - Adicionar Moedas -->
+                    <div id="adminAddCoinsSection" style="display: none;">
+                        <h3>💰 Adicionar Moedas</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserCoins" placeholder="Nome do usuário">
+                            <input type="number" class="admin-input" id="adminCoinsAmount" placeholder="Quantidade de moedas" min="1">
+                            <button class="admin-btn" onclick="adminAddCoins()">Adicionar Moedas</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Seção para Admins (não-dona) - Solicitar Moedas -->
+                    <div id="adminRequestCoinsSection" style="display: none;">
+                        <h3>💰 Solicitar Moedas</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="requestUserCoins" placeholder="Nome do usuário">
+                            <input type="number" class="admin-input" id="requestCoinsAmount" placeholder="Quantidade de moedas" min="1">
+                            <input type="text" class="admin-input" id="requestCoinsMotive" placeholder="Motivo (opcional)">
+                            <button class="admin-btn" onclick="adminRequestCoins()">Solicitar Moedas</button>
+                        </div>
                     </div>
                     
                     <h3>🔓 Desbloquear Jogo</h3>
@@ -3633,6 +3647,23 @@ function conquistaAnimacao(tipo) {
 
         function openAdminPanel() {
             document.getElementById('adminModal').classList.add('active');
+            updateAdminCoinsSection();
+        }
+
+        function updateAdminCoinsSection() {
+            const usuario = localStorage.getItem('usuarioLogado');
+            const addCoinsSection = document.getElementById('adminAddCoinsSection');
+            const requestCoinsSection = document.getElementById('adminRequestCoinsSection');
+            
+            if (usuario === 'Yohanan') {
+                // Yohanan (dono): mostra "Adicionar Moedas" e esconde "Solicitar Moedas"
+                addCoinsSection.style.display = 'block';
+                requestCoinsSection.style.display = 'none';
+            } else {
+                // Outros admins: mostra "Solicitar Moedas" e esconde "Adicionar Moedas"
+                addCoinsSection.style.display = 'none';
+                requestCoinsSection.style.display = 'block';
+            }
         }
 
         function closeAdminPanel(event) {
@@ -3675,6 +3706,38 @@ function conquistaAnimacao(tipo) {
                 if (resposta.ok) {
                     document.getElementById('adminUserCoins').value = '';
                     document.getElementById('adminCoinsAmount').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminRequestCoins() {
+            const nomeUsuario = document.getElementById('requestUserCoins').value;
+            const quantidade = parseInt(document.getElementById('requestCoinsAmount').value);
+            const motivo = document.getElementById('requestCoinsMotive').value;
+
+            if (!nomeUsuario || !quantidade) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/criar-solicitacao-moedas`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, quantidade, motivo })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('requestUserCoins').value = '';
+                    document.getElementById('requestCoinsAmount').value = '';
+                    document.getElementById('requestCoinsMotive').value = '';
                 }
             } catch (err) {
                 alert('❌ Erro: ' + err.message);
