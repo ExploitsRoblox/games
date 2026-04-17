@@ -4383,8 +4383,8 @@ function perguntarSave() {
             }
         }
         
-        // Rastrear tempo a cada 5 minutos
-        setInterval(trackPlaytime, 5 * 60 * 1000);
+        // Rastrear tempo a cada 1 minuto
+        setInterval(trackPlaytime, 1 * 60 * 1000);
         
         // Rastrear tempo ao descarregar a página
         window.addEventListener('beforeunload', trackPlaytime);
