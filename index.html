@@ -3751,8 +3751,7 @@ function conquistaAnimacao(tipo) {
                 adminLoadCompras();
             }
         }
-        setInterval(syncCoinsFromDatabase, 5000); // Atualiza moedas a cada 5 segundos
-        setInterval(syncCoinsToDatabase, 10000); // Atualiza moedas a cada 10 segundos
+        setInterval(syncCoinsToDatabase, 5000); // Atualiza moedas a cada 5 segundos
         function loadNotifications() {
             const token = localStorage.getItem('token');
             if (!token) return;
