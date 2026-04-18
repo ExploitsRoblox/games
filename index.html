@@ -4964,10 +4964,13 @@ function perguntarSave() {
         function showifadmin() {
             const isAdmin = localStorage.getItem('isAdmin') === 'true';
             const adminPanel = document.getElementById('adminPanelBtn');
+            const notificationsBtn = document.getElementById('notificationsBtn');
             if (isAdmin) {
                 adminPanel.style.display = 'block';
+                notificationsBtn.style.display = 'block';
             } else {
                 adminPanel.style.display = 'none';
+                notificationsBtn.style.display = 'none';
             }
         }
 
