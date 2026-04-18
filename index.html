@@ -3313,10 +3313,7 @@ function conquistaAnimacao(tipo) {
                     }
                     return true;
                 } else {
-            const coinsDisplay = document.getElementById('coinsDisplay');
-            if (coinsDisplay) {
-                coinsDisplay.textContent = `💰 ${coins} Moedas`;
-            } || 'Erro desconhecido');
+                    console.error('[SYNC] ❌ Erro ao sincronizar moedas:', data.mensagem || 'Erro desconhecido');
                     return false;
                 }
             } catch (err) {
@@ -3327,7 +3324,10 @@ function conquistaAnimacao(tipo) {
 
         function updateCoinsDisplay() {
             const coins = getCoins();
-            document.getElementById('coinsDisplay').textContent = `💰 ${coins} Moedas`;
+            const coinsDisplay = document.getElementById('coinsDisplay');
+            if (coinsDisplay) {
+                coinsDisplay.textContent = `💰 ${coins} Moedas`;
+            }
         }
 
         function initializeShop() {
