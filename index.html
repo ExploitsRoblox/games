@@ -2558,32 +2558,6 @@
                     <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
                     <div class="admin-users-list" id="adminUsersList"></div>
                 </div>
-                
-                <!-- Seção de Inbox de Compras -->
-                <div class="admin-section">
-                    <h3>📦 Inbox de Compras</h3>
-                    <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Últimas 20 compras da loja</p>
-                    <button class="admin-btn" onclick="adminLoadCompras()">Carregar Compras</button>
-                    <div id="adminComprasList" style="margin-top: 15px; max-height: 300px; overflow-y: auto;"></div>
-                </div>
-
-                <!-- Seção de Sistema de Autorização (Solicitações) -->
-                <div class="admin-section">
-
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px;">
-                        <h4 style="color: #a855f7; margin: 0 0 15px 0;">Solicitações Pendentes</h4>
-                        <p style="color: #aaa; font-size: 0.85rem; margin-bottom: 10px;">⚠️ Apenas para Yohanan</p>
-                        <button class="admin-btn" onclick="carregarSolicitacoesPendentes()">Carregar Solicitações</button>
-                        <div id="adminSolicitacoesList" style="margin-top: 15px; max-height: 350px; overflow-y: auto;"></div>
-                    </div>
-
-                    <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px; margin-top: 15px;">
-                        <h4 style="color: #a855f7; margin: 0 0 15px 0;">Histórico de Solicitações</h4>
-                        <p style="color: #aaa; font-size: 0.85rem; margin-bottom: 10px;">⚠️ Apenas para Yohanan</p>
-                        <button class="admin-btn" onclick="carregarHistoricoSolicitacoes()">Carregar Histórico</button>
-                        <div id="adminHistoricoSolicitacoesList" style="margin-top: 15px; max-height: 350px; overflow-y: auto;"></div>
-                    </div>
-                </div>
 
                 <!-- Seção de Emergência -->
                 <div class="admin-section">
@@ -3703,11 +3677,13 @@ function conquistaAnimacao(tipo) {
             modal.classList.add('active');
             switchNotificationTab('pending');
             loadNotifications();
+            if (localStorage.getItem('usuarioLogado') === 'Yohanan') {
             carregarSolicitacoesPendentes();
             carregarHistoricoSolicitacoes();
             adminLoadCompras();
+            }
         }
-        if (localStorage.getItem('isAdmin') === 'true') {
+        if (localStorage.getItem('usuarioLogado') === 'Yohanan') {
         setInterval(updateNotificationBadge, 3000); // Atualiza a badge a cada minuto
         setInterval(carregarSolicitacoesPendentes, 1000); // Recarrega solicitações pendentes a cada minuto
         setInterval(carregarHistoricoSolicitacoes, 1000); // Recarrega histórico de solicitações a cada minuto
