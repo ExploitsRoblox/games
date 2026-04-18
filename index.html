@@ -2325,6 +2325,7 @@
                 <button class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
                 <button class="navbar-btn" onclick="openShop()">LOJA</button>
                 <button class="navbar-btn" onclick="toggleAchievements()">CONQUISTAS</button>
+                <button class="navbar-btn" id="adminPanelBtn" style="display: none;" onclick="openAdminPanel()">PAINEL</button>
             </nav>
             
             <!-- Lado direito: Moedas e Botões de Autenticação -->
@@ -4960,6 +4961,16 @@ function perguntarSave() {
             }, 100);
         });
 
+        function showifadmin() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            const adminPanel = document.getElementById('adminPanelBtn');
+            if (isAdmin) {
+                adminPanel.style.display = 'block';
+            } else {
+                adminPanel.style.display = 'none';
+            }
+        }
+
         function reloadAchievements() {
             const ach1 = localStorage.getItem('destaque') ? 1 : 0;
             const ach2 = localStorage.getItem('lucky_used') ? 1 : 0;
@@ -4993,6 +5004,7 @@ function perguntarSave() {
             checkAchievements(); // verifica conquistas ao carregar
             reloadAchievements(); // atualiza display de conquistas
             secretText(); // verifica se deve mostrar texto secreto
+            showifadmin(); // verifica se deve mostrar painel de admin
             
             // Atualizar display de moedas
             updateCoinsDisplay();
