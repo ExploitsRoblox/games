@@ -159,6 +159,51 @@
             box-shadow: 0 4px 12px rgba(229, 9, 20, 0.6);
         }
 
+        .navbar-notifications-btn {
+            background: transparent;
+            color: var(--text-color);
+            border: 2px solid var(--text-color);
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar-notifications-btn:hover {
+            background: var(--text-color);
+            color: var(--bg-dark);
+            border-color: var(--text-color);
+        }
+
+        .notification-badge {
+            display: none;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--error-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            min-width: 24px;
+        }
+
+        .notification-badge.active {
+            display: flex;
+        }
+
         /* Responsivo */
         @media (max-width: 1024px) {
             .navbar-container {
@@ -1023,6 +1068,125 @@
             background: #666;
             cursor: not-allowed;
             opacity: 0.6;
+        }
+        
+        /* Modal de Notificações */
+        .notifications-modal {
+            display: none;
+            position: fixed;
+            z-index: 2002;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .notifications-modal.active {
+            display: flex;
+        }
+        
+        .notifications-content {
+            background: var(--sidebar-bg);
+            max-width: 800px;
+            max-height: 80vh;
+            width: 100%;
+            border-radius: 15px;
+            border: 2px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+        
+        .notifications-header h2 {
+            color: var(--accent-color);
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .notifications-close {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .notifications-close:hover {
+            color: var(--error-color);
+            transform: scale(1.2);
+        }
+        
+        .notifications-tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid rgba(207, 57, 57, 0.2);
+            padding: 0;
+        }
+        
+        .notifications-tab {
+            flex: 1;
+            background: transparent;
+            color: var(--text-color);
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            text-align: center;
+        }
+        
+        .notifications-tab:hover {
+            background: rgba(207, 57, 57, 0.1);
+        }
+        
+        .notifications-tab.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+        
+        .notifications-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        .notifications-tab-content {
+            display: none;
+        }
+        
+        .notifications-tab-content.active {
+            display: block;
+        }
+        
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .notifications-list:empty::after {
+            content: 'Nenhuma notificação';
+            text-align: center;
+            color: #aaa;
+            padding: 30px;
+            font-style: italic;
         }
         
         /* Modal de Recompensas Diárias */
@@ -2166,13 +2330,56 @@
             <!-- Lado direito: Moedas e Botões de Autenticação -->
             <div class="navbar-right">
                 <div class="coins-display" id="coinsDisplay">💰 0 Moedas</div>
+                <button id="notificationsBtn" class="navbar-notifications-btn" onclick="openNotifications()">
+                    🔔 
+                    <span class="notification-badge" id="notificationBadge"></span>
+                </button>
                 <button id="userPanelBtn" class="user-panel-btn" style="display: none;" onclick="toggleUserPanel()"></button>
                 <button id="authBtn" class="navbar-auth-btn" onclick="">🔐 LOGIN</button>
             </div>
         </div>
     </header>
     
-    <button id="adminPanelBtn" class="admin-panel-btn" onclick="openAdminPanel()">🔴 PAINEL ADMIN</button>
+    <!-- Modal de Notificações -->
+    <div id="notificationsModal" class="notifications-modal" onclick="closeNotifications(event)">
+        <div class="notifications-content" onclick="event.stopPropagation();">
+            <div class="notifications-header">
+                <h2>🔔 Notificações</h2>
+                <button class="notifications-close" onclick="closeNotifications()">✕</button>
+            </div>
+            
+            <!-- Abas de Notificações -->
+            <div class="notifications-tabs">
+                <button class="notifications-tab active" onclick="switchNotificationTab('pending')">
+                    📋 Solicitações Pendentes
+                </button>
+                <button class="notifications-tab" onclick="switchNotificationTab('history')">
+                    📝 Histórico de Solicitações
+                </button>
+                <button class="notifications-tab" onclick="switchNotificationTab('purchases')">
+                    🛒 Histórico de Compras
+                </button>
+            </div>
+            
+            <!-- Conteúdo das Abas -->
+            <div class="notifications-body">
+                <!-- Aba: Solicitações Pendentes -->
+                <div id="tab-pending" class="notifications-tab-content active">
+                    <div id="solicitacoesPendentes" class="notifications-list"></div>
+                </div>
+                
+                <!-- Aba: Histórico de Solicitações -->
+                <div id="tab-history" class="notifications-tab-content">
+                    <div id="historicoSolicitacoes" class="notifications-list"></div>
+                </div>
+                
+                <!-- Aba: Histórico de Compras -->
+                <div id="tab-purchases" class="notifications-tab-content">
+                    <div id="adminComprasList" class="notifications-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Modal da Loja -->
     <div id="shopModal" class="shop-modal" onclick="closeShop(event)">
@@ -3460,6 +3667,78 @@ function conquistaAnimacao(tipo) {
             modal.classList.remove('active');
         }
 
+        // === SISTEMA DE NOTIFICAÇÕES ===
+        function openNotifications() {
+            const modal = document.getElementById('notificationsModal');
+            modal.classList.add('active');
+            switchNotificationTab('pending');
+            loadNotifications();
+        }
+
+        function closeNotifications(event) {
+            if (event && event.target !== document.getElementById('notificationsModal')) {
+                return;
+            }
+            const modal = document.getElementById('notificationsModal');
+            modal.classList.remove('active');
+        }
+
+        function switchNotificationTab(tabName) {
+            // Remover classe active de todos os abas e conteúdos
+            document.querySelectorAll('.notifications-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.notifications-tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Adicionar classe active à aba selecionada
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            // Carregar dados da aba
+            if (tabName === 'pending') {
+                carregarSolicitacoesPendentes();
+            } else if (tabName === 'history') {
+                carregarHistoricoSolicitacoes();
+            } else if (tabName === 'purchases') {
+                adminLoadCompras();
+            }
+        }
+
+        function loadNotifications() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            carregarSolicitacoesPendentes();
+            carregarHistoricoSolicitacoes();
+            adminLoadCompras();
+        }
+
+        function updateNotificationBadge() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            // Contar solicitações pendentes
+            const API_URL = "https://login-g50h.onrender.com";
+            fetch(`${API_URL}/api/solicitacoes-pendentes`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            .then(r => r.json())
+            .then(data => {
+                const count = data.length || 0;
+                const badge = document.getElementById('notificationBadge');
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.classList.add('active');
+                } else {
+                    badge.classList.remove('active');
+                }
+            })
+            .catch(() => {});
+        }
+
+
         // === SISTEMA DE RECOMPENSAS DIÁRIAS (30 DIAS) ===
         function getDailyRewardDay() {
             const today = new Date();
@@ -3679,7 +3958,6 @@ function conquistaAnimacao(tipo) {
         function updateAuthBtn() {
             const authBtn = document.getElementById('authBtn');
             const userPanelBtn = document.getElementById('userPanelBtn');
-            const adminBtn = document.getElementById('adminPanelBtn');
             const usuario = localStorage.getItem('usuarioLogado');
             const isAdmin = localStorage.getItem('isAdmin') === 'true';
             
@@ -3693,22 +3971,15 @@ function conquistaAnimacao(tipo) {
                 userPanelBtn.style.display = 'flex';
                 userPanelBtn.style.visibility = 'visible';
                 
-                // Mostrar botão de admin se for admin
-                if (isAdmin) {
-                    adminBtn.style.display = 'block';
-                } else {
-                    adminBtn.style.display = 'none';
-                }
-                
                 updateUserPanelButton();
                 updateUserPanelInfo();
+                updateNotificationBadge();
             } else {
                 // Usuário não logado: mostrar botão de login
                 authBtn.style.visibility = 'visible';
                 authBtn.style.pointerEvents = 'auto';
                 userPanelBtn.style.display = 'none';
                 userPanelBtn.style.visibility = 'hidden';
-                adminBtn.style.display = 'none';
                 
                 // Garantir que mantém as classes CSS
                 authBtn.className = 'action-btn btn-auth';
