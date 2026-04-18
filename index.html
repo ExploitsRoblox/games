@@ -3186,11 +3186,19 @@ function conquistaAnimacao(tipo) {
             return parseInt(localStorage.getItem('userCoins') || '0');
         }
 
-        function setCoins(amount) {
+        async function setCoins(amount) {
+            // Validar que é um número válido
+            amount = parseInt(amount) || 0;
+            if (amount < 0) amount = 0;
+            
             localStorage.setItem('userCoins', amount);
             updateCoinsDisplay();
+            
             // Sincronizar com o backend se logado
-            syncCoinsToDatabase(amount);
+            const token = localStorage.getItem('token');
+            if (token) {
+                await syncCoinsToDatabase(amount);
+            }
         }
 
         function addCoins(amount) {
@@ -3200,7 +3208,7 @@ function conquistaAnimacao(tipo) {
 
         async function syncCoinsFromDatabase() {
             const token = localStorage.getItem('token');
-            if (!token) return; // Não sincroniza senão estiver logado
+            if (!token) return false; // Não sincroniza senão estiver logado
             
             try {
                 const API_URL = "https://login-g50h.onrender.com";
@@ -3214,7 +3222,10 @@ function conquistaAnimacao(tipo) {
                     const data = await res.json();
                     if (data.ok && data.usuario) {
                         const user = data.usuario;
-                        localStorage.setItem('userCoins', user.moedas);
+                        const moedas = parseInt(user.moedas) || 0;
+                        
+                        // Atualizar localStorage com dados do servidor
+                        localStorage.setItem('userCoins', moedas);
                         
                         // Sincronizar cores da tag
                         if (user.corTagPersonalizada) {
@@ -3225,13 +3236,17 @@ function conquistaAnimacao(tipo) {
                         }
                         
                         updateCoinsDisplay();
-                        console.log(`[SYNC] Moedas sincronizadas do servidor: ${user.moedas}`);
-                        console.log(`[SYNC] Cor da tag sincronizada: ${user.corTagPersonalizada}`);
+                        console.log(`[SYNC] ✅ Moedas sincronizadas do servidor: ${moedas}`);
+                        console.log(`[SYNC] ✅ Cor da tag sincronizada: ${user.corTagPersonalizada}`);
+                        return true;
                     }
+                } else {
+                    console.error('[SYNC] Erro ao buscar dados do servidor:', res.status);
                 }
             } catch (err) {
-                console.error('Erro ao sincronizar moedas do servidor:', err);
+                console.error('[SYNC] ❌ Erro ao sincronizar moedas do servidor:', err);
             }
+            return false;
         }
 
         async function syncItemsFromDatabase() {
@@ -3273,9 +3288,10 @@ function conquistaAnimacao(tipo) {
 
         async function syncCoinsToDatabase(amount) {
             const token = localStorage.getItem('token');
-            if (!token) return; // Não sincroniza se não estiver logado
+            if (!token) return false; // Não sincroniza se não estiver logado
             
             try {
+                amount = parseInt(amount) || 0;
                 const API_URL = "https://login-g50h.onrender.com";
                 const res = await fetch(`${API_URL}/sincronizar-moedas`, {
                     method: 'POST',
@@ -3286,13 +3302,26 @@ function conquistaAnimacao(tipo) {
                     body: JSON.stringify({ moedas: amount })
                 });
                 
-                if (res.ok) {
-                    console.log(`[SYNC] Moedas sincronizadas: ${amount}`);
+                const data = await res.json();
+                
+                if (res.ok && data.ok) {
+                    console.log(`[SYNC] ✅ Moedas sincronizadas com sucesso: ${amount}`);
+                    // Atualizar localStorage com a resposta do servidor para garantir sincronização
+                    if (data.moedas !== undefined) {
+                        localStorage.setItem('userCoins', parseInt(data.moedas) || amount);
+                        updateCoinsDisplay();
+                    }
+                    return true;
                 } else {
-                    console.error('Erro ao sincronizar moedas');
+            const coinsDisplay = document.getElementById('coinsDisplay');
+            if (coinsDisplay) {
+                coinsDisplay.textContent = `💰 ${coins} Moedas`;
+            } || 'Erro desconhecido');
+                    return false;
                 }
             } catch (err) {
-                console.error('Erro na sincronização de moedas:', err);
+                console.error('[SYNC] ❌ Erro na sincronização de moedas:', err);
+                return false;
             }
         }
 
@@ -3356,7 +3385,7 @@ function conquistaAnimacao(tipo) {
 
             // Se for lootbox, abrir diretamente sem marca de propriedade
             if (item.lootbox) {
-                setCoins(coins - price);
+                await setCoins(coins - price);
                 
                 // Registrar compra no backend se logado
                 if (token) {
@@ -3390,7 +3419,7 @@ function conquistaAnimacao(tipo) {
                 return;
             }
             
-            setCoins(coins - price);
+            await setCoins(coins - price);
             localStorage.setItem(`item-${itemId}`, 'owned');
             
             // Registrar compra no backend se logado
@@ -3684,6 +3713,14 @@ function conquistaAnimacao(tipo) {
         setInterval(carregarHistoricoSolicitacoes, 1000); // Recarrega histórico de solicitações a cada minuto
         setInterval(adminLoadCompras, 1000); // Recarrega compras a cada minuto
         }
+        
+        // Sincronizar moedas a cada 30 segundos se estiver logado
+        if (localStorage.getItem('token')) {
+            setInterval(() => {
+                syncCoinsFromDatabase().catch(err => console.error('[SYNC] Erro ao sincronizar moedas:', err));
+            }, 30000);
+        }
+        
         function closeNotifications(event) {
             if (event && event.target !== document.getElementById('notificationsModal')) {
                 return;
