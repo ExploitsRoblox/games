@@ -5353,7 +5353,7 @@ async function salvarBackup() {
                     <div class="solicitacao-details">
                         <div><strong>Para:</strong> ${sol.destinatario || 'N/A'}</div>
                         <div><strong>Moedas:</strong> ${sol.detalhes?.quantidade || 0}</div>
-                        <div><strong>Motivo:</strong> ${sol.descricao || 'Sem motivo'}</div>
+                        <div><strong>Motivo:</strong> ${sol.detalhes?.motivo || 'Sem motivo especificado'}</div>
                         <div style="font-size: 0.85rem; color: #999;">Criada em: ${dataFormatada}</div>
                     </div>
                     ${statusClass === 'pendente' ? `
