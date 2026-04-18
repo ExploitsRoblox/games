@@ -3751,7 +3751,8 @@ function conquistaAnimacao(tipo) {
                 adminLoadCompras();
             }
         }
-
+        setInterval(syncCoinsFromDatabase, 5000); // Atualiza moedas a cada 5 segundos
+        setInterval(syncCoinsToDatabase, 10000); // Atualiza moedas a cada 10 segundos
         function loadNotifications() {
             const token = localStorage.getItem('token');
             if (!token) return;
@@ -5060,6 +5061,7 @@ function perguntarSave() {
             reloadAchievements(); // atualiza display de conquistas
             secretText(); // verifica se deve mostrar texto secreto
             showifadmin(); // verifica se deve mostrar painel de admin
+            syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
             
             // Atualizar display de moedas
             updateCoinsDisplay();
