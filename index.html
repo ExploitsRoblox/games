@@ -9,18 +9,18 @@
 
         :root {
     --sidebar-width: 300px;
-    --bg-dark: #0f0a1a;        /* Roxo quase preto para o fundo */
-    --sidebar-bg: #1a102e;     /* Roxo escuro para os menus */
-    --accent-color: #a855f7;    /* Roxo vibrante (estilo Twitch/Neon) */
+    --bg-dark: #000000;        /* Roxo quase preto para o fundo */
+    --sidebar-bg: #000000;     /* Roxo escuro para os menus */
+    --accent-color: #cf3939;    /* Roxo vibrante (estilo Twitch/Neon) */
     --text-color: #f8fafc;     /* Branco levemente azulado */
-    --card-bg: #24143d;        /* Roxo médio para os cards */
+    --card-bg: #64080c;        /* Roxo médio para os cards */
     --success-color: #22c55e;   /* Verde mantido para sucesso */
     --error-color: #ff4646;     /* Vermelho para erro */
     --gold: #ffd700; 
     --rainbow: (#ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #8000ff);          /* Dourado para as conquistas */
     
     /* Adicional: uma cor para dar profundidade aos hovers */
-    --accent-hover: #c084fc; 
+    --accent-hover: #ff5e00; 
 }
 
         body {
@@ -29,57 +29,196 @@
             background-color: var(--bg-dark);
             color: var(--text-color);
             display: flex;
+            flex-direction: column;
             min-height: 100vh;
             overflow-x: hidden;
         }
+
+        /* === NAVBAR NETFLIX STYLE === */
+        .navbar {
+            background: linear-gradient(180deg, #1a1a1a 0%, rgba(26, 26, 26, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(229, 9, 20, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .navbar-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin: 0;
+            padding: 0 40px;
+            height: 70px;
+            gap: 40px;
+            box-sizing: border-box;
+        }
+
+        .navbar-logo {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 150px;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .navbar-btn {
+            background: transparent;
+            color: var(--text-color);
+            border: none;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .navbar-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .navbar-btn:hover {
+            color: var(--accent-color);
+        }
+
+        .navbar-btn:hover::after {
+            width: 100%;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+
+        .coins-display {
+            background: rgba(229, 9, 20, 0.2);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .navbar-auth-btn {
+            background: var(--error-color);
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(229, 9, 20, 0.5);
+        }
+
+        .navbar-auth-btn:hover {
+            background: #cc0000;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.6);
+        }
+
+        /* Responsivo */
+        @media (max-width: 1024px) {
+            .navbar-container {
+                gap: 20px;
+            }
+
+            .navbar-menu {
+                gap: 15px;
+            }
+
+            .navbar-btn {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-container {
+                align-items: flex-start;
+                flex-wrap: wrap;
+                height: auto;
+                padding: 10px 15px;
+            }
+
+            .navbar-menu {
+                width: 100%;
+                order: 3;
+                gap: 10px;
+                justify-content: flex-start;
+            }
+
+            .navbar-right {
+                gap: 10px;
+            }
+
+            .navbar-btn {
+                font-size: 0.75rem;
+                padding: 5px 8px;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+        }
+
         /* Novos botões de Ação Superior */
         .top-actions {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 999;
+            display: none;
         }
 
         .action-btn {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid var(--accent-color);
-            padding: 10px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.3s;
-            text-transform: uppercase;
-            min-height: 40px;
-        }
-
-        .action-btn:hover {
-            background: var(--accent-color);
-            color: #000;
-            box-shadow: 0 0 15px var(--accent-color);
+            display: none;
         }
 
         /* Destaque para o botão de Login */
         #authBtn {
-            position: fixed !important;
-            top: 20px !important;
-            right: 120px !important;
-            z-index: 999 !important;
+            display: none;
         }
 
         #authBtn.btn-auth {
-            background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box, 
-                        linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box !important;
-            border: 2px solid transparent !important;
+            display: none;
             border-radius: 8px !important;
+            background-color: red !important;
             background-size: 200% 100%;
             animation: flow 3s linear infinite;
             padding: 10px 18px !important;
@@ -99,21 +238,20 @@
         }
 
         #authBtn.btn-auth:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            display: none;
         }
 
         /* Estilo para a medalha de conquistas */
         /* --- Barras Laterais (Base) --- */
         .sidebar {
             position: fixed;
-            top: 0;
+            top: 70px;
             width: var(--sidebar-width);
-            height: 100%;
+            height: calc(100% - 70px);
             background: var(--sidebar-bg);
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 0 15px rgba(0,0,0,0.5);
-            z-index: 1000;
+            z-index: 999;
             padding: 20px;
             box-sizing: border-box;
             display: flex;
@@ -160,31 +298,128 @@
             cursor: pointer;
         }
     .achievements-container {
-    position: fixed;          /* fixa no viewport */
-    top: 50%;                 /* posiciona no meio vertical */
-    left: 50%;                /* posiciona no meio horizontal */
-    transform: translate(-50%, -50%); /* corrige o deslocamento */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    z-index: 1001;
-    background-image: url('ach-bg.png'); /* imagem de fundo temática */
-    padding: 1000px;             /* opcional: espaçamento interno */
-    border-radius: 0px;       /* opcional: cantos arredondados */
-    border: 2px solid #000;
-        }
+        position: fixed;
+        top: 15%;
+        left: 50%;
+        transform: translate(-50%);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        z-index: 2002;
+        background: var(--sidebar-bg);
+        border: 2px solid var(--accent-color);
+        border-radius: 15px;
+        padding: 40px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 0 50px rgba(207, 57, 57, 0.5);
+        animation: slideIn 0.3s ease-in-out;
+    }
+
+
+    .achievements-container.active {
+        display: flex;
+    }
+
+    .achievements-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 15px;
+    }
+
+    .achievements-title {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: var(--accent-color);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .achievements-close-btn {
+        background: none;
+        border: none;
+        font-size: 28px;
+        color: var(--text-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+    }
+
+    .achievements-close-btn:hover {
+        background: var(--accent-color);
+        color: #ffffff;
+        transform: scale(1.1);
+    }
+
+    .achievements-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
         .achievement {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 0.8rem;
-            margin-bottom: 0px;
+            gap: 15px;
+            font-size: 1rem;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(207, 57, 57, 0.3);
+            border-radius: 8px;
             opacity: 0;
-            transition: 0.3s;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .achievement.unlocked { opacity: 1; color: var(--gold); }
+        .achievement:hover {
+            background: rgba(207, 57, 57, 0.2);
+            border-color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .achievement.unlocked { 
+            opacity: 1; 
+            color: var(--gold);
+            border-color: var(--gold);
+            background: rgba(255, 215, 0, 0.15);
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .achievement-text {
+            flex: 1;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .achievement-locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
 
         /* --- Destaque da Semana --- */
         .featured-banner {
@@ -271,75 +506,54 @@
             transition: margin 0.4s;
             background: linear-gradient(135deg, var(--bg-dark) 0%, var(--sidebar-bg) 100%);
             width: 100%;
+            margin-top: 0;
         }
 
         /* Botões de Toggle */
         .toggle-btn {
-            position: fixed;
-            top: 20px;
-            background: var(--accent-color);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            z-index: 1001;
-            color: #000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
+            display: none;
         }
         .toggle-btn:hover { transform: scale(1.05); }
 
-        .toggle-left { left: 20px; }
-        .toggle-right { right: 20px; }
+        .toggle-left { display: none; }
+        .toggle-right { right: 20px; display: none; }
         .achievements-btn {  
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: var(--gold);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            z-index: 1002;
-            color: #000;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            transition: transform 0.2s;
+            display: none;
         }
         
         /* Painel do Usuário */
         .user-panel-btn {
-            position: fixed;
-            top: 20px;
-            right: 120px;
-            background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
-                        linear-gradient(90deg, #e10000, #ff8a04, #fbff00ee, #55ff00, #00d4ff, #001eff, #7700ff, #ff00ccee, #e10000) border-box;
-            border: 2px solid transparent;
-            border-radius: 8px;
+            background: var(--accent-color);
             color: white;
+            border: none;
+            border-radius: 4px;
             padding: 10px 15px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             z-index: 999;
-            background-size: 200% 100%;
-            animation: flow 3s linear infinite;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(229, 9, 20, 0.5);
+            position: relative;
         }
         
         .user-panel-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            background: #cc0000;
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.6);
         }
         
         .user-panel-btn img {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 2px solid var(--accent-color);
+            border: 2px solid white;
         }
         
         /* Modal do Painel do Usuário */
@@ -639,12 +853,12 @@
         /* Sistema de Moedas */
         .coins-display {
             position: fixed;
-            top: 15px;
-            left: 20%;
+            top: 90px;
+            left: 8%;
             transform: translateX(-50%);
-            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            background: var(--gold);
             color: #000;
-            padding: 12px 20px;
+            padding: 2px 2px;
             border-radius: 25px;
             font-weight: bold;
             font-size: 1.1rem;
@@ -1927,17 +2141,35 @@
     </style>
 </head>
 <body>
-    <button class="toggle-btn toggle-left" onclick="toggleLeftSidebar()">☰ FILTROS</button>
-    <button class="toggle-btn toggle-right" onclick="toggleRightSidebar()">☰ LISTA</button>
-    <button class="achievements-btn" onclick="toggleAchievements()">Conquistas</button>
-    <div class="coins-display" id="coinsDisplay">💰 0 Moedas</div>
-    <button class="toggle-btn" style="top: 20px; right: 250px;" onclick="openShop()">🛍️ LOJA</button>
-    <button class="toggle-btn" style="top: 20px; right: 350px;" onclick="checkDailyReward()">🎁 RECOMPENSA</button>
-    <button class="toggle-btn" style="top: 20px; right: 510px;" onclick="openLeaderboard()">🏆 LEADERBOARD</button>
-    <button class="toggle-btn" style="top: 20px; right: 680px;" onclick="openInventory()">🎒 INVENTÁRIO</button>
+    <!-- Navbar Netflix Style -->
+    <header class="navbar">
+        <div class="navbar-container">
+            <!-- Logo -->
+            <div class="navbar-logo">
+                <img src="logo.png" alt="Logo" style="width: 180px; height: 60px;">
+            </div>
+            
+            <!-- Menu Central -->
+            <nav class="navbar-menu">
+                <button class="navbar-btn" onclick="toggleLeftSidebar()">FILTROS</button>
+                <button class="navbar-btn" onclick="toggleRightSidebar()">MEUS JOGOS</button>
+                <button class="navbar-btn" onclick="openLeaderboard()">PLACAR</button>
+                <button class="navbar-btn" onclick="openInventory()">INVENTÁRIO</button>
+                <button class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
+                <button class="navbar-btn" onclick="openShop()">LOJA</button>
+                <button class="navbar-btn" onclick="toggleAchievements()">CONQUISTAS</button>
+            </nav>
+            
+            <!-- Lado direito: Moedas e Botões de Autenticação -->
+            <div class="navbar-right">
+                <div class="coins-display" id="coinsDisplay">💰 0 Moedas</div>
+                <button id="userPanelBtn" class="user-panel-btn" style="display: none;" onclick="toggleUserPanel()"></button>
+                <button id="authBtn" class="navbar-auth-btn" onclick="">🔐 LOGIN</button>
+            </div>
+        </div>
+    </header>
+    
     <button id="adminPanelBtn" class="admin-panel-btn" onclick="openAdminPanel()">🔴 PAINEL ADMIN</button>
-    <button id="authBtn" class="action-btn btn-auth" style="position: fixed; top: 20px; right: 120px; z-index: 999;">🔐 LOGIN</button>
-    <button id="userPanelBtn" class="user-panel-btn" style="display: none;" onclick="toggleUserPanel()"></button>
     
     <!-- Modal da Loja -->
     <div id="shopModal" class="shop-modal" onclick="closeShop(event)">
@@ -2239,10 +2471,6 @@
     </nav>
 
     <main>
-        <div id="title">
-         <!-- <h1>Nexus Games</h1> -->
-          <img src="logo.png" alt="logo do título" style="width: 600px; height: 200px; margin-bottom: 20px;">
-        </div>
         <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">DESTAQUE DA SEMANA</span>
         <div class="featured-banner" onclick="destaque()">
             <h2 style="margin: 0; font-size: 2rem;">Survival Racing Drift</h2>
@@ -2425,11 +2653,34 @@
          <button class="lucky-btn" onclick="imFeelingLucky()">
             <span>🎲</span> ESTOU COM SORTE
         </button>
-        <div class="achievements-container" style="display: none;" active="false">
-            <p style="color: var(--text-color); font-size: 1.9rem; font-weight: bold; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Suas Conquistas</p>
-            <div class="achievement" id="ach-detetive"><img src="detetive2.png" alt="aa"></div>
-            <div class="achievement" id="ach-lucky"><img src="sortudo2.png" alt="aa"></div>
-            <div class="achievement" id="ach-infinity"><img src="infinity2.png" alt="aa"></div>
+        <div class="achievements-container" active="false">
+            <div class="achievements-header">
+                <h2 class="achievements-title">🏆 Suas Conquistas</h2>
+                <button class="achievements-close-btn" onclick="closeAchievements()">✕</button>
+            </div>
+            <div class="achievements-list">
+                <div class="achievement achievement-locked" id="ach-detetive">
+                    <div class="achievement-icon">🔍</div>
+                    <div class="achievement-text">
+                        <div class="achievement-name">Detetive</div>
+                        <div class="achievement-desc">Clique no destaque da semana</div>
+                    </div>
+                </div>
+                <div class="achievement achievement-locked" id="ach-lucky">
+                    <div class="achievement-icon">🍀</div>
+                    <div class="achievement-text">
+                        <div class="achievement-name">Sortudo</div>
+                        <div class="achievement-desc">Use o botão "Estou com Sorte"</div>
+                    </div>
+                </div>
+                <div class="achievement achievement-locked" id="ach-infinity">
+                    <div class="achievement-icon">♾️</div>
+                    <div class="achievement-text">
+                        <div class="achievement-name">Infinidade</div>
+                        <div class="achievement-desc">Secreto</div>
+                    </div>
+                </div>
+            </div>
         </div>
     <div class="atua">
        <h2 id="updateText"></h2>
@@ -2486,6 +2737,16 @@
                     item.classList.toggle('hidden', !(matchesSearch && matchesCat));
                 }
             });
+        }
+        function secretText() {
+            const infinity = localStorage.getItem('infinity_get');
+            const pai = document.getElementById('ach-infinity');
+            const texto = pai.querySelector('.achievement-desc');
+            if(infinity == 'true') {
+                texto.textContent = "Chegue ao infinito em Gd Clicker para desbloquear essa conquista!";
+            } else {
+                texto.textContent = "???????";
+            }
         }
       
        async function atualizarDataCommit() {
@@ -2545,12 +2806,18 @@ atualizarDataCommit();
                 feedback.style.display = "block";
             }
         }
-       function toggleAchievements() {
-      const container = document.querySelector('.achievements-container');
-    const isActive = container.getAttribute('active') === "true";
-    container.style.display = isActive ? 'none' : 'block';
-    container.setAttribute('active', (!isActive).toString());
-}
+
+        function toggleAchievements() {
+            const container = document.querySelector('.achievements-container');
+            container.classList.toggle('active');
+            checkAchievements();
+        }
+
+        function closeAchievements() {
+            const container = document.querySelector('.achievements-container');
+            container.classList.remove('active');
+        }
+
         function achFadeIn() {
             const container = document.querySelector('.achievements-container');
             let opacity = 0;
@@ -2560,6 +2827,7 @@ atualizarDataCommit();
                 if (opacity >= 1) clearInterval(interval);
             }, 30);
         }
+
         function achFadeOut() {
             const container = document.querySelector('.achievements-container');
             let opacity = 1;
@@ -2568,24 +2836,43 @@ atualizarDataCommit();
                 container.style.opacity = opacity;
                 if (opacity <= 0) {
                     clearInterval(interval);
-                    container.style.display = 'none';
+                    container.classList.remove('active');
                 }
             }, 30);
         }
         function checkAchievements() {
             // Detetive
             if (localStorage.getItem('destaque') > 0) {
-                document.getElementById('ach-detetive').classList.add('unlocked');
+                const detetive = document.getElementById('ach-detetive');
+                detetive.classList.add('unlocked');
+                detetive.classList.remove('achievement-locked');
             }
             // Sortudo
             if (localStorage.getItem('lucky_used') == 'true') {
-                document.getElementById('ach-lucky').classList.add('unlocked');
+                const sortudo = document.getElementById('ach-lucky');
+                sortudo.classList.add('unlocked');
+                sortudo.classList.remove('achievement-locked');
             }
             // Infinity
             if (localStorage.getItem('infinity_get') == 'true') {
-                document.getElementById('ach-infinity').classList.add('unlocked');
+                const infinity = document.getElementById('ach-infinity');
+                infinity.classList.add('unlocked');
+                infinity.classList.remove('achievement-locked');
             }
         }
+
+        // Event listener para fechar conquistas ao clicar no fundo
+        document.addEventListener('DOMContentLoaded', function() {
+            const achievementsContainer = document.querySelector('.achievements-container');
+            if (achievementsContainer) {
+                achievementsContainer.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        closeAchievements();
+                    }
+                });
+            }
+        });
+
         function imFeelingLucky() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
             if (cards.length > 0) {
@@ -4431,6 +4718,7 @@ function perguntarSave() {
             filterGames(); // aplica filtro inicial de categorias/pesquisa
             checkAchievements(); // verifica conquistas ao carregar
             reloadAchievements(); // atualiza display de conquistas
+            secretText(); // verifica se deve mostrar texto secreto
             
             // Atualizar display de moedas
             updateCoinsDisplay();
