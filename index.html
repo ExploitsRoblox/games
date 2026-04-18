@@ -77,9 +77,12 @@
         .navbar-menu {
             display: flex;
             gap: 20px;
-            flex: 1;
+            flex: 0 1 auto;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            flex-direction: row;
+            overflow: hidden;
         }
 
         .navbar-btn {
@@ -181,9 +184,9 @@
             }
 
             .navbar-menu {
-                width: 100%;
+                width: 50%;
                 order: 3;
-                gap: 10px;
+                gap: 0px;
                 justify-content: flex-start;
             }
 
