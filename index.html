@@ -2966,7 +2966,7 @@ atualizarDataCommit();
             "FLASH": "secret5"
         };
 
-        function redeemCode() {
+        async function redeemCode() {
             const input = document.getElementById('redeemInput');
             const feedback = document.getElementById('feedbackMessage');
             const code = input.value.trim().toUpperCase();
@@ -2976,7 +2976,7 @@ atualizarDataCommit();
                 unlockGame(gameId);
                 
                 // Ganhar moedas ao desbloquear um jogo secreto
-                addCoins(50);
+                await addCoins(50);
                 
                 feedback.textContent = "🎉 Jogo Desbloqueado! +50 moedas";
                 feedback.className = "success";
@@ -3058,13 +3058,13 @@ atualizarDataCommit();
             }
         });
 
-        function imFeelingLucky() {
+        async function imFeelingLucky() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
             if (cards.length > 0) {
                 if (!localStorage.getItem('lucky_used')) {
                     conquistaAnimacao('sortudo');
                     localStorage.setItem('lucky_used', 'true');
-                    addCoins(200);
+                    await addCoins(200);
                     updateCoinsDisplay();
                     setInterval(() => {
                         const randomCard = cards[Math.floor(Math.random() * cards.length)];
@@ -3077,7 +3077,7 @@ atualizarDataCommit();
                 }
             }
         }
-        function destaque() {
+        async function destaque() {
             // Incrementa o contador de destaque
             let valor = parseInt(localStorage.getItem('destaque') || '0');
             valor++;
@@ -3088,7 +3088,7 @@ atualizarDataCommit();
 
             // Se for a primeira vez (valor == 1), roda animação, ganha moedas e redireciona após 3s
             if (valor === 1) {
-                addCoins(100);
+                await addCoins(100);
                 updateCoinsDisplay();
                 conquistaAnimacao('detetive');
                 setTimeout(() => {
@@ -3175,9 +3175,9 @@ function conquistaAnimacao(tipo) {
             }
         }
 
-        function addCoins(amount) {
+        async function addCoins(amount) {
             const current = getCoins();
-            setCoins(current + amount);
+            await setCoins(current + amount);
         }
 
         async function syncCoinsFromDatabase() {
@@ -3853,7 +3853,7 @@ function conquistaAnimacao(tipo) {
             document.getElementById('dailyRewardModal').classList.add('active');
         }
 
-        function claimDailyReward() {
+        async function claimDailyReward() {
             const lastClaimDate = localStorage.getItem('lastDailyRewardDate');
             const today = new Date().toDateString();
             
@@ -3866,7 +3866,7 @@ function conquistaAnimacao(tipo) {
             const reward = getRewardForDay(currentDay);
             
             // Adicionar moedas
-            addCoins(reward.coins);
+            await addCoins(reward.coins);
             
             // Adicionar item bônus se aplicável
             if (reward.item) {
@@ -5049,7 +5049,7 @@ function perguntarSave() {
             document.getElementById('achievementsDisplay').textContent = `${totalAch}/2`;
         }
         
-        window.onload = function() {
+        window.onload = async function() {
             // Sincronizar lista com grid automaticamente
             syncGameListWithGrid();
             
@@ -5076,7 +5076,9 @@ function perguntarSave() {
             reloadAchievements(); // atualiza display de conquistas
             secretText(); // verifica se deve mostrar texto secreto
             showifadmin(); // verifica se deve mostrar painel de admin
-            syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
+            
+            // IMPORTANTE: Aguardar sincronização de moedas ANTES de continuar
+            await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
             
             // Atualizar display de moedas
             updateCoinsDisplay();
@@ -5119,9 +5121,8 @@ function perguntarSave() {
                 userName.style.marginBottom = '10px';
                 titleDiv.insertBefore(userName, titleDiv.firstChild);
 
-                // Sincronizar moedas e itens comprados com o servidor
-                syncCoinsFromDatabase();
-                syncItemsFromDatabase();
+                // Sincronizar itens comprados com o servidor (moedas já foram sincronizadas acima)
+                await syncItemsFromDatabase();
                 loadInventoryColors();
             } else if (usuario && !token) {
                 alert("Parece que você está logado, mas ocorreu um erro ao carregar seu token. Por motivos de segurança, faça login novamente para garantir que suas conquistas e progresso sejam salvos corretamente.")
