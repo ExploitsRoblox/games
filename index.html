@@ -3684,10 +3684,10 @@ function conquistaAnimacao(tipo) {
             }
         }
         if (localStorage.getItem('usuarioLogado') === 'Yohanan') {
-        setInterval(updateNotificationBadge, 3000); // Atualiza a badge a cada minuto
-        setInterval(carregarSolicitacoesPendentes, 1000); // Recarrega solicitações pendentes a cada minuto
-        setInterval(carregarHistoricoSolicitacoes, 1000); // Recarrega histórico de solicitações a cada minuto
-        setInterval(adminLoadCompras, 1000); // Recarrega compras a cada minuto
+        setInterval(updateNotificationBadge, 30000); // Atualiza a badge a cada 30 segundos
+        setInterval(carregarSolicitacoesPendentes, 30000); // Recarrega solicitações pendentes a cada 30 segundos
+        setInterval(carregarHistoricoSolicitacoes, 30000); // Recarrega histórico de solicitações a cada 30 segundos
+        setInterval(adminLoadCompras, 30000); // Recarrega compras a cada 30 segundos
         }
         
         // Sincronizar moedas a cada 30 segundos se estiver logado
@@ -3745,8 +3745,20 @@ function conquistaAnimacao(tipo) {
             fetch(`${API_URL}/api/solicitacoes-pendentes`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
-            .then(r => r.json())
+            .then(r => {
+                // Se receber 401, token expirou
+                if (r.status === 401) {
+                    console.error('[NOTIF] Token expirado!');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('usuarioLogado');
+                    localStorage.removeItem('isAdmin');
+                    window.location.href = 'https://exploitsroblox.github.io/login';
+                    return null;
+                }
+                return r.json();
+            })
             .then(data => {
+                if (!data) return;
                 const count = data.count || 0;
                 const badge = document.getElementById('notificationBadge');
                 if (count > 0) {
@@ -4210,7 +4222,15 @@ function conquistaAnimacao(tipo) {
         function logoutUser() {
             const resposta = confirm('⚠️ Deseja realmente sair?');
             if (resposta) {
-                localStorage.clear();
+                // Remover APENAS dados de autenticação, preservando progresso do jogo
+                localStorage.removeItem('token');
+                localStorage.removeItem('usuarioLogado');
+                localStorage.removeItem('isAdmin');
+                localStorage.removeItem('userProfilePic');
+                localStorage.removeItem('userTag');
+                localStorage.removeItem('userTagColor');
+                localStorage.removeItem('userTagColorType');
+                // Preservar: userCoins, userPlaytime, destaque, conquistas, itens comprados, jogos desbloqueados
                 location.reload();
             }
         }
@@ -4445,15 +4465,36 @@ function conquistaAnimacao(tipo) {
         async function adminLoadCompras() {
             try {
                 const token = localStorage.getItem('token');
+                if (!token) {
+                    console.warn('[COMPRAS] Token não encontrado, pulando carregamento');
+                    return;
+                }
+
                 const res = await fetch(`${API_ADMIN}/admin/compras`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+
+                // Se receber 401 (Unauthorized), o token expirou
+                if (res.status === 401) {
+                    console.error('[COMPRAS] ❌ Token expirado! Faça login novamente.');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('usuarioLogado');
+                    localStorage.removeItem('isAdmin');
+                    window.location.href = 'https://exploitsroblox.github.io/login';
+                    return;
+                }
+
+                if (!res.ok) {
+                    console.error(`[COMPRAS] Erro HTTP ${res.status}: ${res.statusText}`);
+                    return;
+                }
+
                 const resposta = await res.json();
 
                 if (!resposta.ok) {
-                    alert('❌ Erro ao carregar compras');
+                    console.error('[COMPRAS] Erro na resposta:', resposta.mensagem);
                     return;
                 }
 
@@ -4482,7 +4523,7 @@ function conquistaAnimacao(tipo) {
                     comprasList.appendChild(compraDiv);
                 });
             } catch (err) {
-                console.error('Erro:', err);
+                console.error('[COMPRAS] Erro ao carregar:', err);
             }
         }
 
@@ -5318,7 +5359,7 @@ async function salvarBackup() {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    alert('❌ Você precisa estar logado!');
+                    console.warn('[SOLICITACOES] Token não encontrado');
                     return;
                 }
                 
@@ -5327,18 +5368,27 @@ async function salvarBackup() {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+
+                // Se receber 401, token expirou
+                if (res.status === 401) {
+                    console.error('[SOLICITACOES] Token expirado!');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('usuarioLogado');
+                    localStorage.removeItem('isAdmin');
+                    window.location.href = 'https://exploitsroblox.github.io/login';
+                    return;
+                }
                 
                 const resposta = await res.json();
                 
                 if (!resposta.ok) {
-                    alert(resposta.mensagem || '❌ Erro ao carregar solicitações');
+                    console.error('[SOLICITACOES] Erro:', resposta.mensagem);
                     return;
                 }
                 
                 renderSolicitacoesPendentes(resposta.solicitacoes || []);
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
-                console.error('Erro ao carregar solicitações:', err);
+                console.error('[SOLICITACOES] Erro ao carregar:', err);
             }
         }
         
@@ -5385,7 +5435,7 @@ async function salvarBackup() {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    alert('❌ Você precisa estar logado!');
+                    console.warn('[HISTORICO] Token não encontrado');
                     return;
                 }
                 
@@ -5394,18 +5444,27 @@ async function salvarBackup() {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+
+                // Se receber 401, token expirou
+                if (res.status === 401) {
+                    console.error('[HISTORICO] Token expirado!');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('usuarioLogado');
+                    localStorage.removeItem('isAdmin');
+                    window.location.href = 'https://exploitsroblox.github.io/login';
+                    return;
+                }
                 
                 const resposta = await res.json();
                 
                 if (!resposta.ok) {
-                    alert(resposta.mensagem || '❌ Erro ao carregar histórico');
+                    console.error('[HISTORICO] Erro:', resposta.mensagem);
                     return;
                 }
                 
                 renderHistoricoSolicitacoes(resposta.solicitacoes || []);
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
-                console.error('Erro ao carregar histórico:', err);
+                console.error('[HISTORICO] Erro ao carregar:', err);
             }
         }
         
