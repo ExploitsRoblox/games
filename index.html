@@ -1214,7 +1214,10 @@
             border-radius: 15px;
             border: 3px solid var(--gold);
             text-align: center;
-            max-width: 400px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
             animation: popIn 0.3s ease-out;
         }
         
@@ -1234,19 +1237,127 @@
             margin-bottom: 20px;
             font-size: 1.8rem;
         }
-        
-        .daily-reward-content .reward-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
+
+        /* Calendário de Recompensas */
+        .daily-calendar {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin: 30px 0;
+            margin-bottom: 30px;
         }
-        
-        .daily-reward-content .reward-amount {
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(135deg, rgba(207, 57, 57, 0.3), rgba(168, 85, 247, 0.3));
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 15px rgba(207, 57, 57, 0.4);
+        }
+
+        .calendar-day.claimed {
+            background: rgba(34, 197, 94, 0.2);
+            border: 2px solid #22c55e;
+            opacity: 0.7;
+        }
+
+        .calendar-day.upcoming {
+            opacity: 0.6;
+        }
+
+        .calendar-day-number {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .calendar-day-icon {
+            font-size: 1.8rem;
+        }
+
+        .calendar-day-coins {
+            font-size: 0.8rem;
+            color: var(--gold);
+        }
+
+        .calendar-day-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #22c55e;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .calendar-day-locked {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #666;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        /* Info do dia selecionado */
+        .daily-reward-info {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .daily-reward-info h3 {
+            color: var(--gold);
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+        }
+
+        .reward-icon {
+            font-size: 4rem;
+            margin: 10px 0;
+        }
+
+        .reward-amount {
             color: var(--accent-color);
             font-size: 2rem;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin: 10px 0;
         }
-        
+
         .daily-reward-content button {
             background: var(--gold);
             color: #000;
@@ -1257,17 +1368,44 @@
             cursor: pointer;
             font-size: 1rem;
             transition: all 0.2s;
+            margin-top: 15px;
         }
-        
+
         .daily-reward-content button:hover {
             background: #ffed4e;
             transform: scale(1.05);
+        }
+
+        .daily-reward-content button:disabled {
+            background: #666;
+            color: #aaa;
+            cursor: not-allowed;
+            transform: scale(1);
         }
         
         .next-reward-time {
             color: #cbd5e1;
             font-size: 0.9rem;
             margin-top: 15px;
+        }
+
+        /* Scrollbar para o calendário */
+        .daily-reward-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .daily-reward-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .daily-reward-content::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 10px;
+        }
+
+        .daily-reward-content::-webkit-scrollbar-thumb:hover {
+            background: var(--gold);
         }
 
         /* Painel de Admin */
@@ -2396,14 +2534,23 @@
     <!-- Modal de Recompensas Diárias -->
     <div id="dailyRewardModal" class="daily-reward-modal" onclick="closeDailyReward(event)">
         <div class="daily-reward-content" onclick="event.stopPropagation();">
-            <h2>🎉 Recompensa Diária!</h2>
-            <div style="color: var(--gold); font-size: 1.1rem; margin-bottom: 15px; font-weight: bold;" id="dayCounter">Dia 1 de 30</div>
-            <div class="reward-icon" id="rewardIcon">💰</div>
-            <div class="reward-amount" id="rewardAmount">150</div>
-            <p style="color: var(--accent-color); margin-bottom: 10px;" id="rewardDescription">Moedas ganhas!</p>
-            <div style="color: #cbd5e1; font-size: 0.9rem; margin-bottom: 20px;" id="bonusDescription"></div>
-            <button onclick="claimDailyReward()">Coletar Recompensa</button>
-            <div class="next-reward-time" id="nextRewardTime"></div>
+            <h2>🎉 Recompensas Diárias - Calendário</h2>
+            
+            <!-- Calendário de 30 dias -->
+            <div class="daily-calendar" id="dailyCalendar">
+                <!-- Será preenchido dinamicamente -->
+            </div>
+
+            <!-- Info do dia selecionado -->
+            <div class="daily-reward-info">
+                <h3 id="selectedDayTitle">Dia 1 de 30</h3>
+                <div class="reward-icon" id="rewardIcon">💰</div>
+                <div class="reward-amount" id="rewardAmount">150</div>
+                <p style="color: var(--accent-color); margin: 10px 0;" id="rewardDescription">Moedas ganhas!</p>
+                <p style="color: #cbd5e1; font-size: 0.9rem; margin: 10px 0;" id="bonusDescription"></p>
+                <button id="claimRewardBtn" onclick="claimDailyReward()">Coletar Recompensa</button>
+                <div id="nextRewardTime" style="color: #cbd5e1; font-size: 0.85rem; margin-top: 10px;"></div>
+            </div>
         </div>
     </div>
     
@@ -3799,45 +3946,139 @@ function conquistaAnimacao(tipo) {
         }
         
         function getRewardForDay(day) {
-            const coins = 150;
-            let reward = { coins: coins, item: null, description: 'Moedas ganhas!', icon: '💰' };
-            
-            if (day === 15) {
-                reward.item = 'custom-tag';
-                reward.description = 'Moedas + Tag Personalizada!';
-                reward.icon = '🏷️';
-            } else if (day === 20) {
-                reward.item = 'cor-comum';
-                reward.description = 'Moedas + Cor da Tag (Comum)!';
-                reward.icon = '🎨';
-            } else if (day === 30) {
-                reward.item = 'cor-especial';
-                reward.description = 'Moedas + Cor da Tag (Especial)!';
-                reward.icon = '✨';
-            }
-            
-            return reward;
+            // Recompensas progressivas e variadas para cada dia
+            const rewards = {
+                1: { coins: 100, item: null, description: 'Bem-vindo! Comece sua jornada!', icon: '🎯' },
+                2: { coins: 120, item: null, description: 'Continue assim!', icon: '💰' },
+                3: { coins: 100, item: 'lootbox-comum', description: 'Moedas + Lootbox Comum!', icon: '📦' },
+                4: { coins: 150, item: null, description: 'Você está indo bem!', icon: '⭐' },
+                5: { coins: 120, item: null, description: 'Metade da primeira semana!', icon: '🔥' },
+                6: { coins: 150, item: 'lootbox-comum', description: 'Moedas + Lootbox Comum!', icon: '📦' },
+                7: { coins: 200, item: null, description: '🎉 Parabéns! Primeira semana completa!', icon: '🎊' },
+                8: { coins: 150, item: null, description: 'Segunda semana começa!', icon: '💪' },
+                9: { coins: 130, item: 'lootbox-comum', description: 'Moedas + Lootbox Comum!', icon: '📦' },
+                10: { coins: 170, item: null, description: 'Dez dias de dedicação!', icon: '🚀' },
+                11: { coins: 200, item: null, description: 'Nível intermediário alcançado!', icon: '📈' },
+                12: { coins: 180, item: 'lootbox-rara', description: 'Moedas + Lootbox Rara! 🟦', icon: '🟦' },
+                13: { coins: 220, item: null, description: 'Quase na metade!', icon: '⚡' },
+                14: { coins: 200, item: null, description: 'Prepare-se para o grande dia!', icon: '🎁' },
+                15: { coins: 300, item: 'custom-tag', description: 'Moedas + Tag Personalizada! 🏷️', icon: '🏷️' },
+                16: { coins: 200, item: 'lootbox-rara', description: 'Moedas + Lootbox Rara! 🟦', icon: '🟦' },
+                17: { coins: 220, item: null, description: 'Na reta final da segunda semana!', icon: '🏁' },
+                18: { coins: 250, item: null, description: 'Você é persistente!', icon: '💎' },
+                19: { coins: 200, item: 'lootbox-rara', description: 'Moedas + Lootbox Rara! 🟦', icon: '🟦' },
+                20: { coins: 350, item: 'cor-comum', description: 'Moedas + Cor da Tag (Comum)! 🎨', icon: '🎨' },
+                21: { coins: 300, item: null, description: 'Terceira semana! Você é incrível!', icon: '👏' },
+                22: { coins: 280, item: 'lootbox-epica', description: 'Moedas + Lootbox Épica! 🟪', icon: '🟪' },
+                23: { coins: 320, item: null, description: 'Cada dia mais perto da glória!', icon: '✨' },
+                24: { coins: 300, item: null, description: 'Quase lá!', icon: '🎯' },
+                25: { coins: 350, item: 'lootbox-epica', description: 'Moedas + Lootbox Épica! 🟪', icon: '🟪' },
+                26: { coins: 400, item: null, description: 'Você está muito próximo!', icon: '🔜' },
+                27: { coins: 380, item: 'lootbox-epica', description: 'Moedas + Lootbox Épica! 🟪', icon: '🟪' },
+                28: { coins: 420, item: null, description: 'Penúltimo dia! Resista!', icon: '💪' },
+                29: { coins: 450, item: 'cor-especial', description: 'Moedas + Cor da Tag (Especial)! ✨', icon: '✨' },
+                30: { coins: 1000, item: 'lootbox-lendaria', description: '🎉 MEGA RECOMPENSA! 1000 moedas + Lootbox Lendária! 👑', icon: '👑' }
+            };
+
+            return rewards[day] || { coins: 100, item: null, description: 'Moedas ganhas!', icon: '💰' };
         }
         
         function updateDailyRewardModal() {
             const currentDay = getDailyRewardDay();
-            const reward = getRewardForDay(currentDay);
-            
-            document.getElementById('dayCounter').textContent = `Dia ${currentDay} de 30`;
-            document.getElementById('rewardAmount').textContent = reward.coins;
+            const lastClaimDate = localStorage.getItem('lastDailyRewardDate');
+            const today = new Date().toDateString();
+            const isClaimed = lastClaimDate === today;
+
+            // Renderizar calendário
+            const calendar = document.getElementById('dailyCalendar');
+            calendar.innerHTML = '';
+
+            for (let day = 1; day <= 30; day++) {
+                const reward = getRewardForDay(day);
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                dayDiv.onclick = () => selectDayReward(day);
+
+                // Adicionar classes de estado
+                if (day === currentDay && !isClaimed) {
+                    dayDiv.classList.add('today');
+                } else if (day < currentDay && isClaimed) {
+                    dayDiv.classList.add('claimed');
+                } else if (day > currentDay) {
+                    dayDiv.classList.add('upcoming');
+                } else if (day < currentDay) {
+                    dayDiv.classList.add('claimed');
+                }
+
+                // Conteúdo do dia
+                dayDiv.innerHTML = `
+                    <div class="calendar-day-number">Dia ${day}</div>
+                    <div class="calendar-day-icon">${reward.icon}</div>
+                    <div class="calendar-day-coins">+${reward.coins}</div>
+                    ${day < currentDay ? '<div class="calendar-day-badge">✓</div>' : ''}
+                    ${day > currentDay ? '<div class="calendar-day-locked">🔒</div>' : ''}
+                `;
+
+                calendar.appendChild(dayDiv);
+            }
+
+            // Selecionar dia atual por padrão
+            selectDayReward(currentDay);
+        }
+
+        function selectDayReward(day) {
+            const currentDay = getDailyRewardDay();
+            const reward = getRewardForDay(day);
+            const lastClaimDate = localStorage.getItem('lastDailyRewardDate');
+            const today = new Date().toDateString();
+            const isClaimed = lastClaimDate === today;
+
+            // Atualizar display
+            document.getElementById('selectedDayTitle').textContent = `Dia ${day} de 30`;
             document.getElementById('rewardIcon').textContent = reward.icon;
+            document.getElementById('rewardAmount').textContent = reward.coins;
             document.getElementById('rewardDescription').textContent = reward.description;
-            
+
+            // Mostrar item bônus se aplicável
+            const bonusDesc = document.getElementById('bonusDescription');
             if (reward.item) {
                 const itemNames = {
                     'custom-tag': '🏷️ Tag Personalizada',
                     'cor-comum': '🎨 Cor da Tag (Comum)',
-                    'cor-especial': '✨ Cor da Tag (Especial)'
+                    'cor-especial': '✨ Cor da Tag (Especial)',
+                    'lootbox-comum': '📦 Lootbox Comum',
+                    'lootbox-rara': '🟦 Lootbox Rara',
+                    'lootbox-epica': '🟪 Lootbox Épica',
+                    'lootbox-lendaria': '👑 Lootbox Lendária'
                 };
-                document.getElementById('bonusDescription').textContent = `Bônus: ${itemNames[reward.item]}`;
+                bonusDesc.textContent = `✨ Bônus: ${itemNames[reward.item]}`;
+                bonusDesc.style.display = 'block';
             } else {
-                document.getElementById('bonusDescription').textContent = '';
+                bonusDesc.style.display = 'none';
             }
+
+            // Atualizar botão
+            const claimBtn = document.getElementById('claimRewardBtn');
+            if (day === currentDay && !isClaimed) {
+                claimBtn.textContent = 'Coletar Recompensa de Hoje';
+                claimBtn.disabled = false;
+                claimBtn.onclick = () => claimDailyReward();
+            } else if (day < currentDay) {
+                claimBtn.textContent = '✓ Já Coletado';
+                claimBtn.disabled = true;
+            } else {
+                claimBtn.textContent = '🔒 Bloqueado - Próximos Dias';
+                claimBtn.disabled = true;
+            }
+
+            // Atualizar destaque visual
+            document.querySelectorAll('.calendar-day').forEach((dayEl, index) => {
+                if (index + 1 === day) {
+                    dayEl.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.5)';
+                } else {
+                    dayEl.style.boxShadow = 'none';
+                }
+            });
         }
         
         function checkDailyReward() {
@@ -3870,19 +4111,53 @@ function conquistaAnimacao(tipo) {
             
             // Adicionar item bônus se aplicável
             if (reward.item) {
-                localStorage.setItem(`item-${reward.item}`, 'owned');
+                // Se for lootbox, incrementar contador
+                if (reward.item.startsWith('lootbox-')) {
+                    const type = reward.item.replace('lootbox-', '');
+                    const key = `userLootbox${type.charAt(0).toUpperCase() + type.slice(1)}`;
+                    const current = parseInt(localStorage.getItem(key) || '0');
+                    localStorage.setItem(key, current + 1);
+                    
+                    // Sincronizar com servidor se logado
+                    const token = localStorage.getItem('token');
+                    if (token) {
+                        try {
+                            fetch('https://login-g50h.onrender.com/admin/adicionar-lootbox', {
+                                method: 'POST',
+                                headers: { 
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                },
+                                body: JSON.stringify({
+                                    nomeUsuario: localStorage.getItem('usuarioLogado'),
+                                    tipo: type,
+                                    quantidade: 1
+                                })
+                            }).catch(err => console.error('[LOOTBOX] Erro ao sincronizar:', err));
+                        } catch (e) {
+                            console.error('[LOOTBOX] Erro:', e);
+                        }
+                    }
+                } else {
+                    localStorage.setItem(`item-${reward.item}`, 'owned');
+                }
             }
             
             localStorage.setItem('lastDailyRewardDate', today);
             
-            document.getElementById('dailyRewardModal').classList.remove('active');
+            // Atualizar calendário visualmente
+            updateDailyRewardModal();
             
             let mensagem = `🎉 Você ganhou ${reward.coins} moedas!`;
             if (reward.item) {
                 const itemNames = {
-                    'custom-tag': 'Tag Personalizada',
-                    'cor-comum': 'Cor da Tag (Comum)',
-                    'cor-especial': 'Cor da Tag (Especial)'
+                    'custom-tag': '🏷️ Tag Personalizada',
+                    'cor-comum': '🎨 Cor da Tag (Comum)',
+                    'cor-especial': '✨ Cor da Tag (Especial)',
+                    'lootbox-comum': '📦 Lootbox Comum',
+                    'lootbox-rara': '🟦 Lootbox Rara',
+                    'lootbox-epica': '🟪 Lootbox Épica',
+                    'lootbox-lendaria': '👑 Lootbox Lendária'
                 };
                 mensagem += `\n✨ Bônus: ${itemNames[reward.item]}`;
             }
