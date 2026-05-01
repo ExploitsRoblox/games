@@ -2851,6 +2851,11 @@
 
                 <!-- Seção exclusiva do dono (Yohanan) - Giros e Tempo de Jogo -->
                 <div id="adminOwnerSection" class="admin-section" style="display: none;">
+
+                    <h3>👥 Listar Usuários</h3>
+                    <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
+                    <div class="admin-users-list" id="adminUsersList"></div>
+
                     <h3>🎰 Adicionar Giros na Roleta</h3>
                     <div class="admin-form">
                         <input type="text" class="admin-input" id="adminUserSpins" placeholder="Nome do usuário">
@@ -2865,10 +2870,6 @@
                         <button class="admin-btn" onclick="adminAddPlaytime()">Adicionar Tempo</button>
                         <button class="admin-btn" onclick="adminChangeBorderColor()">Mudar Borda</button>
                     </div>
-                    
-                    <h3>👥 Listar Usuários</h3>
-                    <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
-                    <div class="admin-users-list" id="adminUsersList"></div>
                 </div>
 
                 <!-- Seção de Emergência -->
@@ -3462,10 +3463,10 @@ function conquistaAnimacao(tipo) {
             { id: 'cor-comum', name: 'Cor da Tag (Comum)', desc: 'Customize a cor da sua tag com cores normais', icon: '🎨', price: 1500 },
             { id: 'cor-especial', name: 'Cor da Tag (Especial)', desc: 'Cores especiais, gradientes animados e mais!', icon: '✨', price: 5000 },
             { id: 'new-game', name: 'Escolher novo jogo', desc: 'Escolha um novo jogo para ser adicionado ao site!', icon: '🎮', price: 10000 },
-            { id: 'spins-5', name: 'Giros da Roleta (5x)', desc: 'Compre 5 giros para usar na roleta da sorte!', icon: '🎡', price: 100, isSpins: true, quantity: 5 },
-            { id: 'spins-10', name: 'Giros da Roleta (10x)', desc: 'Compre 10 giros para usar na roleta da sorte!', icon: '🎡', price: 150, isSpins: true, quantity: 10 },
-            { id: 'spins-25', name: 'Giros da Roleta (25x)', desc: 'Compre 25 giros com desconto!', icon: '🎡', price: 300, isSpins: true, quantity: 25 },
-            { id: 'spins-50', name: 'Giros da Roleta (50x)', desc: 'Compre 50 giros com grande desconto!', icon: '🎡', price: 500, isSpins: true, quantity: 50 },
+            { id: 'spins-5', name: 'Giros da Roleta (5x)', desc: 'Compre 5 giros para usar na roleta da sorte!', icon: '🎡', price: 500, isSpins: true, quantity: 5 },
+            { id: 'spins-10', name: 'Giros da Roleta (10x)', desc: 'Compre 10 giros para usar na roleta da sorte!', icon: '🎡', price: 1500, isSpins: true, quantity: 10 },
+            { id: 'spins-25', name: 'Giros da Roleta (25x)', desc: 'Compre 25 giros com desconto!', icon: '🎡', price: 3000, isSpins: true, quantity: 25 },
+            { id: 'spins-50', name: 'Giros da Roleta (50x)', desc: 'Compre 50 giros com grande desconto!', icon: '🎡', price: 5000, isSpins: true, quantity: 50 },
         ];
 
         function getCoins() {
