@@ -2606,7 +2606,6 @@
                 <button class="navbar-btn" onclick="openInventory()">INVENTÁRIO</button>
                 <button class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
                 <button class="navbar-btn" onclick="openShop()">LOJA</button>
-                <button class="navbar-btn" onclick="openWheel()">🎡 ROLETA</button>
                 <button class="navbar-btn" onclick="toggleAchievements()">CONQUISTAS</button>
                 <button class="navbar-btn" id="adminPanelBtn" style="display: none;" onclick="openAdminPanel()">PAINEL</button>
             </nav>
@@ -3463,10 +3462,10 @@ function conquistaAnimacao(tipo) {
             { id: 'cor-comum', name: 'Cor da Tag (Comum)', desc: 'Customize a cor da sua tag com cores normais', icon: '🎨', price: 1500 },
             { id: 'cor-especial', name: 'Cor da Tag (Especial)', desc: 'Cores especiais, gradientes animados e mais!', icon: '✨', price: 5000 },
             { id: 'new-game', name: 'Escolher novo jogo', desc: 'Escolha um novo jogo para ser adicionado ao site!', icon: '🎮', price: 10000 },
-            { id: 'lootbox-comum', name: 'Lootbox Comum', desc: 'Abra uma lootbox e ganhe moedas!', icon: '📦', price: 100, lootbox: true, type: 'comum' },
-            { id: 'lootbox-rara', name: 'Lootbox Rara', desc: 'Chances de ganhar cores e mais moedas!', icon: '🟦', price: 500, lootbox: true, type: 'rara' },
-            { id: 'lootbox-epica', name: 'Lootbox Épica', desc: 'Itens especiais e recompensas incríveis!', icon: '🟪', price: 1500, lootbox: true, type: 'epica' },
-            { id: 'lootbox-lendaria', name: 'Lootbox Lendária 👑', desc: 'Chance de ganhar o Arco-Iris! Recompensas épicas!', icon: '👑', price: 5000, lootbox: true, type: 'lendaria' },
+            { id: 'spins-5', name: 'Giros da Roleta (5x)', desc: 'Compre 5 giros para usar na roleta da sorte!', icon: '🎡', price: 100, isSpins: true, quantity: 5 },
+            { id: 'spins-10', name: 'Giros da Roleta (10x)', desc: 'Compre 10 giros para usar na roleta da sorte!', icon: '🎡', price: 150, isSpins: true, quantity: 10 },
+            { id: 'spins-25', name: 'Giros da Roleta (25x)', desc: 'Compre 25 giros com desconto!', icon: '🎡', price: 300, isSpins: true, quantity: 25 },
+            { id: 'spins-50', name: 'Giros da Roleta (50x)', desc: 'Compre 50 giros com grande desconto!', icon: '🎡', price: 500, isSpins: true, quantity: 50 },
         ];
 
         function getCoins() {
@@ -3624,6 +3623,7 @@ function conquistaAnimacao(tipo) {
             SHOP_ITEMS.forEach(item => {
                 const owned = localStorage.getItem(`item-${item.id}`) === 'owned';
                 const isReusable = item.id === 'cor-comum' || item.id === 'cor-especial';
+                const isSpins = item.isSpins === true;
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'shop-item';
                 
@@ -3631,7 +3631,11 @@ function conquistaAnimacao(tipo) {
                 let buttonDisabled = false;
                 let buttonOnclick = `buyItem('${item.id}', ${item.price})`;
                 
-                if (owned) {
+                if (isSpins) {
+                    // Para giros, sempre mostrar "Comprar"
+                    buttonText = 'Comprar';
+                    buttonOnclick = `buyItem('${item.id}', ${item.price})`;
+                } else if (owned) {
                     if (isReusable) {
                         // Para cores, mostrar "Usar" e permitir clicar novamente
                         buttonText = '✓ Usar';
@@ -3670,15 +3674,20 @@ function conquistaAnimacao(tipo) {
             const item = SHOP_ITEMS.find(i => i.id === itemId);
             if (!item) return;
 
-            // Se for lootbox, abrir diretamente sem marca de propriedade
-            if (item.lootbox) {
+            // Se for giros, adicionar giros e abrir a roleta
+            if (item.isSpins) {
                 await setCoins(coins - price);
                 
-                // Registrar compra no backend se logado
+                // Atualizar giros localmente
+                spinsRemaining += item.quantity;
+                updateSpinsDisplay();
+                
+                // Sincronizar com o backend se logado
                 if (token) {
                     const API_URL = "https://login-g50h.onrender.com";
                     try {
-                        const res = await fetch(`${API_URL}/registrar-compra`, {
+                        // Registrar compra
+                        await fetch(`${API_URL}/registrar-compra`, {
                             method: 'POST',
                             headers: {
                                 'Authorization': `Bearer ${token}`,
@@ -3690,14 +3699,24 @@ function conquistaAnimacao(tipo) {
                                 preco: price
                             })
                         });
+                        
+                        // Atualizar giros no backend
+                        await fetch(`${API_URL}/user/spins`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({ spins: spinsRemaining })
+                        });
                     } catch (err) {
-                        console.error('Erro ao registrar compra:', err);
+                        console.error('Erro ao registrar compra de giros:', err);
                     }
                 }
                 
-                await openLootbox(item.type);
-                initializeShop();
-                updateUserPanelInfo();
+                alert(`✅ ${item.quantity} giro(s) adicionado(s)! Vamos girar?`);
+                closeShop();
+                openWheelFromShop();
                 return;
             }
             
@@ -3974,6 +3993,7 @@ function conquistaAnimacao(tipo) {
             const modal = document.getElementById('shopModal');
             modal.classList.add('active');
             initializeShop();
+            loadSpinsFromDatabase(); // Carregar giros quando abrir a loja
         }
 
         function closeShop(event) {
@@ -5286,12 +5306,22 @@ function conquistaAnimacao(tipo) {
 
             loadSpinsFromDatabase().then(() => {
                 if (spinsRemaining <= 0) {
-                    alert('❌ Você não tem giros disponíveis! Ganhe moedas para conseguir mais giros.');
+                    alert('❌ Você não tem giros disponíveis! Compre giros na loja.');
                     return;
                 }
                 document.getElementById('wheelModal').classList.add('active');
                 initializeWheel();
             });
+        }
+
+        function openWheelFromShop() {
+            // Versão simplificada que abre a roleta após comprar giros
+            if (spinsRemaining <= 0) {
+                alert('❌ Você não tem giros disponíveis!');
+                return;
+            }
+            document.getElementById('wheelModal').classList.add('active');
+            initializeWheel();
         }
 
         function closeWheel(event) {
