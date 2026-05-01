@@ -2325,6 +2325,150 @@
     100% { background-position: 0% 50%; }
 }
 
+/* === SISTEMA DE ROLETA === */
+.wheel-modal {
+    display: none;
+    position: fixed;
+    z-index: 2001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(5px);
+    align-items: center;
+    justify-content: center;
+}
+
+.wheel-modal.active {
+    display: flex;
+}
+
+.wheel-content {
+    background: var(--card-bg);
+    border: 3px solid var(--gold);
+    border-radius: 20px;
+    padding: 40px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
+    animation: popIn 0.5s ease;
+}
+
+.wheel-title {
+    color: var(--gold);
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.wheel-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto 30px;
+    background: radial-gradient(circle, #ffd700 0%, #ffed4e 100%);
+    border-radius: 50%;
+    border: 5px solid var(--gold);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    overflow: hidden;
+}
+
+.wheel-spinner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-origin: center;
+    transition: transform 0.1s linear;
+}
+
+.wheel-segment {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    clip-path: polygon(50% 50%, 50% 0%, 100% 0%);
+}
+
+.wheel-pointer {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid var(--error-color);
+    z-index: 10;
+}
+
+.wheel-info {
+    color: var(--accent-color);
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.wheel-button {
+    padding: 12px 30px;
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin: 5px;
+}
+
+.wheel-button:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(207, 57, 57, 0.6);
+}
+
+.wheel-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.wheel-close {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.wheel-close:hover {
+    color: var(--error-color);
+    border-color: var(--error-color);
+    transform: scale(1.05);
+}
+
+.spins-display {
+    background: rgba(207, 57, 57, 0.2);
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
         /* === SISTEMA DE AUTORIZAÇÃO/SOLICITAÇÕES === */
         .admin-solicitacao-item {
             padding: 16px !important;
@@ -2462,6 +2606,7 @@
                 <button class="navbar-btn" onclick="openInventory()">INVENTÁRIO</button>
                 <button class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
                 <button class="navbar-btn" onclick="openShop()">LOJA</button>
+                <button class="navbar-btn" onclick="openWheel()">🎡 ROLETA</button>
                 <button class="navbar-btn" onclick="toggleAchievements()">CONQUISTAS</button>
                 <button class="navbar-btn" id="adminPanelBtn" style="display: none;" onclick="openAdminPanel()">PAINEL</button>
             </nav>
@@ -2581,14 +2726,18 @@
         </div>
     </div>
 
-    <!-- Modal de Lootbox -->
-    <div id="lootboxModal" class="lootbox-modal" onclick="closeLootboxReward()">
-        <div class="lootbox-content" onclick="event.stopPropagation();">
-            <div class="lootbox-title">🎉 LOOTBOX!</div>
-            <div class="lootbox-item" id="lootboxItem">🎁</div>
-            <div class="lootbox-reward-text" id="lootboxRewardText">Você ganhou:</div>
-            <div class="lootbox-reward-amount" id="lootboxRewardAmount">+100 moedas</div>
-            <button class="lootbox-close" onclick="closeLootboxReward()">Fechar</button>
+    <!-- Modal de Roleta -->
+    <div id="wheelModal" class="wheel-modal" onclick="closeWheel(event)">
+        <div class="wheel-content" onclick="event.stopPropagation();">
+            <div class="wheel-title">🎡 ROLETA DA SORTE</div>
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <div class="wheel-spinner" id="wheelSpinner"></div>
+            </div>
+            <div class="wheel-info" id="wheelRewardText">Clique em girar para começar!</div>
+            <div class="wheel-info" id="spinsLeft">Giros disponíveis: <span id="spinsCount">0</span></div>
+            <button class="wheel-button" id="spinBtn" onclick="startSpin()">🎰 GIRAR</button>
+            <button class="wheel-close" onclick="closeWheel()">Fechar</button>
         </div>
     </div>
     
@@ -2698,6 +2847,23 @@
                             <option value="sky-blue">☁️ Azul Céu</option>
                             <option value="rainbow">🌈 Arco-Iris (Rara)</option>
                         </select>
+                    </div>
+                </div>
+
+                <!-- Seção exclusiva do dono (Yohanan) - Giros e Tempo de Jogo -->
+                <div id="adminOwnerSection" class="admin-section" style="display: none;">
+                    <h3>🎰 Adicionar Giros na Roleta</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserSpins" placeholder="Nome do usuário">
+                        <input type="number" class="admin-input" id="adminSpinsAmount" placeholder="Quantidade de giros" min="1">
+                        <button class="admin-btn" onclick="adminAddSpins()">Adicionar Giros</button>
+                    </div>
+
+                    <h3>⏱️ Adicionar Tempo de Jogo</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserPlaytime" placeholder="Nome do usuário">
+                        <input type="number" class="admin-input" id="adminPlaytimeMinutes" placeholder="Minutos a adicionar" min="1">
+                        <button class="admin-btn" onclick="adminAddPlaytime()">Adicionar Tempo</button>
                         <button class="admin-btn" onclick="adminChangeBorderColor()">Mudar Borda</button>
                     </div>
                     
@@ -4522,15 +4688,18 @@ function conquistaAnimacao(tipo) {
             const usuario = localStorage.getItem('usuarioLogado');
             const addCoinsSection = document.getElementById('adminAddCoinsSection');
             const requestCoinsSection = document.getElementById('adminRequestCoinsSection');
+            const ownerSection = document.getElementById('adminOwnerSection');
             
             if (usuario === 'Yohanan') {
-                // Yohanan (dono): mostra "Adicionar Moedas" e esconde "Solicitar Moedas"
+                // Yohanan (dono): mostra "Adicionar Moedas" e seção de giros
                 addCoinsSection.style.display = 'block';
                 requestCoinsSection.style.display = 'none';
+                ownerSection.style.display = 'block';
             } else {
-                // Outros admins: mostra "Solicitar Moedas" e esconde "Adicionar Moedas"
+                // Outros admins: mostra "Solicitar Moedas"
                 addCoinsSection.style.display = 'none';
                 requestCoinsSection.style.display = 'block';
+                ownerSection.style.display = 'none';
             }
         }
 
@@ -5053,89 +5222,184 @@ function conquistaAnimacao(tipo) {
             }
         }
 
-        // === SISTEMA DE LOOTBOX ===
-        const LOOTBOX_TYPES = {
-            comum: {
-                name: 'Lootbox Comum',
-                price: 100,
-                emoji: '📦',
-                rewards: [
-                    { type: 'moedas', amount: 100, chance: 0.50 },
-                    { type: 'moedas', amount: 200, chance: 0.30 },
-                    { type: 'moedas', amount: 50, chance: 0.20 }
-                ]
-            },
-            rara: {
-                name: 'Lootbox Rara',
-                price: 500,
-                emoji: '🟦',
-                rewards: [
-                    { type: 'moedas', amount: 500, chance: 0.30 },
-                    { type: 'moedas', amount: 1000, chance: 0.25 },
-                    { type: 'moedas', amount: 250, chance: 0.10 },
-                    { type: 'item', itemId: 'cor-blue', name: 'Cor Azul', chance: 0.10 },
-                    { type: 'item', itemId: 'cor-red', name: 'Cor Vermelho', chance: 0.08 },
-                    { type: 'item', itemId: 'cor-green', name: 'Cor Verde', chance: 0.08 },
-                    { type: 'item', itemId: 'cor-orange', name: 'Cor Laranja', chance: 0.09 }
-                ]
-            },
-            epica: {
-                name: 'Lootbox Épica',
-                price: 1500,
-                emoji: '🟪',
-                rewards: [
-                    { type: 'moedas', amount: 2000, chance: 0.25 },
-                    { type: 'moedas', amount: 3000, chance: 0.20 },
-                    { type: 'moedas', amount: 1500, chance: 0.10 },
-                    { type: 'item', itemId: 'cor-purple', name: 'Cor Roxa Neon', chance: 0.12 },
-                    { type: 'item', itemId: 'cor-cyan', name: 'Cor Ciano', chance: 0.12 },
-                    { type: 'item', itemId: 'cor-pink', name: 'Cor Rosa Néon', chance: 0.11 },
-                    { type: 'item', itemId: 'cor-gold', name: 'Cor Dourada', chance: 0.10 }
-                ]
-            },
-            lendaria: {
-                name: 'Lootbox Lendária',
-                price: 5000,
-                emoji: '👑',
-                rewards: [
-                    { type: 'moedas', amount: 5000, chance: 0.20 },
-                    { type: 'moedas', amount: 7500, chance: 0.15 },
-                    { type: 'moedas', amount: 10000, chance: 0.10 },
-                    { type: 'item', itemId: 'cor-lime-glow', name: 'Cor Verde Neon', chance: 0.12 },
-                    { type: 'item', itemId: 'cor-sky-blue', name: 'Cor Azul Céu', chance: 0.12 },
-                    { type: 'item', itemId: 'cor-gold', name: 'Cor Dourada Premium', chance: 0.11 },
-                    { type: 'item', itemId: 'cor-rainbow', name: '🌈 Arco-Iris (RARA)', chance: 0.20 }
-                ]
-            }
-        };
+        // === SISTEMA DE ROLETA ===
+        const WHEEL_REWARDS = [
+            { emoji: '💰', text: '+100 Moedas', coins: 100, rarity: 'comum' },
+            { emoji: '💱', text: '+250 Moedas', coins: 250, rarity: 'raro' },
+            { emoji: '🎆', text: '+500 Moedas', coins: 500, rarity: 'epico' },
+            { emoji: '🌈', text: '+1000 Moedas', coins: 1000, rarity: 'lendario' },
+            { emoji: '🌟', text: '+150 Moedas', coins: 150, rarity: 'raro' },
+            { emoji: '✨', text: '+750 Moedas', coins: 750, rarity: 'epico' },
+            { emoji: '🐠', text: '+50 Moedas', coins: 50, rarity: 'comum' },
+            { emoji: '💎', text: '+2000 Moedas', coins: 2000, rarity: 'lendario' }
+        ];
 
-        async function openLootbox(type) {
+        let spinsRemaining = 0;
+        let isSpinning = false;
+        let currentWheelRotation = 0;
+
+        async function loadSpinsFromDatabase() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const res = await fetch(`${API_ADMIN}/user/spins`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                spinsRemaining = data.spins || 0;
+                updateSpinsDisplay();
+            } catch (err) {
+                console.error('Erro ao carregar giros:', err);
+                spinsRemaining = 0;
+            }
+        }
+
+        async function saveSpinsToDatabase(spins) {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                await fetch(`${API_ADMIN}/user/spins`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ spins })
+                });
+            } catch (err) {
+                console.error('Erro ao salvar giros:', err);
+            }
+        }
+
+        function updateSpinsDisplay() {
+            const element = document.getElementById('spinsCount');
+            if (element) {
+                element.textContent = spinsRemaining;
+            }
+        }
+
+        function openWheel() {
             const token = localStorage.getItem('token');
             if (!token) return alert('❌ Você precisa estar logado!');
 
-            const lootbox = LOOTBOX_TYPES[type];
-            if (!lootbox) return alert('❌ Lootbox inválida!');
+            loadSpinsFromDatabase().then(() => {
+                if (spinsRemaining <= 0) {
+                    alert('❌ Você não tem giros disponíveis! Ganhe moedas para conseguir mais giros.');
+                    return;
+                }
+                document.getElementById('wheelModal').classList.add('active');
+                initializeWheel();
+            });
+        }
 
-            const coins = parseInt(document.getElementById('coinsDisplay').textContent) || 0;
-            if (coins < lootbox.price) {
-                return alert(`❌ Você precisa de ${lootbox.price} moedas! Você tem apenas ${coins}.`);
+        function closeWheel(event) {
+            if (event && event.target !== document.getElementById('wheelModal')) {
+                return;
+            }
+            document.getElementById('wheelModal').classList.remove('active');
+        }
+
+        function initializeWheel() {
+            const spinnerDiv = document.getElementById('wheelSpinner');
+            spinnerDiv.innerHTML = '';
+
+            const segmentAngle = 360 / WHEEL_REWARDS.length;
+
+            WHEEL_REWARDS.forEach((reward, index) => {
+                const segment = document.createElement('div');
+                segment.className = 'wheel-segment';
+                segment.style.transform = `rotate(${index * segmentAngle}deg) skewY(${90 - segmentAngle}deg)`;
+                segment.style.background = getSegmentColor(reward.rarity);
+                segment.textContent = reward.emoji;
+                spinnerDiv.appendChild(segment);
+            });
+        }
+
+        function getSegmentColor(rarity) {
+            const colors = {
+                comum: '#888888',
+                raro: '#4169E1',
+                epico: '#9370DB',
+                lendario: '#FFD700'
+            };
+            return colors[rarity] || '#888888';
+        }
+
+        function startSpin() {
+            if (isSpinning || spinsRemaining <= 0) {
+                alert('❌ Você não pode girar agora!');
+                return;
+            }
+
+            isSpinning = true;
+            document.getElementById('spinBtn').disabled = true;
+            document.getElementById('wheelRewardText').textContent = 'Girando...';
+
+            const spins = Math.floor(Math.random() * 5) + 5; // 5-10 voltas
+            const randomSegment = Math.floor(Math.random() * WHEEL_REWARDS.length);
+            const segmentAngle = 360 / WHEEL_REWARDS.length;
+            const finalRotation = spins * 360 + randomSegment * segmentAngle;
+
+            const spinner = document.getElementById('wheelSpinner');
+            spinner.style.transition = 'transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            currentWheelRotation = finalRotation;
+            spinner.style.transform = `rotate(${finalRotation}deg)`;
+
+            setTimeout(() => {
+                finishSpin(randomSegment);
+            }, 4000);
+        }
+
+        async function finishSpin(winningSegment) {
+            const reward = WHEEL_REWARDS[winningSegment];
+            spinsRemaining--;
+
+            // Adicionar moedas
+            await addCoins(reward.coins);
+            await saveSpinsToDatabase(spinsRemaining);
+            await syncCoinsFromDatabase();
+
+            document.getElementById('wheelRewardText').innerHTML = `🌟 <strong>${reward.text}</strong> 🌟`;
+            document.getElementById('spinsCount').textContent = spinsRemaining;
+
+            isSpinning = false;
+            setTimeout(() => {
+                document.getElementById('spinBtn').disabled = false;
+            }, 1000);
+        }
+
+        async function adminAddSpins() {
+            const usuario = localStorage.getItem('usuarioLogado');
+            if (usuario !== 'Yohanan') {
+                return alert('❌ Apenas o dono pode adicionar giros!');
+            }
+
+            const nomeUsuario = document.getElementById('adminUserSpins').value;
+            const quantidade = parseInt(document.getElementById('adminSpinsAmount').value);
+
+            if (!nomeUsuario || !quantidade) {
+                alert('❌ Preencha todos os campos!');
+                return;
             }
 
             try {
-                const res = await fetch(`${API_ADMIN}/lootbox/abrir`, {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/adicionar-giros`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ type })
+                    body: JSON.stringify({ nomeUsuario, quantidade })
                 });
                 const resposta = await res.json();
 
                 if (resposta.ok) {
-                    displayLootboxReward(type, resposta.reward);
-                    syncCoinsFromDatabase();
-                    loadInventoryColors();
+                    alert(`✅ ${quantidade} giros adicionados para ${nomeUsuario}!`);
+                    document.getElementById('adminUserSpins').value = '';
+                    document.getElementById('adminSpinsAmount').value = '';
                 } else {
                     alert('❌ ' + resposta.mensagem);
                 }
@@ -5144,26 +5408,42 @@ function conquistaAnimacao(tipo) {
             }
         }
 
-        function displayLootboxReward(type, reward) {
-            const modal = document.getElementById('lootboxModal');
-            const itemEl = document.getElementById('lootboxItem');
-            const textEl = document.getElementById('lootboxRewardText');
-            const amountEl = document.getElementById('lootboxRewardAmount');
-
-            const lootbox = LOOTBOX_TYPES[type];
-            itemEl.textContent = lootbox.emoji;
-
-            if (reward.type === 'moedas') {
-                textEl.textContent = '🎊 Você ganhou Moedas!';
-                amountEl.textContent = `+${reward.amount} 💰`;
-            } else {
-                textEl.textContent = `✨ Você desbloqueou: ${reward.name}`;
-                amountEl.textContent = '🎁 Item Adicionado!';
-                // Salvar cor desbloqueada no localStorage
-                localStorage.setItem(`item-${reward.itemId}`, 'owned');
+        async function adminAddPlaytime() {
+            const usuario = localStorage.getItem('usuarioLogado');
+            if (usuario !== 'Yohanan') {
+                return alert('❌ Apenas o dono pode adicionar tempo de jogo!');
             }
 
-            modal.classList.add('active');
+            const nomeUsuario = document.getElementById('adminUserPlaytime').value;
+            const minutos = parseInt(document.getElementById('adminPlaytimeMinutes').value);
+
+            if (!nomeUsuario || !minutos) {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/adicionar-tempo-jogo`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, minutos })
+                });
+                const resposta = await res.json();
+
+                if (resposta.ok) {
+                    alert(`✅ ${minutos} minutos de tempo de jogo adicionados para ${nomeUsuario}!`);
+                    document.getElementById('adminUserPlaytime').value = '';
+                    document.getElementById('adminPlaytimeMinutes').value = '';
+                } else {
+                    alert('❌ ' + resposta.mensagem);
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
         }
         
         function saveInventoryToLocalStorage() {
@@ -5190,8 +5470,12 @@ function conquistaAnimacao(tipo) {
             document.getElementById('lootboxModal').classList.remove('active');
         }
 
-        // Verificar jogos já desbloqueados ao abrir a página
-        // === SINCRONIZAÇÃO AUTOMÁTICA DA LISTA COM O GRID ===
+        // Carregar giros ao abrir a página
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('token')) {
+                loadSpinsFromDatabase();
+            }
+        });
          function syncGameListWithGrid() {
     const gameGrid = document.querySelectorAll('.game-card');
     const sideList = document.getElementById('sideList');
