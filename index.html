@@ -2804,18 +2804,6 @@
                 
                 <!-- Seção de Gerenciamento de Admins -->
                 <div class="admin-section">
-                    <h3>👑 Promover Admin</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserPromote" placeholder="Nome do usuário">
-                        <button class="admin-btn" onclick="adminPromoteUser()">Definir Como Admin</button>
-                    </div>
-
-                    <h3>🚫 Remover Admin</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserRemove" placeholder="Nome do usuário">
-                        <button class="admin-btn" onclick="adminRemoveAdmin()">Remover Admin</button>
-                    </div>
-
                     <h3>🏷️ Mudar Tag de Usuário</h3>
                     <div class="admin-form">
                         <input type="text" class="admin-input" id="adminUserChangeTag" placeholder="Nome do usuário">
@@ -2850,6 +2838,7 @@
                             <option value="sky-blue">☁️ Azul Céu</option>
                             <option value="rainbow">🌈 Arco-Iris (Rara)</option>
                         </select>
+                        <button class="admin-btn" onclick="adminChangeBorderColor()">Mudar Borda</button>
                     </div>
                 </div>
 
@@ -2872,7 +2861,18 @@
                         <input type="text" class="admin-input" id="adminUserPlaytime" placeholder="Nome do usuário">
                         <input type="number" class="admin-input" id="adminPlaytimeMinutes" placeholder="Minutos a adicionar" min="1">
                         <button class="admin-btn" onclick="adminAddPlaytime()">Adicionar Tempo</button>
-                        <button class="admin-btn" onclick="adminChangeBorderColor()">Mudar Borda</button>
+                    </div>
+
+                    <h3>👑 Promover Admin</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserPromote" placeholder="Nome do usuário">
+                        <button class="admin-btn" onclick="adminPromoteUser()">Definir Como Admin</button>
+                    </div>
+
+                    <h3>🚫 Remover Admin</h3>
+                    <div class="admin-form">
+                        <input type="text" class="admin-input" id="adminUserRemove" placeholder="Nome do usuário">
+                        <button class="admin-btn" onclick="adminRemoveAdmin()">Remover Admin</button>
                     </div>
                 </div>
 
@@ -3095,7 +3095,7 @@
             </a>
 
 
-            <a href="http://jcw87.github.io/c2-sans-fight/" class="game-card" data-name="Bad Time Simulator" data-category="horror">
+            <a href="http://exploitsroblox.github.io/sf" class="game-card" data-name="Bad Time Simulator" data-category="horror">
                 <img src="badtime.png" alt="Bad Time Simulator">
                 <span>Bad Time Simulator</span>
             </a>
@@ -5249,14 +5249,20 @@ function conquistaAnimacao(tipo) {
 
         // === SISTEMA DE ROLETA ===
         const WHEEL_REWARDS = [
-            { emoji: '💰', text: '+100 Moedas', coins: 100, rarity: 'comum' },
-            { emoji: '💱', text: '+250 Moedas', coins: 250, rarity: 'raro' },
-            { emoji: '🎆', text: '+500 Moedas', coins: 500, rarity: 'epico' },
-            { emoji: '🌈', text: '+1000 Moedas', coins: 1000, rarity: 'lendario' },
-            { emoji: '🌟', text: '+150 Moedas', coins: 150, rarity: 'raro' },
-            { emoji: '✨', text: '+750 Moedas', coins: 750, rarity: 'epico' },
-            { emoji: '🐠', text: '+50 Moedas', coins: 50, rarity: 'comum' },
-            { emoji: '💎', text: '+2000 Moedas', coins: 2000, rarity: 'lendario' }
+            { emoji: '💰', text: '+100 Moedas', coins: 50, type: 'coins', rarity: 'comum' },
+            { emoji: '💱', text: '+250 Moedas', coins: 150, type: 'coins', rarity: 'raro' },
+            { emoji: '🎆', text: '+500 Moedas', coins: 500, type: 'coins', rarity: 'epico' },
+            { emoji: '🌈', text: '+1000 Moedas', coins: 1000, type: 'coins', rarity: 'lendario' },
+            { emoji: '🌟', text: '+150 Moedas', coins: 150, type: 'coins', rarity: 'raro' },
+            { emoji: '✨', text: '+750 Moedas', coins: 750, type: 'coins', rarity: 'epico' },
+            { emoji: '🐠', text: '+50 Moedas', coins: 50, type: 'coins', rarity: 'comum' },
+            { emoji: '💎', text: '+2000 Moedas', coins: 2000, type: 'coins', rarity: 'lendario' },
+            { emoji: '🎨', text: 'Borderline Dourado', itemId: 'border-gold', type: 'item', rarity: 'raro' },
+            { emoji: '🌸', text: 'Borderline Rosa Neon', itemId: 'border-pink-neon', type: 'item', rarity: 'raro' },
+            { emoji: '🔮', text: 'Borderline Roxo Mistico', itemId: 'border-purple-mystical', type: 'item', rarity: 'epico' },
+            { emoji: '⚡', text: 'Borderline Raio Elétrico', itemId: 'border-lightning', type: 'item', rarity: 'epico' },
+            { emoji: '🌊', text: 'Borderline Oceano', itemId: 'border-ocean', type: 'item', rarity: 'raro' },
+            { emoji: '🔥', text: 'Borderline Lava Vermelha', itemId: 'border-lava-red', type: 'item', rarity: 'epico' }
         ];
 
         let spinsRemaining = 0;
@@ -5370,10 +5376,18 @@ function conquistaAnimacao(tipo) {
 
             isSpinning = true;
             document.getElementById('spinBtn').disabled = true;
-            document.getElementById('wheelRewardText').textContent = 'Girando...';
-
+            
+            // Selecionar a recompensa que será ganha
             const spins = Math.floor(Math.random() * 5) + 5; // 5-10 voltas
             const randomSegment = Math.floor(Math.random() * WHEEL_REWARDS.length);
+            const reward = WHEEL_REWARDS[randomSegment];
+            
+            // Exibir a recompensa que será ganha
+            const rewardDisplay = reward.type === 'item' 
+                ? `${reward.emoji} ${reward.text}` 
+                : `${reward.emoji} ${reward.text}`;
+            document.getElementById('wheelRewardText').innerHTML = `🎯 <strong>${rewardDisplay}</strong> 🎯`;
+
             const segmentAngle = 360 / WHEEL_REWARDS.length;
             const finalRotation = spins * 360 + randomSegment * segmentAngle;
 
@@ -5383,20 +5397,45 @@ function conquistaAnimacao(tipo) {
             spinner.style.transform = `rotate(${finalRotation}deg)`;
 
             setTimeout(() => {
-                finishSpin(randomSegment);
+                finishSpin(randomSegment, reward);
             }, 4000);
         }
 
-        async function finishSpin(winningSegment) {
-            const reward = WHEEL_REWARDS[winningSegment];
+        async function finishSpin(winningSegment, reward) {
+            if (!reward) {
+                reward = WHEEL_REWARDS[winningSegment];
+            }
+            
             spinsRemaining--;
 
-            // Adicionar moedas
-            await addCoins(reward.coins);
+            // Processar recompensa de acordo com o tipo
+            if (reward.type === 'coins') {
+                // Adicionar moedas
+                await addCoins(reward.coins);
+                await syncCoinsFromDatabase();
+                document.getElementById('wheelRewardText').innerHTML = `✨ <strong>+${reward.coins} Moedas</strong> ✨<br><span style="font-size: 0.9rem; color: #ffd700;">Adicionado ao seu saldo!</span>`;
+            } else if (reward.type === 'item') {
+                // Adicionar item ao inventário
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                const itensComprados = user.itensComprados || [];
+                
+                if (!itensComprados.includes(reward.itemId)) {
+                    itensComprados.push(reward.itemId);
+                    user.itensComprados = itensComprados;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    localStorage.setItem(`item-${reward.itemId}`, 'owned');
+                    
+                    document.getElementById('wheelRewardText').innerHTML = `🎁 <strong>${reward.text}</strong> 🎁<br><span style="font-size: 0.9rem; color: #22c55e;">Adicionado ao seu inventário!</span>`;
+                } else {
+                    // Se já tem o item, dar moedas compensatórias
+                    const compensacaoCoins = 250;
+                    await addCoins(compensacaoCoins);
+                    await syncCoinsFromDatabase();
+                    document.getElementById('wheelRewardText').innerHTML = `🎁 <strong>${reward.text}</strong> (duplicado)<br><span style="font-size: 0.9rem; color: #22c55e;">+${compensacaoCoins} Moedas em compensação!</span>`;
+                }
+            }
+            
             await saveSpinsToDatabase(spinsRemaining);
-            await syncCoinsFromDatabase();
-
-            document.getElementById('wheelRewardText').innerHTML = `🌟 <strong>${reward.text}</strong> 🌟`;
             document.getElementById('spinsCount').textContent = spinsRemaining;
 
             isSpinning = false;
