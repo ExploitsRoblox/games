@@ -4813,18 +4813,15 @@ function conquistaAnimacao(tipo) {
             const usuario = localStorage.getItem('usuarioLogado');
             const addCoinsSection = document.getElementById('adminAddCoinsSection');
             const requestCoinsSection = document.getElementById('adminRequestCoinsSection');
-            const ownerSection = document.getElementById('adminOwnerSection');
             
             if (usuario === 'Yohanan') {
-                // Yohanan (dono): mostra "Adicionar Moedas" e seção de giros
+                // Yohanan (dono): mostra "Adicionar Moedas"
                 addCoinsSection.style.display = 'block';
                 requestCoinsSection.style.display = 'none';
-                ownerSection.style.display = 'block';
             } else {
                 // Outros admins: mostra "Solicitar Moedas"
                 addCoinsSection.style.display = 'none';
                 requestCoinsSection.style.display = 'block';
-                ownerSection.style.display = 'none';
             }
         }
 
