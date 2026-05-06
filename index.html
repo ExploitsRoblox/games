@@ -1541,17 +1541,18 @@
         }
         
         .admin-body {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding: 0;
             overflow-y: auto;
+            overflow-x: hidden;
             flex: 1;
         }
 
         @media (max-width: 1400px) {
             .admin-body {
-                grid-template-columns: 1fr;
+                display: flex;
             }
         }
         
@@ -1741,6 +1742,72 @@
         .admin-compra-item:hover {
             background: rgba(255, 255, 255, 0.12) !important;
             transform: translateX(5px);
+        }
+
+        /* === ABAS DO PAINEL DE ADMIN === */
+        .admin-tabs-container {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.3);
+            overflow-x: auto;
+            flex-shrink: 0;
+            padding: 0 40px;
+            background: rgba(255, 0, 0, 0.05);
+        }
+
+        .admin-tabs-container::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .admin-tabs-container::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .admin-tab-btn {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+            border: none;
+            padding: 15px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-tab-btn:hover {
+            color: var(--text-color);
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .admin-tab-btn.active {
+            color: #ff0000;
+            border-bottom-color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        .admin-tab-content {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .admin-tab-content.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            padding: 30px;
+        }
+
+        @media (max-width: 1400px) {
+            .admin-tab-content.active {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Empurra o conteúdo quando as sidebars estão abertas */
@@ -2751,136 +2818,155 @@
                 <h2>🔴 Painel de Administrador</h2>
                 <button class="admin-close" onclick="closeAdminPanel()">✕</button>
             </div>
+            <div class="admin-tabs-container">
+                <button class="admin-tab-btn active" onclick="switchAdminTab(0)">💰 Moedas & Jogos</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab(1)">👤 Perfil de Usuários</button>
+                <button class="admin-tab-btn" id="adminAdvancedTabBtn" style="display: none;" onclick="switchAdminTab(2)">⚙️ Gerenciamento Avançado</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab(3)">🚨 Emergência</button>
+            </div>
             <div class="admin-body">
-                <!-- Seção de Gerenciamento de Moedas -->
-                <div class="admin-section">
+                <!-- TAB 0: Moedas & Jogos -->
+                <div class="admin-tab-content active">
                     <!-- Seção para Yohanan (Dono) - Adicionar Moedas -->
-                    <div id="adminAddCoinsSection" style="display: none;">
-                        <h3>💰 Adicionar Moedas</h3>
+                    <div class="admin-section">
+                        <div id="adminAddCoinsSection" style="display: none;">
+                            <h3>💰 Adicionar Moedas</h3>
+                            <div class="admin-form">
+                                <input type="text" class="admin-input" id="adminUserCoins" placeholder="Nome do usuário">
+                                <input type="number" class="admin-input" id="adminCoinsAmount" placeholder="Quantidade de moedas" min="1">
+                                <button class="admin-btn" onclick="adminAddCoins()">Adicionar Moedas</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Seção para Admins (não-dona) - Solicitar Moedas -->
+                        <div id="adminRequestCoinsSection" style="display: none;">
+                            <h3>📋 Solicitar Moedas</h3>
+                            <div class="admin-form">
+                                <input type="text" class="admin-input" id="requestUserCoins" placeholder="Nome do usuário">
+                                <input type="number" class="admin-input" id="requestCoinsAmount" placeholder="Quantidade de moedas" min="1">
+                                <input type="text" class="admin-input" id="requestCoinsMotive" placeholder="Motivo (opcional)">
+                                <button class="admin-btn" onclick="adminRequestCoins()">Solicitar Moedas</button>
+                            </div>
+                        </div>
+                        
+                        <h3>🔓 Desbloquear Jogo</h3>
                         <div class="admin-form">
-                            <input type="text" class="admin-input" id="adminUserCoins" placeholder="Nome do usuário">
-                            <input type="number" class="admin-input" id="adminCoinsAmount" placeholder="Quantidade de moedas" min="1">
-                            <button class="admin-btn" onclick="adminAddCoins()">Adicionar Moedas</button>
+                            <input type="text" class="admin-input" id="adminUserGame" placeholder="Nome do usuário">
+                            <select class="admin-input" id="adminGameId">
+                                <option value="">Selecione um jogo secreto</option>
+                                <option value="secret1">Guloso</option>
+                                <option value="secret2">Flappy Div</option>
+                                <option value="secret3">Bruno</option>
+                                <option value="secret4">Jogos Indexados</option>
+                                <option value="secret5">Jogos Flash</option>
+                            </select>
+                            <button class="admin-btn" onclick="adminUnlockGame()">Desbloquear Jogo</button>
                         </div>
                     </div>
                     
-                    <!-- Seção para Admins (não-dona) - Solicitar Moedas -->
-                    <div id="adminRequestCoinsSection" style="display: none;">
-                        <h3>📋 Solicitar Moedas</h3>
+                    <div class="admin-section">
+                        <h3>🎁 Adicionar Item</h3>
                         <div class="admin-form">
-                            <input type="text" class="admin-input" id="requestUserCoins" placeholder="Nome do usuário">
-                            <input type="number" class="admin-input" id="requestCoinsAmount" placeholder="Quantidade de moedas" min="1">
-                            <input type="text" class="admin-input" id="requestCoinsMotive" placeholder="Motivo (opcional)">
-                            <button class="admin-btn" onclick="adminRequestCoins()">Solicitar Moedas</button>
+                            <input type="text" class="admin-input" id="adminUserItem" placeholder="Nome do usuário">
+                            <select class="admin-input" id="adminItemId">
+                                <option value="">Selecione um item</option>
+                                <option value="all-games">Desbloquear Todos os Jogos</option>
+                                <option value="custom-tag">Tag Personalizada</option>
+                                <option value="new-game">Escolher novo jogo</option>
+                            </select>
+                            <button class="admin-btn" onclick="adminAddItem()">Adicionar Item</button>
                         </div>
                     </div>
-                    
-                    <h3>🔓 Desbloquear Jogo</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserGame" placeholder="Nome do usuário">
-                        <select class="admin-input" id="adminGameId">
-                            <option value="">Selecione um jogo secreto</option>
-                            <option value="secret1">Guloso</option>
-                            <option value="secret2">Flappy Div</option>
-                            <option value="secret3">Bruno</option>
-                            <option value="secret4">Jogos Indexados</option>
-                            <option value="secret5">Jogos Flash</option>
-                        </select>
-                        <button class="admin-btn" onclick="adminUnlockGame()">Desbloquear Jogo</button>
-                    </div>
-                    
-                    <h3>🎁 Adicionar Item</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserItem" placeholder="Nome do usuário">
-                        <select class="admin-input" id="adminItemId">
-                            <option value="">Selecione um item</option>
-                            <option value="all-games">Desbloquear Todos os Jogos</option>
-                            <option value="custom-tag">Tag Personalizada</option>
-                            <option value="new-game">Escolher novo jogo</option>
-                        </select>
-                        <button class="admin-btn" onclick="adminAddItem()">Adicionar Item</button>
-                    </div>
                 </div>
-                
-                <!-- Seção de Gerenciamento de Admins -->
-                <div class="admin-section">
-                    <h3>🏷️ Mudar Tag de Usuário</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserChangeTag" placeholder="Nome do usuário">
-                        <input type="text" class="admin-input" id="adminNewTag" placeholder="Nova tag (máx. 10 caracteres)" maxlength="10">
-                        <button class="admin-btn" onclick="adminChangeUserTag()">Mudar Tag</button>
+
+                <!-- TAB 1: Perfil de Usuários -->
+                <div class="admin-tab-content">
+                    <div class="admin-section">
+                        <h3>🏷️ Mudar Tag de Usuário</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserChangeTag" placeholder="Nome do usuário">
+                            <input type="text" class="admin-input" id="adminNewTag" placeholder="Nova tag (máx. 10 caracteres)" maxlength="10">
+                            <button class="admin-btn" onclick="adminChangeUserTag()">Mudar Tag</button>
+                        </div>
+
+                        <h3>📸 Mudar Foto de Perfil</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserChangePhoto" placeholder="Nome do usuário">
+                            <input type="text" class="admin-input" id="adminNewPhoto" placeholder="URL da nova foto">
+                            <button class="admin-btn" onclick="adminChangeUserPhoto()">Mudar Foto</button>
+                        </div>
                     </div>
 
-                    <h3>📸 Mudar Foto de Perfil</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserChangePhoto" placeholder="Nome do usuário">
-                        <input type="text" class="admin-input" id="adminNewPhoto" placeholder="URL da nova foto">
-                        <button class="admin-btn" onclick="adminChangeUserPhoto()">Mudar Foto</button>
-                    </div>
-
-                    <h3>🎨 Mudar Cor da Borda</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserChangeBorder" placeholder="Nome do usuário">
-                        <select class="admin-input" id="adminBorderColor">
-                            <option value="">Selecione uma cor</option>
-                            <option value="silver">⚪ Prata</option>
-                            <option value="red">🔴 Vermelho</option>
-                            <option value="blue">🔵 Azul</option>
-                            <option value="green">🟢 Verde</option>
-                            <option value="orange">🟠 Laranja</option>
-                            <option value="yellow">🟡 Amarelo</option>
-                            <option value="lime">🟩 Verde Limão</option>
-                            <option value="gold">💛 Dourado</option>
-                            <option value="purple">🟣 Roxo Neon</option>
-                            <option value="cyan">🔷 Ciano</option>
-                            <option value="pink">💗 Rosa Néon</option>
-                            <option value="lime-glow">✨ Verde Neon</option>
-                            <option value="sky-blue">☁️ Azul Céu</option>
-                            <option value="rainbow">🌈 Arco-Iris (Rara)</option>
-                        </select>
-                        <button class="admin-btn" onclick="adminChangeBorderColor()">Mudar Borda</button>
+                    <div class="admin-section">
+                        <h3>🎨 Mudar Cor da Borda</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserChangeBorder" placeholder="Nome do usuário">
+                            <select class="admin-input" id="adminBorderColor">
+                                <option value="">Selecione uma cor</option>
+                                <option value="silver">⚪ Prata</option>
+                                <option value="red">🔴 Vermelho</option>
+                                <option value="blue">🔵 Azul</option>
+                                <option value="green">🟢 Verde</option>
+                                <option value="orange">🟠 Laranja</option>
+                                <option value="yellow">🟡 Amarelo</option>
+                                <option value="lime">🟩 Verde Limão</option>
+                                <option value="gold">💛 Dourado</option>
+                                <option value="purple">🟣 Roxo Neon</option>
+                                <option value="cyan">🔷 Ciano</option>
+                                <option value="pink">💗 Rosa Néon</option>
+                                <option value="lime-glow">✨ Verde Neon</option>
+                                <option value="sky-blue">☁️ Azul Céu</option>
+                                <option value="rainbow">🌈 Arco-Iris (Rara)</option>
+                            </select>
+                            <button class="admin-btn" onclick="adminChangeBorderColor()">Mudar Borda</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Seção exclusiva do dono (Yohanan) - Giros e Tempo de Jogo -->
-                <div id="adminOwnerSection" class="admin-section" style="display: none;">
-
-                    <h3>👥 Listar Usuários</h3>
-                    <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
-                    <div class="admin-users-list" id="adminUsersList"></div>
-
-                    <h3>🎰 Adicionar Giros na Roleta</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserSpins" placeholder="Nome do usuário">
-                        <input type="number" class="admin-input" id="adminSpinsAmount" placeholder="Quantidade de giros" min="1">
-                        <button class="admin-btn" onclick="adminAddSpins()">Adicionar Giros</button>
+                <!-- TAB 2: Gerenciamento Avançado (Apenas Dono) -->
+                <div class="admin-tab-content" id="adminOwnerSection">
+                    <div class="admin-section">
+                        <h3>👥 Listar Usuários</h3>
+                        <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
+                        <div class="admin-users-list" id="adminUsersList"></div>
                     </div>
 
-                    <h3>⏱️ Adicionar Tempo de Jogo</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserPlaytime" placeholder="Nome do usuário">
-                        <input type="number" class="admin-input" id="adminPlaytimeMinutes" placeholder="Minutos a adicionar" min="1">
-                        <button class="admin-btn" onclick="adminAddPlaytime()">Adicionar Tempo</button>
-                    </div>
+                    <div class="admin-section">
+                        <h3>🎰 Adicionar Giros na Roleta</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserSpins" placeholder="Nome do usuário">
+                            <input type="number" class="admin-input" id="adminSpinsAmount" placeholder="Quantidade de giros" min="1">
+                            <button class="admin-btn" onclick="adminAddSpins()">Adicionar Giros</button>
+                        </div>
 
-                    <h3>👑 Promover Admin</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserPromote" placeholder="Nome do usuário">
-                        <button class="admin-btn" onclick="adminPromoteUser()">Definir Como Admin</button>
-                    </div>
+                        <h3>⏱️ Adicionar Tempo de Jogo</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserPlaytime" placeholder="Nome do usuário">
+                            <input type="number" class="admin-input" id="adminPlaytimeMinutes" placeholder="Minutos a adicionar" min="1">
+                            <button class="admin-btn" onclick="adminAddPlaytime()">Adicionar Tempo</button>
+                        </div>
 
-                    <h3>🚫 Remover Admin</h3>
-                    <div class="admin-form">
-                        <input type="text" class="admin-input" id="adminUserRemove" placeholder="Nome do usuário">
-                        <button class="admin-btn" onclick="adminRemoveAdmin()">Remover Admin</button>
+                        <h3>👑 Promover Admin</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserPromote" placeholder="Nome do usuário">
+                            <button class="admin-btn" onclick="adminPromoteUser()">Definir Como Admin</button>
+                        </div>
+
+                        <h3>🚫 Remover Admin</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserRemove" placeholder="Nome do usuário">
+                            <button class="admin-btn" onclick="adminRemoveAdmin()">Remover Admin</button>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Seção de Emergência -->
-                <div class="admin-section">
-                    <h3>🚨 BOTÃO DE EMERGÊNCIA</h3>
-                    <p style="color: #ff8a8a; font-size: 0.95rem; margin: 15px 0; line-height: 1.6;">⚠️ Reseta todos os admins. Apenas Yohanan permanecerá como admin. Use com cuidado!</p>
-                    <button class="admin-btn admin-btn-emergency" onclick="adminEmergencyReset()">⚠️ ACIONADOR DE EMERGÊNCIA</button>
+                <!-- TAB 3: Emergência -->
+                <div class="admin-tab-content">
+                    <div class="admin-section">
+                        <h3>🚨 BOTÃO DE EMERGÊNCIA</h3>
+                        <p style="color: #ff8a8a; font-size: 0.95rem; margin: 15px 0; line-height: 1.6;">⚠️ Reseta todos os admins. Apenas Yohanan permanecerá como admin. Use com cuidado!</p>
+                        <button class="admin-btn admin-btn-emergency" onclick="adminEmergencyReset()">⚠️ ACIONADOR DE EMERGÊNCIA</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4707,6 +4793,20 @@ function conquistaAnimacao(tipo) {
         function openAdminPanel() {
             document.getElementById('adminModal').classList.add('active');
             updateAdminCoinsSection();
+            updateAdminTabs();
+        }
+
+        function updateAdminTabs() {
+            const usuario = localStorage.getItem('usuarioLogado');
+            const advancedTabBtn = document.getElementById('adminAdvancedTabBtn');
+            
+            if (usuario === 'Yohanan') {
+                // Mostrar aba de Gerenciamento Avançado apenas para o dono
+                advancedTabBtn.style.display = 'block';
+            } else {
+                // Esconder aba de Gerenciamento Avançado para outros admins
+                advancedTabBtn.style.display = 'none';
+            }
         }
 
         function updateAdminCoinsSection() {
@@ -4726,6 +4826,20 @@ function conquistaAnimacao(tipo) {
                 requestCoinsSection.style.display = 'block';
                 ownerSection.style.display = 'none';
             }
+        }
+
+        function switchAdminTab(tabIndex) {
+            // Remover active de todos os botões de aba
+            const tabButtons = document.querySelectorAll('.admin-tab-btn');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Remover active de todos os conteúdos
+            const tabContents = document.querySelectorAll('.admin-tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Ativar aba selecionada
+            tabButtons[tabIndex].classList.add('active');
+            tabContents[tabIndex].classList.add('active');
         }
 
         function closeAdminPanel(event) {
