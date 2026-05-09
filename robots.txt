@@ -1,1 +1,4 @@
-Sitemap: https://exploitsroblox.github.io/sitemap.xml
+User-agent: *
+Allow: /
+
+Sitemap: https://exploitsroblox.github.io/games/sitemap.xml
