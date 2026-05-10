@@ -3811,10 +3811,12 @@ function undertaleShopAction(action) {
     const shopItemsGrid = document.getElementById('shopItemsGrid');
     
     if (action === 'comprar') {
+        changeSansSprite('joking'); // Muda para o sprite de idle como exemplo
         typeWriter('* heh... então tu quer\n* fazer uma compra?\n* da uma olhada\n* nessas tralhas.');
         shopItemsGrid.classList.add('show');
     } 
     else if (action === 'conversar') {
+        changeSansSprite('normal'); // Volta para o sprite normal
         shopItemsGrid.classList.remove('show');
 
        const dialogs = [
@@ -3847,6 +3849,13 @@ function undertaleShopAction(action) {
             currentDialogIndex = 0; // Reinicia a lore
             // Se preferir que ele pare de falar coisas novas, 
             // você pode travar no último índice: currentDialogIndex = dialogs.length - 1;
+        }
+        if (currentDialogIndex === 0) {
+            // Se a história reiniciou, você pode adicionar uma animação ou efeito especial aqui
+            changeSansSprite('joking'); // Muda para o sprite de piada como exemplo
+            setTimeout(() => {
+                changeSansSprite('normal'); // Volta para o sprite normal se tiver 
+            }, 6000);
         }
     }
 }
