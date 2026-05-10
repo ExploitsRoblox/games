@@ -3047,7 +3047,7 @@
                 <div class="admin-tab-content">
                     <div class="admin-section">
                         <h3>🚨 BOTÃO DE EMERGÊNCIA</h3>
-                        <p style="color: #ff8a8a; font-size: 0.95rem; margin: 15px 0; line-height: 1.6;">⚠️ Reseta todos os admins. Apenas Yohanan permanecerá como admin. Use com cuidado!</p>
+                        <p style="color: #ff8a8a; font-size: 0.95rem; margin: 15px 0; line-height: 1.6;">⚠️ Reseta todos os admins. Apenas O dono permanecerá como admin. Use com cuidado!</p>
                         <button class="admin-btn admin-btn-emergency" onclick="adminEmergencyReset()">⚠️ ACIONADOR DE EMERGÊNCIA</button>
                     </div>
                 </div>
@@ -5783,7 +5783,7 @@ function stopShopMusic() {
 
         function startSpin() {
             if (isSpinning || spinsRemaining <= 0) {
-                alert('❌ Você não pode girar agora!');
+                alert('VISITANTE! VOCÊ NÃO PODE GIRAR AGORA. SIM, SIM!');
                 return;
             }
 
@@ -5866,7 +5866,7 @@ function stopShopMusic() {
         async function adminAddSpins() {
             const usuario = localStorage.getItem('usuarioLogado');
             if (usuario !== 'Yohanan') {
-                return alert('❌ Apenas o dono pode adicionar giros!');
+                return alert('❌ Apenas EU posso adicionar giros!');
             }
 
             const nomeUsuario = document.getElementById('adminUserSpins').value;
@@ -5904,7 +5904,7 @@ function stopShopMusic() {
         async function adminAddPlaytime() {
             const usuario = localStorage.getItem('usuarioLogado');
             if (usuario !== 'Yohanan') {
-                return alert('❌ Apenas o dono pode adicionar tempo de jogo!');
+                return alert('❌ Apenas EU posso adicionar tempo de jogo!');
             }
 
             const nomeUsuario = document.getElementById('adminUserPlaytime').value;
