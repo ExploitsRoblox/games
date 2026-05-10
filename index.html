@@ -3111,6 +3111,9 @@
     <div class="infinityimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
         <img src="infinity.png" alt="Infinity" >
     </div>
+    <div class="gasterimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
+        <img src="gaster.png" alt="Gaster" >
+    </div>
     <nav id="left-sidebar" class="sidebar">
         <div class="search-container">
             <input type="text" id="searchBox" placeholder="Buscar jogo..." onkeyup="filterGames()">
@@ -3351,14 +3354,54 @@
                         <div class="achievement-desc">Secreto</div>
                     </div>
                 </div>
+                 <div class="achievement achievement-locked" id="ach-gaster">
+                     <div class="achievement-icon">?</div>
+                     <div class="achievement-text">
+                         <div class="achievement-name">☝︎✌︎💧︎❄︎☜︎☼︎</div>
+                         <div class="achievement-desc">☜︎☠︎👍︎⚐︎☠︎❄︎☼︎☜︎ ⚐︎ ☝︎✌︎💧︎❄︎☜︎☼︎</div>
+                     </div>
+                </div>
             </div>
         </div>
     <div class="atua">
        <h2 id="updateText"></h2>
     </div>
+    <button class="gastersprite" onclick="gasterFadeOut()">
+    <img src="gastersprite.png" alt="Redacted">
+</button>
     </main>
 
     <script>
+    function checkIfGaster(){
+    const gasterAchieved = localStorage.getItem('ach-gaster');
+    if(gasterAchieved) {
+        const gaster = document.querySelector('.gastersprite');
+        if(gaster) {
+            gaster.style.display = 'none';
+        }
+    }
+}
+function audiogaster() {
+    const audio = new Audio('vanish.mp3');
+    audio.play();
+}
+        function gasterFadeOut() {
+    const gaster = document.querySelector('.gastersprite');
+    
+    if (gaster) { // Verifica se o elemento existe para não dar erro no console
+        gaster.style.transition = 'opacity 1s';
+        gaster.style.opacity = '0';
+        gaster.style.pointerEvents = 'none'; // Impede novos cliques durante o fade
+        audiogaster();
+        
+        setTimeout(() => {
+            gaster.style.display = 'none';
+            localStorage.setItem('ach-gaster', 'true');
+            conquistaAnimacao('gaster');
+             gasterText();
+        }, 1000);
+    }
+}
         function toggleLeftSidebar() {
             document.getElementById('left-sidebar').classList.toggle('active');
             document.body.classList.toggle('left-active');
@@ -3417,6 +3460,19 @@
                 texto.textContent = "Chegue ao infinito em Gd Clicker para desbloquear essa conquista!";
             } else {
                 texto.textContent = "???????";
+            }
+        }
+        function gasterText() {
+            const gaster = localStorage.getItem('ach-gaster');
+            const pai = document.getElementById('ach-gaster');
+            const texto = pai.querySelector('.achievement-desc')
+            const titulo = pai.querySelector('.achievement-name');
+            if(gaster == 'true') {
+                titulo.textContent = "Gaster";
+                texto.textContent = "Encontre o Gaster!";
+            } else {
+                titulo.textContent = "☯︎☯︎☼︎☜︎👎︎✌︎👍︎❄︎☜︎👎︎☸︎☸︎";
+                texto.textContent = "☜︎☠︎👍︎⚐︎☠︎❄︎☼︎☜︎ ⚐︎ ☯︎☯︎☼︎☜︎👎︎✌︎👍︎❄︎☜︎👎︎☸︎☸︎";
             }
         }
       
@@ -3530,6 +3586,12 @@ atualizarDataCommit();
                 infinity.classList.add('unlocked');
                 infinity.classList.remove('achievement-locked');
             }
+            // Gaster
+            if (localStorage.getItem('ach-gaster') == 'true') {
+                const gaster = document.getElementById('ach-gaster');
+                gaster.classList.add('unlocked');
+                gaster.classList.remove('achievement-locked');
+            }
         }
 
         // Event listener para fechar conquistas ao clicar no fundo
@@ -3590,7 +3652,8 @@ function conquistaAnimacao(tipo) {
     const selectorMap = {
         'detetive': '.detetiveimg',
         'sortudo': '.sortudoimg',
-        'infinity': '.infinityimg'
+        'infinity': '.infinityimg',
+        'gaster': '.gasterimg'
     };
     
     const selector = selectorMap[tipo];
@@ -4882,8 +4945,9 @@ function stopShopMusic() {
             const ach1 = localStorage.getItem('destaque') ? 1 : 0;
             const ach2 = localStorage.getItem('lucky_used') ? 1 : 0;
             const ach3 = localStorage.getItem('infinity_get') ? 1 : 0;
-            const totalAch = ach1 + ach2 + ach3;
-            document.getElementById('achievementsDisplay').textContent = `${totalAch}/3`;
+            const ach4 = localStorage.getItem('ach-gaster') ? 1 : 0; // Nova conquista para completar os 4 slots
+            const totalAch = ach1 + ach2 + ach3 + ach4;
+            document.getElementById('achievementsDisplay').textContent = `${totalAch}/4`;
             
             // Contar itens comprados
             let ownedItems = 0;
@@ -6127,7 +6191,9 @@ function perguntarSave() {
             checkAchievements(); // verifica conquistas ao carregar
             reloadAchievements(); // atualiza display de conquistas
             secretText(); // verifica se deve mostrar texto secreto
+            gasterText(); // verifica se deve mostrar texto do Gaster
             showifadmin(); // verifica se deve mostrar painel de admin
+            checkIfGaster();
             
             // IMPORTANTE: Aguardar sincronização de moedas ANTES de continuar
             await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
@@ -6282,6 +6348,8 @@ async function salvarBackup() {
       userProfilePic: localStorage.getItem('userProfilePic'),
       destaque: localStorage.getItem('destaque'),
       lucky_used: localStorage.getItem('lucky_used'),
+      gaster_unlocked: localStorage.getItem('ach-gaster'),
+      infinity_used: localStorage.getItem('infinity_used'),
       lastDailyRewardDate: localStorage.getItem('lastDailyRewardDate')
     };
 
