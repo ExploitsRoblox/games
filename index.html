@@ -2457,8 +2457,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
-    backdrop-filter: blur(5px);
+    background-color: black;
     align-items: center;
     justify-content: center;
 }
@@ -2468,14 +2467,13 @@
 }
 
 .wheel-content {
-    background: var(--card-bg);
-    border: 3px solid var(--gold);
-    border-radius: 20px;
+    background: black;
+    border: 3px solid white;
+    border-radius: 0px;
     padding: 40px;
-    width: 90%;
+    width: 100%;
     max-width: 500px;
     text-align: center;
-    box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
     animation: popIn 0.5s ease;
 }
 
@@ -2542,12 +2540,13 @@
 
 .wheel-button {
     padding: 12px 30px;
-    background: var(--accent-color);
+    background: black;
     color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
+    border: 2px white solid;
+    border-radius: 0px;
+    font-weight: medium;
+    font-size: 1.4rem;
+    font-family: 'Deltarune';
     cursor: pointer;
     transition: all 0.2s;
     margin: 5px;
@@ -2555,7 +2554,7 @@
 
 .wheel-button:hover:not(:disabled) {
     transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(207, 57, 57, 0.6);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
 }
 
 .wheel-button:disabled {
@@ -2566,11 +2565,12 @@
 .wheel-close {
     margin-top: 15px;
     padding: 10px 20px;
-    background: transparent;
-    color: var(--text-color);
-    border: 2px solid var(--text-color);
-    border-radius: 8px;
-    font-weight: bold;
+    background: black;
+    color: white;
+    border: 2px solid white;
+    border-radius: 0px;
+    font-weight: medium;
+    font-family: 'Deltarune';
     cursor: pointer;
     transition: 0.2s;
 }
@@ -2590,6 +2590,15 @@
     font-weight: 600;
     font-size: 0.9rem;
     white-space: nowrap;
+}
+
+.jevil img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    position: absolute;
+    top: 300px;
+    left: 90px;
 }
 
         /* === SISTEMA DE AUTORIZAÇÃO/SOLICITAÇÕES === */
@@ -2872,16 +2881,17 @@
     <!-- Modal de Roleta -->
     <div id="wheelModal" class="wheel-modal" onclick="closeWheel(event)">
         <div class="wheel-content" onclick="event.stopPropagation();">
-            <div class="wheel-title">🎡 ROLETA DA SORTE</div>
             <div class="wheel-container">
+                <img class="wheel-spinner" id="wheelSpinner" src="wheel.png" alt="Wheel Sprite" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
                 <div class="wheel-pointer"></div>
-                <div class="wheel-spinner" id="wheelSpinner"></div>
             </div>
             <div class="wheel-info" id="wheelRewardText">Clique em girar para começar!</div>
             <div class="wheel-info" id="spinsLeft">Giros disponíveis: <span id="spinsCount">0</span></div>
-            <button class="wheel-button" id="spinBtn" onclick="startSpin()">🎰 GIRAR</button>
+            <button class="wheel-button" id="spinBtn" onclick="startSpin()">GIRAR</button>
             <button class="wheel-close" onclick="closeWheel()">Fechar</button>
-        </div>
+           
+        </div> 
+        <div class="jevil"><img src="jevil.png" alt="Jevil"></div>
     </div>
     
     <!-- Modal de Admin -->
@@ -5689,9 +5699,63 @@ function stopShopMusic() {
                 return;
             }
             document.getElementById('wheelModal').classList.remove('active');
+            stopIdleMusic();
+            stopWheelMusic();
+        }
+        let wheelMusicAudio = null;
+        function stopWheelMusic() {
+            if (wheelMusicAudio) {
+                wheelMusicAudio.pause();
+                wheelMusicAudio.currentTime = 0;
+                wheelMusicAudio = null;
+            }
+        }
+        function stopIdleMusic() {
+            const idleAudio = document.getElementById('idleMusic');
+            if (idleAudio) {
+                idleAudio.pause();
+                idleAudio.currentTime = 0;
+            }
+        }
+        function startIdleMusic() {
+            stopIdleMusic();
+            wheelMusicAudio = new Audio('wheelidle.mp3');
+            wheelMusicAudio.volume = 0.5;
+            wheelMusicAudio.playbackRate = 0.8;
+            wheelMusicAudio.loop = true;
+            wheelMusicAudio.play().catch(err => {
+                console.warn('Não foi possível reproduzir a música da roleta:', err);
+            });
+        }
+        function changeJevilSprite(sprite) {
+    // Mantendo o padrão camelo (camelCase) que é o comum no JS
+    const jevilImg = document.querySelector('.jevil img');
+
+    if (jevilImg) {
+        if (sprite === 'idle') {
+            jevilImg.src = 'jevil.png';
+        } else if (sprite === 'spinning') {
+            jevilImg.src = 'jevilgif.gif';
+        }
+    }
+}
+        function startWheelMusic() {
+            stopWheelMusic();
+            wheelMusicAudio = new Audio('spinningwheel.mp3');
+            wheelMusicAudio.volume = 0.5;
+            wheelMusicAudio.playbackRate = 1; // Aumentar um pouco a velocidade para mais emoção
+            wheelMusicAudio.currentTime = Math.random() * 70; // Iniciar em um ponto aleatório para evitar repetição
+            wheelMusicAudio.loop = true;
+            wheelMusicAudio.play().catch(err => {
+                console.warn('Não foi possível reproduzir a música da roleta:', err);
+            });
         }
 
         function initializeWheel() {
+            stopShopMusic();
+            typeWriter(''); // limpar texto
+            changeJevilSprite('idle');
+            startIdleMusic(); // Parar música de idle
             const spinnerDiv = document.getElementById('wheelSpinner');
             spinnerDiv.innerHTML = '';
 
@@ -5724,6 +5788,9 @@ function stopShopMusic() {
             }
 
             isSpinning = true;
+            stopIdleMusic();
+            startWheelMusic();
+            changeJevilSprite('spinning');
             document.getElementById('spinBtn').disabled = true;
             
             // Selecionar a recompensa que será ganha
@@ -5735,7 +5802,7 @@ function stopShopMusic() {
             const rewardDisplay = reward.type === 'item' 
                 ? `${reward.emoji} ${reward.text}` 
                 : `${reward.emoji} ${reward.text}`;
-            document.getElementById('wheelRewardText').innerHTML = `🎯 <strong>${rewardDisplay}</strong> 🎯`;
+            document.getElementById('wheelRewardText').innerHTML = `Girando...`;
 
             const segmentAngle = 360 / WHEEL_REWARDS.length;
             const finalRotation = spins * 360 + randomSegment * segmentAngle;
@@ -5788,6 +5855,9 @@ function stopShopMusic() {
             document.getElementById('spinsCount').textContent = spinsRemaining;
 
             isSpinning = false;
+            stopWheelMusic();
+            startIdleMusic();
+            changeJevilSprite('idle');
             setTimeout(() => {
                 document.getElementById('spinBtn').disabled = false;
             }, 1000);
