@@ -3887,13 +3887,14 @@ function changeSansSprite(state) {
                 dialogText.textContent = '* tu já\n* tem esse item.\n* não posso te vender\n* algo em dobro.';
                 return;
             }
+            
             // Reusarr itens de cores para customização
             if (isReusable && owned) {
                 dialogText.textContent = `* ah, vejo que você já tem\n* ${item.name}.\n* quer usar\n* para customizar sua tag?`;
                 
                 const optionsDiv = document.querySelector('.dialog-options');
                 optionsDiv.innerHTML = `
-                    <button class="dialog-btn" onclick="promptTagColor('${itemId}')">Sim</button>
+                    <button class="dialog-btn" onclick="promptTagColor('${itemName}')">Sim</button>
                     <button class="dialog-btn" onclick="undertaleShopAction('comprar')">Não</button>
                 `;
                 return;
