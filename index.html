@@ -3811,7 +3811,7 @@ function undertaleShopAction(action) {
     const shopItemsGrid = document.getElementById('shopItemsGrid');
     
     if (action === 'comprar') {
-        dialogText.textContent = '* heh... então tu quer\n* fazer uma compra?\n* da uma olhada\n* nessas tralhas.';
+        typeWriter('* heh... então tu quer\n* fazer uma compra?\n* da uma olhada\n* nessas tralhas.');
         shopItemsGrid.classList.add('show');
     } 
     else if (action === 'conversar') {
@@ -3837,7 +3837,7 @@ function undertaleShopAction(action) {
 ];
 
         // Define o texto baseado no índice atual
-        dialogText.textContent = dialogs[currentDialogIndex];
+        typeWriter(dialogs[currentDialogIndex]);
 
         // Avança para o próximo diálogo
         currentDialogIndex++;
@@ -3864,6 +3864,43 @@ function changeSansSprite(state) {
     }
 
 }
+
+let isTyping = false; // Impede que dois textos tentem escrever ao mesmo tempo
+let typeInterval;
+
+function typeWriter(text) {
+    const dialogText = document.getElementById('dialogText');
+    
+    // Se já estiver digitando, para a execução anterior
+    if (isTyping) {
+        clearInterval(typeInterval);
+    }
+
+    isTyping = true;
+    dialogText.textContent = ""; // Limpa o texto atual
+    let index = 0;
+
+    // Criamos o som de fala (aquele 'bip' curto)
+    const talkSound = new Audio('sans.mp3'); 
+    talkSound.volume = 0.3;
+
+    typeInterval = setInterval(() => {
+        if (index < text.length) {
+            dialogText.textContent += text.charAt(index);
+            
+            // Toca o som a cada letra (exceto espaços para soar mais natural)
+            if (text.charAt(index) !== " ") {
+                // Clonar o áudio permite que sons se sobreponham se a digitação for rápida
+                talkSound.cloneNode(true).play().catch(() => {});
+            }
+            
+            index++;
+        } else {
+            clearInterval(typeInterval);
+            isTyping = false;
+        }
+    }, 50); // Velocidade da digitação (50ms é um bom padrão)
+}
         
         function undertaleSelectItem(itemId, price) {
             const item = SHOP_ITEMS.find(i => i.id === itemId);
@@ -3873,7 +3910,7 @@ function changeSansSprite(state) {
             const coins = getCoins();
             
             if (coins < price) {
-                dialogText.textContent = '* heh.\n* você não tem\n* ouro o suficiente.\n* mais sorte na próxima vez.';
+                typeWriter('* heh.\n* você não tem\n* ouro o suficiente.\n* mais sorte na próxima vez.');
                 return;
             }
             
@@ -3884,13 +3921,13 @@ function changeSansSprite(state) {
             const itemName = itemId === 'cor-especial' ? 'especial' : itemId === 'cor-comum' ? 'comum' : '';
             
             if (!isSpins && owned && !isReusable) {
-                dialogText.textContent = '* tu já\n* tem esse item.\n* não posso te vender\n* algo em dobro.';
+                typeWriter('* tu já\n* tem esse item.\n* não posso te vender\n* algo em dobro.');
                 return;
             }
             
             // Reusarr itens de cores para customização
             if (isReusable && owned) {
-                dialogText.textContent = `* ah, vejo que você já tem\n* ${item.name}.\n* quer usar\n* para customizar sua tag?`;
+                typeWriter(`* ah, vejo que você já tem\n* ${item.name}.\n* quer usar\n* para customizar sua tag?`);
                 
                 const optionsDiv = document.querySelector('.dialog-options');
                 optionsDiv.innerHTML = `
@@ -3902,7 +3939,7 @@ function changeSansSprite(state) {
             
             // Confirmar compra
             const confirmText = `* então tu quer comprar\n* "${item.name}"?\n* isso vai custar uns ${price} ouros.\n* ok?`;
-            dialogText.textContent = confirmText;
+            typeWriter(confirmText);
             
             const shopItemsGrid = document.getElementById('shopItemsGrid');
             const optionsDiv = document.querySelector('.dialog-options');
