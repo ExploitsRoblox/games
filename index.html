@@ -4022,8 +4022,15 @@ function typeWriter(text) {
                 typeWriter(`* ah, vejo que você já tem\n* ${item.name}.\n* quer usar\n* para customizar sua tag?`);
                 
                 const optionsDiv = document.querySelector('.dialog-options');
+                if (itemId === 'custom-tag') {
+                    optionsDiv.innerHTML = `
+                        <button class="dialog-btn" id="customTagShopBtn" onclick="promptCustomTag()">Sim</button>
+                        <button class="dialog-btn" onclick="undertaleShopAction('comprar')">Não</button>
+                    `;
+                    return;
+                }
                 optionsDiv.innerHTML = `
-                    <button class="dialog-btn" onclick="promptTagColor('${itemName}')">Sim</button>
+                    <button class="dialog-btn" id="customTagShopBtn" onclick="promptTagColor('${itemName}')">Sim</button>
                     <button class="dialog-btn" onclick="undertaleShopAction('comprar')">Não</button>
                 `;
                 return;
@@ -5693,7 +5700,7 @@ function stopShopMusic() {
             { emoji: '🐠', text: '+50 Moedas', coins: 50, type: 'coins', rarity: 'comum' },
             { emoji: '💎', text: '+2000 Moedas', coins: 2000, type: 'coins', rarity: 'lendario' },
             { emoji: '🎮', text: 'Desbloquear Todos os Jogos', itemId: 'all-games', type: 'item', rarity: 'lendario' },
-            { emoji: '🏷', text: 'Tag',itemId: 'custom-tag', type: 'item', rarity: 'epico' },
+            { emoji: '🏷️', text: 'Tag', itemId: 'custom-tag', type: 'item', rarity: 'epico' },
             { emoji: '🌈', text: 'Cor Da Tag Especial', itemId: 'cor-especial', type: 'item', rarity: 'lendario' },
             { emoji: '🔥', text: 'Cor Da Tag Comum', itemId: 'cor-comum', type: 'item', rarity: 'raro' }
         ];
@@ -5916,6 +5923,9 @@ function stopShopMusic() {
                     localStorage.setItem(`item-${reward.itemId}`, 'owned');
                     
                     document.getElementById('wheelRewardText').innerHTML = `🎁 <strong>${reward.text}</strong> 🎁<br><span style="font-size: 0.9rem; color: #22c55e;">Adicionado ao seu inventário!</span>`;
+                    if (reward.itemId === 'custom-tag') {
+                        promptCustomTag();
+                    }
                 } else {
                     // Se já tem o item, dar moedas compensatórias
                     const compensacaoCoins = 250;
