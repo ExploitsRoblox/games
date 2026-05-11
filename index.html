@@ -3869,7 +3869,7 @@ function conquistaAnimacao(tipo) {
             
             SHOP_ITEMS.forEach(item => {
                 const owned = localStorage.getItem(`item-${item.id}`) === 'owned';
-                const isReusable = item.id === 'cor-comum' || item.id === 'cor-especial';
+                const isReusable = item.id === 'cor-comum' || item.id === 'cor-especial' || item.id === 'custom-tag';
                 const isSpins = item.isSpins === true;
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'shop-item-undertale';
