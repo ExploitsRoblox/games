@@ -3151,8 +3151,6 @@
             <p style="margin: 5px 0 0 0;">Voe e corre para derrotar inimigos!</p>
         </div>
 
-        <h1 id="boas-vindas" style="font-size: 1rem;">Bem Vindo(a)!</h1>
-
         <div class="grid-container" id="gameGrid">
             <a href="https://neeexusbr.github.io/apostilas" class="game-card" data-name="Apostilas" data-category="educativo">
                 <img src="apostila.png" alt="Apostilas">
@@ -5776,27 +5774,6 @@ function stopShopMusic() {
                 wheelMusicAudio = null;
             }
         }
-        function welcome() {
-    const nomeUsuario = localStorage.getItem("usuarioLogado") || "Visitante";
-    const tag = localStorage.getItem("userTag") || "";
-    const tagColor = localStorage.getItem("userTagColor") || "#ffffff";
-    const elemento = document.getElementById("boas-vindas");
-
-    // 1. Limpamos o conteúdo atual
-    elemento.innerHTML = "";
-
-    // 2. Criamos o texto de boas-vindas (seguro)
-    const textoBoasVindas = document.createTextNode(`Bem Vindo(a), ${nomeUsuario} `);
-    
-    // 3. Criamos o elemento da Tag com a cor específica
-    const spanTag = document.createElement("span");
-    spanTag.textContent = tag; // Define o texto da tag com segurança
-    spanTag.style.color = tagColor; // Aplica a cor do localStorage
-
-    // 4. Adicionamos ambos ao elemento principal
-    elemento.appendChild(textoBoasVindas);
-    elemento.appendChild(spanTag);
-}
         function stopIdleMusic() {
             const idleAudio = document.getElementById('idleMusic');
             if (idleAudio) {
@@ -6215,7 +6192,6 @@ function perguntarSave() {
             reloadAchievements(); // atualiza display de conquistas
             secretText(); // verifica se deve mostrar texto secreto
             gasterText(); // verifica se deve mostrar texto do Gaster
-            welcome(); // exibe mensagem de boas-vindas personalizada
             showifadmin(); // verifica se deve mostrar painel de admin
             checkIfGaster();
             
