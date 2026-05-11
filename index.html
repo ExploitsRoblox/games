@@ -3145,6 +3145,7 @@
     </nav>
 
     <main>
+        <h1 id="boas-vindas" style="font-size: 1.4rem;">Bem Vindo(a)!</h1>
         <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">DESTAQUE DA SEMANA</span>
         <div class="featured-banner" onclick="destaque()">
             <h2 style="margin: 0; font-size: 2rem;">Survival Racing Drift</h2>
@@ -5774,6 +5775,27 @@ function stopShopMusic() {
                 wheelMusicAudio = null;
             }
         }
+        function welcome() {
+    const nomeUsuario = localStorage.getItem("usuarioLogado") || "Visitante";
+    const tag = localStorage.getItem("userTag") || "";
+    const tagColor = localStorage.getItem("userTagColor") || "#ffffff";
+    const elemento = document.getElementById("boas-vindas");
+
+    // 1. Limpamos o conteúdo atual
+    elemento.innerHTML = "";
+
+    // 2. Criamos o texto de boas-vindas (seguro)
+    const textoBoasVindas = document.createTextNode(`Bem Vindo(a), ${nomeUsuario} `);
+    
+    // 3. Criamos o elemento da Tag com a cor específica
+    const spanTag = document.createElement("span");
+    spanTag.textContent = tag; // Define o texto da tag com segurança
+    spanTag.style.color = tagColor; // Aplica a cor do localStorage
+
+    // 4. Adicionamos ambos ao elemento principal
+    elemento.appendChild(textoBoasVindas);
+    elemento.appendChild(spanTag);
+}
         function stopIdleMusic() {
             const idleAudio = document.getElementById('idleMusic');
             if (idleAudio) {
@@ -6192,6 +6214,7 @@ function perguntarSave() {
             reloadAchievements(); // atualiza display de conquistas
             secretText(); // verifica se deve mostrar texto secreto
             gasterText(); // verifica se deve mostrar texto do Gaster
+            welcome(); // exibe mensagem de boas-vindas personalizada
             showifadmin(); // verifica se deve mostrar painel de admin
             checkIfGaster();
             
