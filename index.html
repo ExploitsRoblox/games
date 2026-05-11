@@ -4008,7 +4008,7 @@ function typeWriter(text) {
             
             // Verificar se já possui
             const owned = localStorage.getItem(`item-${itemId}`) === 'owned';
-            const isReusable = itemId === 'cor-comum' || itemId === 'cor-especial';
+            const isReusable = itemId === 'cor-comum' || itemId === 'cor-especial' || itemId === 'custom-tag';
             const isSpins = item.isSpins === true;
             const itemName = itemId === 'cor-especial' ? 'especial' : itemId === 'cor-comum' ? 'comum' : '';
             
@@ -5923,15 +5923,15 @@ function stopShopMusic() {
                     localStorage.setItem(`item-${reward.itemId}`, 'owned');
                     
                     document.getElementById('wheelRewardText').innerHTML = `🎁 <strong>${reward.text}</strong> 🎁<br><span style="font-size: 0.9rem; color: #22c55e;">Adicionado ao seu inventário!</span>`;
-                    if (reward.itemId === 'custom-tag') {
-                        promptCustomTag();
-                    }
                 } else {
                     // Se já tem o item, dar moedas compensatórias
                     const compensacaoCoins = 250;
                     await addCoins(compensacaoCoins);
                     await syncCoinsFromDatabase();
                     document.getElementById('wheelRewardText').innerHTML = `🎁 <strong>${reward.text}</strong> (duplicado)<br><span style="font-size: 0.9rem; color: #22c55e;">+${compensacaoCoins} Moedas em compensação!</span>`;
+                    if (reward.itemId === 'custom-tag') {
+                       promptCustomTag();
+                    }
                 }
             }
             
