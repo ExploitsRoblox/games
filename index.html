@@ -4393,6 +4393,12 @@ function typeWriter(text) {
             initializeShop();
             loadSpinsFromDatabase(); // Carregar giros quando abrir a loja
             playShopMusic();
+            const optionsDiv = document.querySelector('.dialog-options');
+            optionsDiv.innerHTML = `
+                <button class="dialog-btn" onclick="undertaleShopAction('comprar')">Comprar</button>
+                <button class="dialog-btn" onclick="undertaleShopAction('conversar')">Conversar</button>
+            `;
+            typeWriter('* bem-vindo à minha loja!\n* o que você quer?\n* comprar ou conversar?');
         }
         let shopAudio = null;
 
