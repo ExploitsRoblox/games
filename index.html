@@ -347,7 +347,7 @@
         }
     .achievements-container {
         position: fixed;
-        top: 15%;
+        top: 5%;
         left: 50%;
         transform: translate(-50%);
         display: none;
@@ -362,8 +362,18 @@
         width: 90%;
         max-width: 500px;
         box-shadow: 0 0 50px rgba(207, 57, 57, 0.5);
-        animation: slideIn 0.3s ease-in-out;
+        animation: AchievementSlideIn 0.3s ease-in-out;
     }
+    @keyframes AchievementSlideIn {
+    from {
+        /* Começa fora da tela à direita, mas mantendo o ajuste de centralização */
+        transform: translate(100%, 0); 
+    }
+    to {
+        /* Termina na posição de repouso (centralizado) */
+        transform: translate(-50%, 0);
+    }
+}
 
 
     .achievements-container.active {
