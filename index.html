@@ -3835,6 +3835,14 @@ function openSpamtonShop() {
         spamtonPopup();
         spamtonPopup();
         return;
+    } else {
+        const modal = document.getElementById('shopSModal');
+            modal.classList.add('active');
+            const optionsDiv = document.querySelector('.dialog-options');
+            optionsDiv.innerHTML = `
+                <button class="dialog-btn" onclick="spamtonShopAction('comprar')">Comprar</button>
+                <button class="dialog-btn" onclick="spamtonShopAction('conversar')">Conversar</button>
+            `;
     }
 
 }
@@ -4565,16 +4573,6 @@ function typeWriter(text) {
             };
             
             document.body.appendChild(modal);
-        }
-        function openSpamtonShop() {
-            // Terminar Depois, só um easter egg por enquanto
-            const modal = document.getElementById('shopSModal');
-            modal.classList.add('active');
-            const optionsDiv = document.querySelector('.dialog-options');
-            optionsDiv.innerHTML = `
-                <button class="dialog-btn" onclick="undertaleShopAction('comprar')">Comprar</button>
-                <button class="dialog-btn" onclick="undertaleShopAction('conversar')">Conversar</button>
-            `;
         }
 
         function openShop() {
