@@ -126,6 +126,34 @@
             flex-shrink: 0;
         }
 
+        .spamton-popup {
+    position: fixed;
+    z-index: 9999;
+    /* Estado Inicial */
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
+    /* O cubic-bezier acima dá um efeito "bounce" (elástico) igual a popups de spam antigos */
+}
+
+.spamton-popup.show {
+    /* Estado Final */
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.spamton-popup button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.spamton-popup img {
+    display: block;
+    max-width: 200px; /* Ou o tamanho que preferir */
+}
+
         .coins-display {
             background: rgba(229, 9, 20, 0.2);
             border: 1px solid var(--accent-color);
@@ -979,6 +1007,10 @@
             pointer-events: none;
         }
         .sans-character img {
+            width: 300px;
+            height: 360px;
+        }
+        .spamton-character img {
             width: 300px;
             height: 360px;
         }
@@ -2610,6 +2642,24 @@
     top: 300px;
     left: 90px;
 }
+.door img {
+    width: 80px;
+    height: 100px;
+    object-fit: cover;
+    position: absolute;
+    bottom: 0px;
+    right: 10%;
+}
+button.door {
+    position: absolute;
+    bottom: 0px;
+    right: 10%;
+    width: 80px;
+    height: 100px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
 
         /* === SISTEMA DE AUTORIZAÇÃO/SOLICITAÇÕES === */
         .admin-solicitacao-item {
@@ -2833,6 +2883,34 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal da loja do Spamton -->
+      <div id="shopSModal" class="shop-modal" onclick="closeSpamtonShop()">
+        <div class="shop-content" onclick="event.stopPropagation();">
+            <button class="shop-close" onclick="closeSpamtonShop()">✕</button>
+            
+            <!-- Spamton Character -->
+            <div class="spamton-character">
+                <img src="sprite.png" alt="Spamton">
+            </div>
+            
+            <!-- Shop Items Grid (Hidden by default) -->
+            <div class="shop-items-grid" id="shopItemsGrid"></div>
+            
+            <!-- Dialog Box -->
+            <div class="undertale-dialogbox">
+                <div class="dialog-text" id="dialogText">
+                * OLÁ, [[Pequeno coágulo]]
+                * O QUE TE TRAZ
+                * Á MINHA LOJA HOJE?
+                </div>
+                <div class="dialog-options">
+                    <button class="dialog-btn" id="comprar" onclick="undertaleShopAction('comprar')">Comprar</button>
+                    <button class="dialog-btn" id="conversar" onclick="undertaleShopAction('conversar')">Conversar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Modal de Recompensas Diárias -->
     <div id="dailyRewardModal" class="daily-reward-modal" onclick="closeDailyReward(event)">
@@ -2885,6 +2963,9 @@
                 <h3>🎡 Roleta da Sorte</h3>
                 <button class="wheel-button" onclick="openWheel(); closeInventory();" style="width: 100%;">🎰 Abrir Roleta</button>
             </div>
+            <button class="gastersprite" onclick="gasterFadeOut()">
+    <img src="gastersprite.png" alt="Redacted">
+</button>
         </div>
     </div>
 
@@ -2902,6 +2983,7 @@
            
         </div> 
         <div class="jevil"><img src="jevil.png" alt="Jevil"></div>
+        <button class="door" onclick="opendoor()"><img src="door.jpg" alt="Door"></img></button>
     </div>
     
     <!-- Modal de Admin -->
@@ -3386,9 +3468,6 @@
     <div class="atua">
        <h2 id="updateText"></h2>
     </div>
-    <button class="gastersprite" onclick="gasterFadeOut()">
-    <img src="gastersprite.png" alt="Redacted">
-</button>
     </main>
 
     <script>
@@ -3625,6 +3704,56 @@ atualizarDataCommit();
                 });
             }
         });
+        function fadeoutblackscreen() {
+            const blackScreen = document.createElement('div');
+            blackScreen.style.position = 'fixed';
+            blackScreen.style.top = '0';
+            blackScreen.style.left = '0';
+            blackScreen.style.width = '100%';
+            blackScreen.style.height = '100%';
+            blackScreen.style.backgroundColor = '#000';
+            blackScreen.style.opacity = '1';
+            blackScreen.style.transition = 'opacity 1s ease-out';
+            blackScreen.style.zIndex = '10000';
+            document.body.appendChild(blackScreen);
+
+            setTimeout(() => {
+                blackScreen.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(blackScreen);
+                }, 1000);
+            }, 100);
+        }
+
+        function fadeinblackscreen() {
+            const blackScreen = document.createElement('div');
+            blackScreen.style.position = 'fixed';
+            blackScreen.style.top = '0';
+            blackScreen.style.left = '0';
+            blackScreen.style.width = '100%';
+            blackScreen.style.height = '100%';
+            blackScreen.style.backgroundColor = '#000';
+            blackScreen.style.opacity = '0';
+            blackScreen.style.transition = 'opacity 1s ease-out';
+            blackScreen.style.zIndex = '10000';
+            document.body.appendChild(blackScreen);
+
+            setTimeout(() => {
+                blackScreen.style.opacity = '1';
+                setTimeout(() => {
+                    document.body.removeChild(blackScreen);
+                }, 1000);
+            }, 100);
+        }
+
+        function opendoor(){
+           fadeinblackscreen();
+           setTimeout(() => {
+             fadeoutblackscreen();
+             openSpamtonShop();
+           }, 1000);
+        }
+
 
         async function imFeelingLucky() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
@@ -3667,7 +3796,48 @@ atualizarDataCommit();
                 window.location.href = 'https://neeexusbr.github.io/survival';
             }
         }
+function spamtonPopup() {
+    const popup = document.createElement('div');
+    popup.className = 'spamton-popup';
 
+    // Correções: Math com "M" maiúsculo e atribuição ao .style
+    const topPos = Math.floor(Math.random() * 80) + 10;
+    const leftPos = Math.floor(Math.random() * 80) + 10;
+
+    popup.style.top = topPos + "%";
+    popup.style.left = leftPos + "%";
+
+    popup.innerHTML = `
+        <button onclick="this.parentElement.remove()">
+            <img src="popup.png" alt="[[BIG SHOT]]">
+        </button>
+    `;
+
+    document.body.appendChild(popup);
+
+    // Pequeno delay para garantir que o navegador perceba a mudança e aplique a animação
+    setTimeout(() => {
+        popup.classList.add('show');
+    }, 10);
+    // Som
+    const audio = new Audio('popup.mp3');
+    audio.play();
+
+    console.log(`Popup criada em: ${popup.style.top}, ${popup.style.left}`);
+}
+
+function openSpamtonShop() {
+   if (!localStorage.getItem('key_get')) {
+        alert("PAROU PAROU PAROU! VOCÊ ACHA QUE PODE ENTRAR NO MEU [[Negócio Próprio]] SEM UMA [[Assinatura Premium]]? CADÊ A [Chave], PEQUENO [[Coágulo]]?? SEM CHAVE, SEM [[Leve 3 pague 1]]!!");
+        spamtonPopup();
+        spamtonPopup();
+        spamtonPopup();
+        spamtonPopup();
+        spamtonPopup();
+        return;
+    }
+
+}
 function conquistaAnimacao(tipo) {
     const selectorMap = {
         'detetive': '.detetiveimg',
@@ -4396,6 +4566,16 @@ function typeWriter(text) {
             
             document.body.appendChild(modal);
         }
+        function openSpamtonShop() {
+            // Terminar Depois, só um easter egg por enquanto
+            const modal = document.getElementById('shopSModal');
+            modal.classList.add('active');
+            const optionsDiv = document.querySelector('.dialog-options');
+            optionsDiv.innerHTML = `
+                <button class="dialog-btn" onclick="undertaleShopAction('comprar')">Comprar</button>
+                <button class="dialog-btn" onclick="undertaleShopAction('conversar')">Conversar</button>
+            `;
+        }
 
         function openShop() {
             const modal = document.getElementById('shopModal');
@@ -4431,7 +4611,13 @@ function stopShopMusic() {
         shopAudio.currentTime = 0; // Reseta para o início
     }
 }
-
+function closeSpamtonShop(){
+    if (event && event.target !== document.getElementById('shopSModal')) {
+        return;
+    }
+    const modal = document.getElementById('shopSModal');
+    modal.classList.remove('active');
+}
         function closeShop(event) {
             stopShopMusic();
             if (event && event.target !== document.getElementById('shopModal')) {
