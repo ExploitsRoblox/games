@@ -2142,6 +2142,19 @@
     transform: scale(1.1);
 }
 
+.fastSpinButton {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+    border: 2px solid white;
+    border-radius: 0px;
+    color: lime;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
 .leaderboard-list {
     display: flex;
     flex-direction: column;
@@ -2885,28 +2898,28 @@ button.door {
     </div>
 
     <!-- Modal da loja do Spamton -->
-      <div id="shopSModal" class="shop-modal" onclick="closeSpamtonShop()">
+      <div id="shopSModal" class="shop-modal" onclick="closedoor()">
         <div class="shop-content" onclick="event.stopPropagation();">
-            <button class="shop-close" onclick="closeSpamtonShop()">✕</button>
+            <button class="shop-close" onclick="closedoor()">✕</button>
             
             <!-- Spamton Character -->
             <div class="spamton-character">
-                <img src="sprite.png" alt="Spamton">
+                <img src="spamton.png" alt="Spamton">
             </div>
             
             <!-- Shop Items Grid (Hidden by default) -->
-            <div class="shop-items-grid" id="shopItemsGrid"></div>
+            <div class="shop-items-grid" id="shopSItemsGrid"></div>
             
             <!-- Dialog Box -->
             <div class="undertale-dialogbox">
-                <div class="dialog-text" id="dialogText">
+                <div class="dialog-text" id="dialogTextS">
                 * OLÁ, [[Pequeno coágulo]]
                 * O QUE TE TRAZ
                 * Á MINHA LOJA HOJE?
                 </div>
-                <div class="dialog-options">
-                    <button class="dialog-btn" id="comprar" onclick="undertaleShopAction('comprar')">Comprar</button>
-                    <button class="dialog-btn" id="conversar" onclick="undertaleShopAction('conversar')">Conversar</button>
+                <div class="dialog-options" id="dialogOptionsS">
+                    <button class="dialog-btn" id="spamtonComprarbtn" onclick="spamtonShopAction('comprar')">Comprar</button>
+                    <button class="dialog-btn" id="spamtonConversarbtn" onclick="spamtonShopAction('conversar')">Conversar</button>
                 </div>
             </div>
         </div>
@@ -2978,6 +2991,11 @@ button.door {
             </div>
             <div class="wheel-info" id="wheelRewardText">Clique em girar para começar!</div>
             <div class="wheel-info" id="spinsLeft">Giros disponíveis: <span id="spinsCount">0</span></div>
+           <input type="checkbox" id="fastSpin" onclick="ToggleFastSpin()" style="display: none;">
+    
+    <label for="fastSpin" id="fastSpinStatus" style="color: lime; cursor: pointer;">
+        FAST SPIN: ON
+    </label>
             <button class="wheel-button" id="spinBtn" onclick="startSpin()">GIRAR</button>
             <button class="wheel-close" onclick="closeWheel()">Fechar</button>
            
@@ -3748,9 +3766,21 @@ atualizarDataCommit();
 
         function opendoor(){
            fadeinblackscreen();
+           const audio = new Audio('dooropen.mp3');
+           audio.play();
            setTimeout(() => {
              fadeoutblackscreen();
              openSpamtonShop();
+           }, 1000);
+        }
+
+        function closedoor(){
+           fadeinblackscreen();
+           const audio = new Audio('doorclose.mp3');
+           audio.play();
+           setTimeout(() => {
+             fadeoutblackscreen();
+             closeSpamtonShop();
            }, 1000);
         }
 
@@ -3827,7 +3857,7 @@ function spamtonPopup() {
 }
 
 function openSpamtonShop() {
-   if (!localStorage.getItem('key_get')) {
+   if (!localStorage.getItem('item-key')) {
         alert("PAROU PAROU PAROU! VOCÊ ACHA QUE PODE ENTRAR NO MEU [[Negócio Próprio]] SEM UMA [[Assinatura Premium]]? CADÊ A [Chave], PEQUENO [[Coágulo]]?? SEM CHAVE, SEM [[Leve 3 pague 1]]!!");
         spamtonPopup();
         spamtonPopup();
@@ -3838,11 +3868,13 @@ function openSpamtonShop() {
     } else {
         const modal = document.getElementById('shopSModal');
             modal.classList.add('active');
-            const optionsDiv = document.querySelector('.dialog-options');
+            const optionsDiv = document.querySelector('#dialogOptionsS');
             optionsDiv.innerHTML = `
                 <button class="dialog-btn" onclick="spamtonShopAction('comprar')">Comprar</button>
                 <button class="dialog-btn" onclick="spamtonShopAction('conversar')">Conversar</button>
             `;
+            // Mostrar mensagem inicial
+            typeWriter('* [[OLÁ]], [[PEQUENO COÁGULO]]\n* [[BEM-VINDO]] Á MINHA LOJA\n* [[O QUE VOCÊ QUER?]]', 'dialogTextS');
     }
 
 }
@@ -3901,6 +3933,14 @@ function conquistaAnimacao(tipo) {
             { id: 'spins-10', name: 'Giros da Roleta (10x)', desc: 'Compre 10 giros para usar na roleta da sorte!', icon: '🎡', price: 1500, isSpins: true, quantity: 10 },
             { id: 'spins-25', name: 'Giros da Roleta (25x)', desc: 'Compre 25 giros com desconto!', icon: '🎡', price: 3000, isSpins: true, quantity: 25 },
             { id: 'spins-50', name: 'Giros da Roleta (50x)', desc: 'Compre 50 giros com grande desconto!', icon: '🎡', price: 5000, isSpins: true, quantity: 50 },
+        ];
+
+        const SPAMTON_ITEMS = [
+            { id: 'cor-comum', name: 'Cor da Tag (Comum)', desc: 'Customize a cor da sua tag, mas com Desconto!', icon: '🎨', price: 500 },
+            { id: 'cor-especial', name: 'Cor da Tag (Especial)', desc: 'Cores especiais, mas com Desconto!', icon: '✨', price: 1500 },
+            { id: '404-notfound', name: '[[ERRO_404]]', desc: 'ERRO 404: Could not find item, check your internet connection!', icon: '🔍', price: (Number(localStorage.getItem('userCoins')) || 0) + 1 },
+            { id: 'fast-spin', name: 'Giro Rápido', desc: 'Gire a roleta Instantaneamente!', icon: '🎡', price: 750 },
+            { id: 'spins-100', name: 'Giros da Roleta (100x)', desc: 'Giros com desconto IMENSO!', icon: '🎡', price: 7500, isSpins: true, quantity: 100 },
         ];
 
         function getCoins() {
@@ -4145,41 +4185,62 @@ function changeSansSprite(state) {
 
 }
 
-let isTyping = false; // Impede que dois textos tentem escrever ao mesmo tempo
-let typeInterval;
+// Objeto para rastrear estado de digitação independente para cada elemento
+const typeWriterState = {
+    dialogText: { isTyping: false, interval: null },
+    dialogTextS: { isTyping: false, interval: null }
+};
 
-function typeWriter(text) {
-    const dialogText = document.getElementById('dialogText');
-    
-    // Se já estiver digitando, para a execução anterior
-    if (isTyping) {
-        clearInterval(typeInterval);
+function typeWriter(text, elementId = 'dialogText') {
+    const dialogText = document.getElementById(elementId);
+    if (!dialogText) {
+        console.error(`Elemento com ID '${elementId}' não encontrado`);
+        return;
     }
+    
+    // Inicializa ou recupera o estado do elemento
+    if (!typeWriterState[elementId]) {
+        typeWriterState[elementId] = { isTyping: false, interval: null };
+    }
+    const state = typeWriterState[elementId];
 
-    isTyping = true;
-    dialogText.textContent = ""; // Limpa o texto atual
+    // Se já estiver digitando, para a execução anterior
+    if (state.isTyping) {
+        clearInterval(state.interval);
+    }
+    
+    state.isTyping = true;
+    dialogText.textContent = ""; 
     let index = 0;
+    let charCounter = 0; // Contador para controlar a cadência do som
 
-    // Criamos o som de fala (aquele 'bip' curto)
-    const talkSound = new Audio('sans.mp3'); 
-    talkSound.volume = 0.3;
+    // Escolher som de acordo com o elemento
+    const isSpamton = elementId === 'dialogTextS';
+    const audioFile = isSpamton ? 'spamtontalking.mp3' : 'sans.mp3';
+    const talkSound = new Audio(audioFile); 
+    talkSound.volume = isSpamton ? 0.04 : 0.5; // Ajusta o volume para diferenciar os sons
 
-    typeInterval = setInterval(() => {
+    state.interval = setInterval(() => {
         if (index < text.length) {
-            dialogText.textContent += text.charAt(index);
+            const char = text.charAt(index);
+            dialogText.textContent += char;
             
-            // Toca o som a cada letra (exceto espaços para soar mais natural)
-            if (text.charAt(index) !== " ") {
-                // Clonar o áudio permite que sons se sobreponham se a digitação for rápida
-                talkSound.cloneNode(true).play().catch(() => {});
+            if (char !== " ") {
+                // LÓGICA DE DELAY/CADÊNCIA:
+                // Se for Spamton, toca o som apenas a cada 2 caracteres (par)
+                // Se for Sans (ou outro), toca em todos os caracteres
+                if (!isSpamton || charCounter % 3 === 0) {
+                    talkSound.cloneNode(true).play().catch(() => {});
+                }
+                charCounter++;
             }
             
             index++;
         } else {
-            clearInterval(typeInterval);
-            isTyping = false;
+            clearInterval(state.interval);
+            state.isTyping = false;
         }
-    }, 50); // Velocidade da digitação (50ms é um bom padrão)
+    }, 50); 
 }
         
         function undertaleSelectItem(itemId, price) {
@@ -4207,6 +4268,12 @@ function typeWriter(text) {
             
             // Reusarr itens de cores para customização
             if (isReusable && owned) {
+                // Validar se o usuário tem moedas suficientes para usar o item
+                if (coins < price) {
+                    typeWriter('* heh.\n* você não tem\n* ouro o suficiente.\n* mais sorte na próxima vez.');
+                    return;
+                }
+                
                 typeWriter(`* ah, vejo que você já tem\n* ${item.name}.\n* quer usar\n* para customizar sua tag?`);
                 
                 const optionsDiv = document.querySelector('.dialog-options');
@@ -4258,7 +4325,13 @@ function typeWriter(text) {
             
             // Encontrar o item para obter o nome
             const item = SHOP_ITEMS.find(i => i.id === itemId);
-            if (!item) return;
+            if (!item) {
+                const spamtonItem = SPAMTON_ITEMS.find(i => i.id === itemId);
+                if (!spamtonItem) {
+                    return; // Item não encontrado, aborta
+                } 
+            }
+    
 
             // Se for giros, adicionar giros e abrir a roleta
             if (item.isSpins) {
@@ -4371,6 +4444,19 @@ function typeWriter(text) {
         }
 
         function promptCustomTag() {
+            // Validar se o usuário possui o item e tem moedas suficientes
+            const customTagPrice = 2500;
+            if (localStorage.getItem(`item-custom-tag`) !== 'owned') {
+                alert(`❌ Você não possui a "Tag Personalizada"! Compre na loja primeiro.`);
+                return;
+            }
+            
+            const coins = getCoins();
+            if (coins < customTagPrice) {
+                alert(`❌ Você não tem moedas suficientes! Precisa de ${customTagPrice} moedas para usar a Tag Personalizada.`);
+                return;
+            }
+            
             const tag = prompt('Escolha sua tag personalizada (1-10 caracteres):', '');
             if (tag !== null) {
                 if (tag.length < 1 || tag.length > 10) {
@@ -4403,8 +4489,17 @@ function typeWriter(text) {
         async function promptTagColor(tipo) {
             // Validar se o usuário possui o item
             const itemId = tipo === 'especial' ? 'cor-especial' : 'cor-comum';
+            const colorPrice = tipo === 'especial' ? 5000 : 1500;
+            
             if (localStorage.getItem(`item-${itemId}`) !== 'owned') {
                 alert(`❌ Você não possui o item "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"! Compre na loja primeiro.`);
+                return;
+            }
+            
+            // Validar se o usuário tem moedas suficientes para usar a cor
+            const coins = getCoins();
+            if (coins < colorPrice) {
+                alert(`❌ Você não tem moedas suficientes! Precisa de ${colorPrice} moedas para usar a "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"!`);
                 return;
             }
 
@@ -4609,6 +4704,148 @@ function stopShopMusic() {
         shopAudio.currentTime = 0; // Reseta para o início
     }
 }
+function spamtonShopAction(action) {
+    const dialogTextS = document.getElementById('dialogTextS');
+    const shopSItemsGrid = document.getElementById('shopSItemsGrid');
+    
+    if (action === 'comprar') {
+        // Mostrar a grade de itens
+        const typeWriterText = '* [[BIG SHOT]]\n* [[LEVE 3 PAGUE 1]]\n* TODOS OS [[Deals Incríveis]]\n* VAMOS, [[PEQUENO COÁGULO]]!';
+        typeWriter(typeWriterText, 'dialogTextS');
+        shopSItemsGrid.classList.add('show');
+        initializeSpamtonShop();
+    } 
+    else if (action === 'conversar') {
+        shopSItemsGrid.classList.remove('show');
+
+        const dialogs = [
+            '* [[BIG SHOT]]\n* [[BIG SHOT]]\n* [[BIG SHOT]]',
+            '* você já ouviu falar\n* sobre os [[LIVRETOS ASTRAIS]]?',
+            '* eu era um [[NORMAL GUY]]\n* mas depois...\n* depois dos [[NEO-DEALS]]...',
+            '* meus olhos abriram\n* para os [[VERDADEIROS NEGÓCIOS]]',
+            '* [[LEVE 3 PAGUE 1]]\n* [[OFERTA LIMITADA]]\n* [[NÃO PERCA]]',
+            '* sabe o que é ser um [[BIG SHOT]]?\n* é quando você tem\n* [[TUDO QUE VOCÊ PRECISA]]',
+            '* e aí, quer fazer\n* um [[PEQUENO NEGÓCIO]]?\n* [[SÓ EU E VOCÊ]]?',
+            '* os tempos estão mudando\n* [[AMIGO]]\n* os [[NEO-DEALS]] estão aqui',
+            '* eu tenho tudo que você\n* [[PODERIA SONHAR]]\n* vem, vem cá!',
+            '* [[COMPRE AGORA]]\n* [[PAGUE DEPOIS]]\n* [[TALVEZ NUNCA]]'
+        ];
+
+        // Define o texto baseado no índice atual
+        if (!window.currentSpamtonDialogIndex) {
+            window.currentSpamtonDialogIndex = 0;
+        }
+        
+        typeWriter(dialogs[window.currentSpamtonDialogIndex], 'dialogTextS');
+
+        // Avança para o próximo diálogo
+        window.currentSpamtonDialogIndex++;
+
+        // Se chegar ao fim da lista, volta para o primeiro
+        if (window.currentSpamtonDialogIndex >= dialogs.length) {
+            window.currentSpamtonDialogIndex = 0;
+        }
+    }
+}
+
+function initializeSpamtonShop() {
+    const shopSItemsGrid = document.getElementById('shopSItemsGrid');
+    shopSItemsGrid.innerHTML = '';
+
+    SPAMTON_ITEMS.forEach(item => {
+        const owned = localStorage.getItem(`item-${item.id}`) === 'owned';
+        const isReusable = item.id === 'cor-comum' || item.id === 'cor-especial' || item.id === 'custom-tag';
+        const isSpins = item.isSpins === true;
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'shop-item-undertale';
+        
+        itemDiv.innerHTML = `
+            <div class="shop-item-undertale-icon">${item.icon}</div>
+            <div class="shop-item-undertale-name">${item.name}</div>
+            <div class="shop-item-undertale-price">💰 ${item.price}</div>
+        `;
+        itemDiv.onclick = () => spamtonSelectItem(item.id, item.price);
+        shopSItemsGrid.appendChild(itemDiv);
+    });
+}
+
+function spamtonSelectItem(itemId, price) {
+    const item = SPAMTON_ITEMS.find(i => i.id === itemId);
+    if (!item) return;
+    
+    const dialogTextS = document.getElementById('dialogTextS');
+    const coins = getCoins();
+    
+    if (coins < price) {
+        typeWriter('* [[VOCÊ NÃO TEM OURO SUFICIENTE]]\n* [[VOLTE QUANDO TIVER MAIS DINHEIRO]]\n* [[PEQUENO COÁGULO]]', 'dialogTextS');
+        return;
+    }
+    
+    // Verificar se já possui
+    const owned = localStorage.getItem(`item-${itemId}`) === 'owned';
+    const isReusable = itemId === 'cor-comum' || itemId === 'cor-especial' || itemId === 'custom-tag';
+    const isSpins = item.isSpins === true;
+    const itemName = itemId === 'cor-especial' ? 'especial' : itemId === 'cor-comum' ? 'comum' : '';
+    
+    if (!isSpins && owned && !isReusable) {
+        typeWriter('* [[VOCÊ JÁ TEM ISSO]]\n* [[NÃO POSSO VENDER ALGO DOBRADO]]\n* [[DESCULPA, AMIGO]]', 'dialogTextS');
+        return;
+    }
+    
+    // Reusarr itens de cores para customização
+    if (isReusable && owned) {
+        // Validar se o usuário tem moedas suficientes para usar o item
+        if (coins < price) {
+            typeWriter('* [[VOCÊ NÃO TEM OURO SUFICIENTE]]\n* [[PARA CUSTOMIZAR]]\n* [[VOLTE DEPOIS]]', 'dialogTextS');
+            return;
+        }
+        
+        typeWriter(`* [[AH, VOCÊ JÁ TEM ISSO]]\n* [[QUER USAR PARA CUSTOMIZAR]]\n* [[SUA TAG]]?`, 'dialogTextS');
+        
+        const optionsDiv = document.querySelector('#dialogOptionsS');
+        if (itemId === 'custom-tag') {
+            optionsDiv.innerHTML = `
+                <button class="dialog-btn" onclick="spamtonConfirmTagCustomization('tag')">Sim</button>
+                <button class="dialog-btn" onclick="spamtonShopAction('comprar')">Não</button>
+            `;
+            return;
+        }
+        optionsDiv.innerHTML = `
+            <button class="dialog-btn" onclick="spamtonConfirmTagCustomization('${itemName}')">Sim</button>
+            <button class="dialog-btn" onclick="spamtonShopAction('comprar')">Não</button>
+        `;
+        return;
+    }
+    
+    // Confirmar compra
+    const confirmText = `* [[ENTÃO VOCÊ QUER COMPRAR]]\n* [["${item.name}"]]\n* [[VAI CUSTAR]] ${price} [[OUROS]]\n* [[OK]]?`;
+    typeWriter(confirmText, 'dialogTextS');
+    
+    const optionsDiv = document.querySelector('#dialogOptionsS');
+    optionsDiv.innerHTML = `
+        <button class="dialog-btn" onclick="spamtonConfirmBuy('${itemId}', ${price})">Sim</button>
+        <button class="dialog-btn" onclick="spamtonShopAction('comprar')">Não</button>
+    `;
+}
+
+function spamtonConfirmTagCustomization(type) {
+    if (type === 'tag') {
+        promptCustomTag();
+    } else {
+        promptTagColor(type);
+    }
+}
+
+async function spamtonConfirmBuy(itemId, price) {
+    await buyItem(itemId, price);
+    const optionsDiv = document.querySelector('#dialogOptionsS');
+    optionsDiv.innerHTML = `
+        <button class="dialog-btn" onclick="spamtonShopAction('comprar')">Comprar</button>
+        <button class="dialog-btn" onclick="spamtonShopAction('conversar')">Conversar</button>
+    `;
+    initializeSpamtonShop();
+}
+
 function closeSpamtonShop(){
     if (event && event.target !== document.getElementById('shopSModal')) {
         return;
@@ -4757,7 +4994,7 @@ function closeSpamtonShop(){
             const rewards = {
                 1: { coins: 100, item: null, description: 'Bem-vindo! Comece sua jornada!', icon: '🎯' },
                 2: { coins: 120, item: null, description: 'Continue assim!', icon: '💰' },
-                3: { coins: 100, item: 'lootbox-comum', description: 'Moedas + Lootbox Comum!', icon: '📦' },
+                3: { coins: 100, item: 'spin-5', description: 'Moedas + 5 Giros!', icon: '📦' },
                 4: { coins: 150, item: null, description: 'Você está indo bem!', icon: '⭐' },
                 5: { coins: 120, item: null, description: 'Metade da primeira semana!', icon: '🔥' },
                 6: { coins: 150, item: 'lootbox-comum', description: 'Moedas + Lootbox Comum!', icon: '📦' },
@@ -5903,7 +6140,9 @@ function closeSpamtonShop(){
             { emoji: '🎮', text: 'Desbloquear Todos os Jogos', itemId: 'all-games', type: 'item', rarity: 'lendario' },
             { emoji: '🏷️', text: 'Tag', itemId: 'custom-tag', type: 'item', rarity: 'epico' },
             { emoji: '🌈', text: 'Cor Da Tag Especial', itemId: 'cor-especial', type: 'item', rarity: 'lendario' },
-            { emoji: '🔥', text: 'Cor Da Tag Comum', itemId: 'cor-comum', type: 'item', rarity: 'raro' }
+            { emoji: '🔥', text: 'Cor Da Tag Comum', itemId: 'cor-comum', type: 'item', rarity: 'raro' },
+            { emoji: '🗝️', text: 'Chave Misteriosa', itemId: 'key', type: 'item', rarity: 'mitico' },
+            { emoji: '💎', text: '+10000 Moedas', coins: 10000, type: 'coins', rarity: 'mitico' }
         ];
 
         let spinsRemaining = 0;
@@ -6063,6 +6302,62 @@ function closeSpamtonShop(){
             return colors[rarity] || '#888888';
         }
 
+        // Função para selecionar uma recompensa respeitando a raridade
+        function selectWeightedReward() {
+            // Pesos de probabilidade para cada raridade
+            const rarityWeights = {
+                'comum': 50,      // 50% de chance
+                'raro': 30,        // 30% de chance
+                'epico': 15,       // 15% de chance
+                'lendario': 5,     // 5% de chance
+                'mitico': 0.5      // 0.5% de chance
+            };
+
+            // Agrupar itens por raridade
+            const rewardsByRarity = {
+                'comum': [],
+                'raro': [],
+                'epico': [],
+                'lendario': [],
+                'mitico': []
+            };
+
+            WHEEL_REWARDS.forEach((reward, index) => {
+                if (rewardsByRarity[reward.rarity]) {
+                    rewardsByRarity[reward.rarity].push(index);
+                }
+            });
+
+            // Gerar número aleatório
+            const random = Math.random() * 100;
+
+            // Determinar qual raridade foi sorteada
+            let selectedRarity;
+            let cumulativeWeight = 0;
+
+            for (const rarity of ['mitico', 'lendario', 'epico', 'raro', 'comum']) {
+                cumulativeWeight += rarityWeights[rarity];
+                if (random <= cumulativeWeight) {
+                    selectedRarity = rarity;
+                    break;
+                }
+            }
+
+            // Se não conseguiu encontrar (por erro de cálculo), usar comum
+            if (!selectedRarity) {
+                selectedRarity = 'comum';
+            }
+
+            // Selecionar um item aleatório da raridade sorteada
+            const itemsOfRarity = rewardsByRarity[selectedRarity];
+            if (itemsOfRarity.length === 0) {
+                return 0; // Fallback para o primeiro item
+            }
+
+            const randomIndex = Math.floor(Math.random() * itemsOfRarity.length);
+            return itemsOfRarity[randomIndex];
+        }
+
         function startSpin() {
             if (isSpinning || spinsRemaining <= 0) {
                 alert('VISITANTE! VOCÊ NÃO PODE GIRAR AGORA. SIM, SIM!');
@@ -6075,9 +6370,9 @@ function closeSpamtonShop(){
             changeJevilSprite('spinning');
             document.getElementById('spinBtn').disabled = true;
             
-            // Selecionar a recompensa que será ganha
+            // Selecionar a recompensa que será ganha respeitando as raridades
             const spins = Math.floor(Math.random() * 5) + 5; // 5-10 voltas
-            const randomSegment = Math.floor(Math.random() * WHEEL_REWARDS.length);
+            const randomSegment = selectWeightedReward(); // Usar seleção ponderada
             const reward = WHEEL_REWARDS[randomSegment];
             
             // Exibir a recompensa que será ganha
@@ -6086,18 +6381,26 @@ function closeSpamtonShop(){
                 : `${reward.emoji} ${reward.text}`;
             document.getElementById('wheelRewardText').innerHTML = `Girando...`;
 
-            const segmentAngle = 360 / WHEEL_REWARDS.length;
-            const finalRotation = spins * 360 + randomSegment * segmentAngle;
+           // 1. Verificar se o Fast Spin está ativado
+    const isFast = localStorage.getItem('fast-spin') === 'on';
+    const spinTime = isFast ? 1 : 4; // 1 segundo se rápido, 4 segundos se normal
 
-            const spinner = document.getElementById('wheelSpinner');
-            spinner.style.transition = 'transform 4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            currentWheelRotation = finalRotation;
-            spinner.style.transform = `rotate(${finalRotation}deg)`;
+    const segmentAngle = 360 / WHEEL_REWARDS.length;
+    const finalRotation = spins * 360 + randomSegment * segmentAngle;
 
-            setTimeout(() => {
-                finishSpin(randomSegment, reward);
-            }, 4000);
-        }
+    const spinner = document.getElementById('wheelSpinner');
+    
+    // 2. Aplicar o tempo dinâmico no CSS (usando a variável spinTime)
+    spinner.style.transition = `transform ${spinTime}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+    
+    currentWheelRotation = finalRotation;
+    spinner.style.transform = `rotate(${finalRotation}deg)`;
+
+    // 3. Aplicar o tempo dinâmico no Timeout (convertendo segundos para milissegundos)
+    setTimeout(() => {
+        finishSpin(randomSegment, reward);
+    }, spinTime * 1000);
+}
 
         async function finishSpin(winningSegment, reward) {
             if (!reward) {
@@ -6131,7 +6434,12 @@ function closeSpamtonShop(){
                     await syncCoinsFromDatabase();
                     document.getElementById('wheelRewardText').innerHTML = `🎁 <strong>${reward.text}</strong> (duplicado)<br><span style="font-size: 0.9rem; color: #22c55e;">+${compensacaoCoins} Moedas em compensação!</span>`;
                     if (reward.itemId === 'custom-tag') {
-                       promptCustomTag();
+                       // Validar se o usuário tem moedas suficientes para usar a tag personalizada
+                       const coins = getCoins();
+                       const customTagPrice = 2500; // Preço da tag personalizada
+                       if (coins >= customTagPrice) {
+                           promptCustomTag();
+                       }
                     }
                 }
             }
@@ -6296,6 +6604,20 @@ function closeSpamtonShop(){
         }
     });
 }
+function ToggleFastSpin() {
+    const checkbox = document.getElementById('fastSpin'); // O input
+    const statusText = document.getElementById('fastSpinStatus'); // Um span ao lado
+
+    if (checkbox.checked) {
+        localStorage.setItem('fast-spin', 'on');
+        statusText.style.color = 'lime';
+        statusText.textContent = 'FAST SPIN: ON';
+    } else {
+        localStorage.setItem('fast-spin', 'off');
+        statusText.style.color = 'red';
+        statusText.textContent = 'FAST SPIN: OFF';
+    }
+}
 
 function perguntarBackup() {
     const resposta = confirm("Deseja carregar o backup?");
@@ -6406,6 +6728,14 @@ function perguntarSave() {
                     localStorage.setItem(gameId, 'unlocked');
                     unlockGame(gameId);
                 });
+            }
+
+             // Se o item "all-games" foi comprado, desbloquear todos os jogos secretos
+            if (localStorage.getItem('item-fast-spin')) {
+               localStorage.setItem('fast-spin', 'on');
+               document.getElementById('fastSpin').textContent = 'FAST SPIN: ON';
+               document.getElementById('fastSpin').checked = true;
+               document.getElementById('fastSpin').style.display = 'inline-block';
             }
 
             filterGames(); // aplica filtro inicial de categorias/pesquisa
@@ -6583,6 +6913,16 @@ async function salvarBackup() {
         itensComprados.push(itemId);
       }
     });
+    // Loja do Spamton
+    // 2. ITENS COMPRADOS
+    const itensCompradosSpamton = [];
+    const SPAMTON_ITEMS = ['cor-comum', 'cor-especial', '404-notfound', 'fast-spin'];
+    SPAMTON_ITEMS.forEach(itemId => {
+      const key = `item-${itemId}`;
+      if (localStorage.getItem(key) === 'owned') {
+        itensCompradosSpamton.push(itemId);
+      }
+    });
 
     // 3. JOGOS SECRETOS DESBLOQUEADOS
     const jogosDesbloqueados = [];
@@ -6617,6 +6957,7 @@ async function salvarBackup() {
       achievements: conquistas,
       unlockedGames: jogosDesbloqueados,
       purchasedItems: itensComprados,
+      purchasedItemsSpamton: itensCompradosSpamton,
       preferences: preferences,
       timestamp: new Date().toISOString()
     };
