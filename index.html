@@ -2993,7 +2993,7 @@ button.door {
             <div class="wheel-info" id="spinsLeft">Giros disponíveis: <span id="spinsCount">0</span></div>
            <input type="checkbox" id="fastSpin" onclick="ToggleFastSpin()" style="display: none;">
     
-    <label for="fastSpin" id="fastSpinStatus" style="color: lime; cursor: pointer;">
+    <label for="fastSpin" id="fastSpinStatus" style="color: lime; cursor: pointer; display: none;">
         FAST SPIN: ON
     </label>
             <button class="wheel-button" id="spinBtn" onclick="startSpin()">GIRAR</button>
@@ -4324,12 +4324,13 @@ function typeWriter(text, elementId = 'dialogText') {
             }
             
             // Encontrar o item para obter o nome
-            const item = SHOP_ITEMS.find(i => i.id === itemId);
+            let item = SHOP_ITEMS.find(i => i.id === itemId);
             if (!item) {
                 const spamtonItem = SPAMTON_ITEMS.find(i => i.id === itemId);
                 if (!spamtonItem) {
                     return; // Item não encontrado, aborta
-                } 
+                }
+                item = spamtonItem; // Usar o item do Spamton
             }
     
 
@@ -6730,12 +6731,13 @@ function perguntarSave() {
                 });
             }
 
-             // Se o item "all-games" foi comprado, desbloquear todos os jogos secretos
-            if (localStorage.getItem('item-fast-spin')) {
+             // Se o item "fast-spin" foi comprado, mostrar o botão de giro rápido
+            if (localStorage.getItem('item-fast-spin') === 'owned') {
                localStorage.setItem('fast-spin', 'on');
-               document.getElementById('fastSpin').textContent = 'FAST SPIN: ON';
                document.getElementById('fastSpin').checked = true;
-               document.getElementById('fastSpin').style.display = 'inline-block';
+               document.getElementById('fastSpinStatus').style.display = 'inline-block';
+            } else {
+               document.getElementById('fastSpinStatus').style.display = 'none';
             }
 
             filterGames(); // aplica filtro inicial de categorias/pesquisa
