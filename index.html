@@ -76,7 +76,7 @@
 
         .navbar-menu {
             display: flex;
-            gap: 2px;
+            gap: 0px;
             flex: 0 1 auto;
             align-items: center;
             flex-wrap: nowrap;
@@ -2142,6 +2142,38 @@
     transform: scale(1.1);
 }
 
+.leaderboard-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.leaderboard-tab {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(168, 85, 247, 0.3);
+    color: var(--text-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+}
+
+.leaderboard-tab:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--accent-color);
+}
+
+.leaderboard-tab.active {
+    background: var(--accent-color);
+    color: #000;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+}
+
 .fastSpinButton {
     display: flex;
     align-items: center;
@@ -2954,6 +2986,11 @@ button.door {
             <div class="leaderboard-header">
                 <h2>🏆 LEADERBOARD</h2>
                 <button class="leaderboard-close" onclick="closeLeaderboard()">✕</button>
+            </div>
+            <div class="leaderboard-tabs">
+                <button class="leaderboard-tab active" onclick="switchLeaderboardTab('tempo')">⏱️ Tempo de Jogo</button>
+                <button class="leaderboard-tab" onclick="switchLeaderboardTab('moedas')">💰 Moedas</button>
+                <button class="leaderboard-tab" onclick="switchLeaderboardTab('giros')">🎡 Giros</button>
             </div>
             <div class="leaderboard-list" id="leaderboardList">
                 <!-- Carregado dinamicamente -->
@@ -3856,7 +3893,7 @@ function spamtonPopup() {
     console.log(`Popup criada em: ${popup.style.top}, ${popup.style.left}`);
 }
 
-function openSpamtonShop() {
+async function openSpamtonShop() {
    if (!localStorage.getItem('item-key')) {
         alert("PAROU PAROU PAROU! VOCÊ ACHA QUE PODE ENTRAR NO MEU [[Negócio Próprio]] SEM UMA [[Assinatura Premium]]? CADÊ A [Chave], PEQUENO [[Coágulo]]?? SEM CHAVE, SEM [[Leve 3 pague 1]]!!");
         spamtonPopup();
@@ -3866,8 +3903,12 @@ function openSpamtonShop() {
         spamtonPopup();
         return;
     } else {
+        // Sincronizar itens do backend antes de abrir a loja
+        await syncItemsFromDatabase();
+        
         const modal = document.getElementById('shopSModal');
             modal.classList.add('active');
+            initializeSpamtonShop();
             const optionsDiv = document.querySelector('#dialogOptionsS');
             optionsDiv.innerHTML = `
                 <button class="dialog-btn" onclick="spamtonShopAction('comprar')">Comprar</button>
@@ -4218,7 +4259,7 @@ function typeWriter(text, elementId = 'dialogText') {
     const isSpamton = elementId === 'dialogTextS';
     const audioFile = isSpamton ? 'spamtontalking.mp3' : 'sans.mp3';
     const talkSound = new Audio(audioFile); 
-    talkSound.volume = isSpamton ? 0.04 : 0.5; // Ajusta o volume para diferenciar os sons
+    talkSound.volume = isSpamton ? 0.1 : 0.1; // Ajusta o volume para diferenciar os sons
 
     state.interval = setInterval(() => {
         if (index < text.length) {
@@ -4227,9 +4268,9 @@ function typeWriter(text, elementId = 'dialogText') {
             
             if (char !== " ") {
                 // LÓGICA DE DELAY/CADÊNCIA:
-                // Se for Spamton, toca o som apenas a cada 2 caracteres (par)
+                // Se for Spamton, toca o som apenas a cada 13 caracteres (par)
                 // Se for Sans (ou outro), toca em todos os caracteres
-                if (!isSpamton || charCounter % 3 === 0) {
+                if (!isSpamton || charCounter % 13 === 0) {
                     talkSound.cloneNode(true).play().catch(() => {});
                 }
                 charCounter++;
@@ -4240,7 +4281,7 @@ function typeWriter(text, elementId = 'dialogText') {
             clearInterval(state.interval);
             state.isTyping = false;
         }
-    }, 50); 
+    }, 30); 
 }
         
         function undertaleSelectItem(itemId, price) {
@@ -4313,7 +4354,7 @@ function typeWriter(text, elementId = 'dialogText') {
             initializeShop();
         }
 
-        async function buyItem(itemId, price) {
+        async function buyItem(itemId, price, origem = 'normal') {
             const coins = getCoins();
             const token = localStorage.getItem('token');
             const usuario = localStorage.getItem('usuarioLogado');
@@ -4346,7 +4387,7 @@ function typeWriter(text, elementId = 'dialogText') {
                 if (token) {
                     const API_URL = "https://login-g50h.onrender.com";
                     try {
-                        // Registrar compra
+                        // Registrar compra com origem
                         await fetch(`${API_URL}/registrar-compra`, {
                             method: 'POST',
                             headers: {
@@ -4356,7 +4397,8 @@ function typeWriter(text, elementId = 'dialogText') {
                             body: JSON.stringify({
                                 itemId: itemId,
                                 itemNome: item.name,
-                                preco: price
+                                preco: price,
+                                origem: origem
                             })
                         });
                         
@@ -4375,7 +4417,11 @@ function typeWriter(text, elementId = 'dialogText') {
                 }
                 
                 alert(`✅ ${item.quantity} giro(s) adicionado(s)! Vamos girar?`);
-                closeShop();
+                if (origem === 'spamton') {
+                    closeSpamtonShop();
+                } else {
+                    closeShop();
+                }
                 openWheelFromShop();
                 return;
             }
@@ -4401,7 +4447,8 @@ function typeWriter(text, elementId = 'dialogText') {
                         body: JSON.stringify({
                             itemId: itemId,
                             itemNome: item.name,
-                            preco: price
+                            preco: price,
+                            origem: origem
                         })
                     });
                     
@@ -4440,7 +4487,11 @@ function typeWriter(text, elementId = 'dialogText') {
                 alert('🎉 Item comprado com sucesso!');
             }
             
-            initializeShop();
+            if (origem === 'spamton') {
+                initializeSpamtonShop();
+            } else {
+                initializeShop();
+            }
             updateUserPanelInfo();
         }
 
@@ -4671,10 +4722,11 @@ function typeWriter(text, elementId = 'dialogText') {
             document.body.appendChild(modal);
         }
 
-        function openShop() {
+        async function openShop() {
             const modal = document.getElementById('shopModal');
             modal.classList.add('active');
             initializeShop();
+            await syncItemsFromDatabase(); // Sincronizar itens do backend
             loadSpinsFromDatabase(); // Carregar giros quando abrir a loja
             playShopMusic();
             const optionsDiv = document.querySelector('.dialog-options');
@@ -4838,7 +4890,67 @@ function spamtonConfirmTagCustomization(type) {
 }
 
 async function spamtonConfirmBuy(itemId, price) {
-    await buyItem(itemId, price);
+    const coins = getCoins();
+    const token = localStorage.getItem('token');
+    const item = SPAMTON_ITEMS.find(i => i.id === itemId);
+    
+    if (!item) return;
+    
+    if (coins < price) {
+        alert('❌ Moedas insuficientes!');
+        return;
+    }
+    
+    // Se for giros, adicionar giros e sincronizar
+    if (item.isSpins) {
+        await setCoins(coins - price);
+        
+        // Atualizar giros localmente
+        spinsRemaining += item.quantity;
+        updateSpinsDisplay();
+        
+        // Sincronizar com o backend se logado
+        if (token) {
+            const API_URL = "https://login-g50h.onrender.com";
+            try {
+                // Registrar compra de giros do Spamton
+                await fetch(`${API_URL}/registrar-compra`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        itemId: itemId,
+                        itemNome: item.name,
+                        preco: price,
+                        origem: 'spamton'
+                    })
+                });
+                
+                // Atualizar giros no backend
+                await fetch(`${API_URL}/user/spins`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ spins: spinsRemaining })
+                });
+            } catch (err) {
+                console.error('Erro ao registrar compra de giros do Spamton:', err);
+            }
+        }
+        
+        alert(`✅ ${item.quantity} giro(s) adicionado(s)! Vamos girar?`);
+        closeSpamtonShop();
+        openWheelFromShop();
+        return;
+    }
+    
+    // Para outros itens, usar a função buyItem
+    await buyItem(itemId, price, 'spamton');
+    
     const optionsDiv = document.querySelector('#dialogOptionsS');
     optionsDiv.innerHTML = `
         <button class="dialog-btn" onclick="spamtonShopAction('comprar')">Comprar</button>
@@ -5222,7 +5334,7 @@ function closeSpamtonShop(){
         // === SISTEMA DE LEADERBOARD ===
         async function openLeaderboard() {
             document.getElementById('leaderboardModal').classList.add('active');
-            await loadLeaderboard();
+            await loadLeaderboard('tempo');
         }
 
         function closeLeaderboard(event) {
@@ -5232,14 +5344,33 @@ function closeSpamtonShop(){
             document.getElementById('leaderboardModal').classList.remove('active');
         }
 
-        async function loadLeaderboard() {
+        function switchLeaderboardTab(tipo) {
+            // Atualizar classe active dos botões
+            document.querySelectorAll('.leaderboard-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Carregar novo leaderboard
+            loadLeaderboard(tipo);
+        }
+
+        async function loadLeaderboard(tipo = 'tempo') {
             try {
                 const API_URL = "https://login-g50h.onrender.com";
-                const response = await fetch(`${API_URL}/leaderboard`);
+                let endpoint = '/leaderboard';
+                
+                if (tipo === 'moedas') {
+                    endpoint = '/leaderboard/moedas';
+                } else if (tipo === 'giros') {
+                    endpoint = '/leaderboard/giros';
+                }
+                
+                const response = await fetch(`${API_URL}${endpoint}`);
                 const res = await response.json();
                 
                 if (res.ok) {
-                    renderLeaderboard(res.usuarios);
+                    renderLeaderboardByType(res.usuarios, tipo);
                 } else {
                     alert('Erro ao carregar leaderboard');
                 }
@@ -5249,14 +5380,15 @@ function closeSpamtonShop(){
             }
         }
 
-        function renderLeaderboard(usuarios) {
+        function renderLeaderboardByType(usuarios, tipo) {
             const leaderboardList = document.getElementById('leaderboardList');
             leaderboardList.innerHTML = '';
             
             usuarios.forEach((user, index) => {
                 // Tratamento defensivo para valores undefined
                 const tempo = (user.tempo_jogo !== undefined && user.tempo_jogo !== null) ? user.tempo_jogo : 0;
-                const moedas = (user.premio !== undefined && user.premio !== null) ? user.premio : 0;
+                const moedas = (user.moedas !== undefined && user.moedas !== null) ? user.moedas : 0;
+                const giros = (user.spins !== undefined && user.spins !== null) ? user.spins : 0;
                 const posicao = (user.posicao !== undefined && user.posicao !== null) ? user.posicao : index + 1;
                 const nome = user.nome || 'Desconhecido';
                 const corTag = user.corTagPersonalizada || '#a855f7';
@@ -5286,10 +5418,35 @@ function closeSpamtonShop(){
                 
                 const rewardClass = index === 0 ? '' : index === 1 ? 'silver' : index === 2 ? 'bronze' : 'other';
                 
-                console.log(`[LEADERBOARD-RENDER] #${posicao} ${nome}: ${tempo}m playtime, ${moedas} moedas, borda: ${idCorBorda}`);
+                console.log(`[LEADERBOARD-${tipo.toUpperCase()}-RENDER] #${posicao} ${nome}:`, {tempo, moedas, giros});
                 
                 const item = document.createElement('div');
                 item.className = 'leaderboard-item';
+                
+                let statsHTML = '';
+                if (tipo === 'tempo') {
+                    statsHTML = `
+                        <div class="leaderboard-time">
+                            <div class="leaderboard-time-label">Tempo de Jogo</div>
+                            <div class="leaderboard-time-value">${tempoHoras}h ${tempoMinutos}m</div>
+                        </div>
+                    `;
+                } else if (tipo === 'moedas') {
+                    statsHTML = `
+                        <div class="leaderboard-time">
+                            <div class="leaderboard-time-label">Total de Moedas</div>
+                            <div class="leaderboard-time-value">${moedas}</div>
+                        </div>
+                    `;
+                } else if (tipo === 'giros') {
+                    statsHTML = `
+                        <div class="leaderboard-time">
+                            <div class="leaderboard-time-label">Giros Realizados</div>
+                            <div class="leaderboard-time-value">${giros}</div>
+                        </div>
+                    `;
+                }
+                
                 item.innerHTML = `
                     <div class="leaderboard-position ${positionClass}">${medalEmoji} #${posicao}</div>
                     <div class="leaderboard-profile">
@@ -5297,13 +5454,10 @@ function closeSpamtonShop(){
                         <div class="leaderboard-name">${nome}${tag}</div>
                     </div>
                     <div class="leaderboard-stats">
-                        <div class="leaderboard-time">
-                            <div class="leaderboard-time-label">Tempo de Jogo</div>
-                            <div class="leaderboard-time-value">${tempoHoras}h ${tempoMinutos}m</div>
-                        </div>
+                        ${statsHTML}
                     </div>
                     <div class="leaderboard-reward ${rewardClass}">
-                        💰 ${moedas} moedas
+                        🏅 ${user.premio} ${tipo === 'giros' ? 'giros' : 'moedas'}
                     </div>
                 `;
                 leaderboardList.appendChild(item);
@@ -6365,6 +6519,97 @@ function closeSpamtonShop(){
                 return;
             }
 
+            // Verificar se o Fast Spin está ativado
+            const isFast = localStorage.getItem('fast-spin') === 'on';
+            
+            if (isFast) {
+                // Se estiver ativado, perguntar quantos giros quer
+                startMultipleSpin();
+            } else {
+                // Caso contrário, fazer giro normal
+                performSingleSpin();
+            }
+        }
+
+        async function startMultipleSpin() {
+            const quantidadeStr = prompt(`🎡 QUANTOS GIROS VOCÊ QUER GIRAR?\n\n(Você tem ${spinsRemaining} giros disponíveis)\n\nDigite um número de 1 a ${spinsRemaining}:`, '1');
+            
+            if (quantidadeStr === null) {
+                // Usuário cancelou
+                return;
+            }
+            
+            let quantidade = parseInt(quantidadeStr);
+            
+            // Validar entrada
+            if (isNaN(quantidade) || quantidade < 1) {
+                alert('❌ Digite um número válido!');
+                return;
+            }
+            
+            if (quantidade > spinsRemaining) {
+                alert(`❌ Você só tem ${spinsRemaining} giro(s) disponível(is)!`);
+                return;
+            }
+            
+            // Desabilitar botão e mostrar que está girando
+            isSpinning = true;
+            document.getElementById('spinBtn').disabled = true;
+            
+            // Executar múltiplos giros em sequência
+            document.getElementById('wheelRewardText').innerHTML = `Girando ${quantidade} vez(es)...`;
+            
+            for (let i = 0; i < quantidade; i++) {
+                // Fazer um giro instantâneo (sem animação visual)
+                await performFastSpin();
+                
+                // Pequena pausa entre giros para visual melhor
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            // Re-habilitar botão
+            isSpinning = false;
+            document.getElementById('spinBtn').disabled = false;
+            
+            // Atualizar display de giros
+            document.getElementById('spinsCount').textContent = spinsRemaining;
+            
+            // Mensagem final
+            document.getElementById('wheelRewardText').innerHTML = `✅ <strong>${quantidade} giro(s) completado(s)!</strong><br>🎊 Confira suas recompensas!`;
+        }
+
+        async function performFastSpin() {
+            // Simular um giro instantâneo sem animação visual
+            const randomSegment = selectWeightedReward();
+            const reward = WHEEL_REWARDS[randomSegment];
+            
+            spinsRemaining--;
+            
+            // Processar recompensa
+            if (reward.type === 'coins') {
+                await addCoins(reward.coins);
+            } else if (reward.type === 'item') {
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                const itensComprados = user.itensComprados || [];
+                
+                if (!itensComprados.includes(reward.itemId)) {
+                    itensComprados.push(reward.itemId);
+                    user.itensComprados = itensComprados;
+                    localStorage.setItem('user', JSON.stringify(user));
+                    localStorage.setItem(`item-${reward.itemId}`, 'owned');
+                } else {
+                    // Se já tem o item, dar moedas compensatórias
+                    const compensacaoCoins = 250;
+                    await addCoins(compensacaoCoins);
+                }
+            }
+            
+            // Salvar no banco de dados
+            await saveSpinsToDatabase(spinsRemaining);
+            await syncCoinsFromDatabase();
+        }
+
+        function performSingleSpin() {
             isSpinning = true;
             stopIdleMusic();
             startWheelMusic();
@@ -6382,26 +6627,24 @@ function closeSpamtonShop(){
                 : `${reward.emoji} ${reward.text}`;
             document.getElementById('wheelRewardText').innerHTML = `Girando...`;
 
-           // 1. Verificar se o Fast Spin está ativado
-    const isFast = localStorage.getItem('fast-spin') === 'on';
-    const spinTime = isFast ? 1 : 4; // 1 segundo se rápido, 4 segundos se normal
+            const spinTime = 4; // Tempo normal de giro
 
-    const segmentAngle = 360 / WHEEL_REWARDS.length;
-    const finalRotation = spins * 360 + randomSegment * segmentAngle;
+            const segmentAngle = 360 / WHEEL_REWARDS.length;
+            const finalRotation = spins * 360 + randomSegment * segmentAngle;
 
-    const spinner = document.getElementById('wheelSpinner');
-    
-    // 2. Aplicar o tempo dinâmico no CSS (usando a variável spinTime)
-    spinner.style.transition = `transform ${spinTime}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
-    
-    currentWheelRotation = finalRotation;
-    spinner.style.transform = `rotate(${finalRotation}deg)`;
+            const spinner = document.getElementById('wheelSpinner');
+            
+            // Aplicar animação
+            spinner.style.transition = `transform ${spinTime}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+            
+            currentWheelRotation = finalRotation;
+            spinner.style.transform = `rotate(${finalRotation}deg)`;
 
-    // 3. Aplicar o tempo dinâmico no Timeout (convertendo segundos para milissegundos)
-    setTimeout(() => {
-        finishSpin(randomSegment, reward);
-    }, spinTime * 1000);
-}
+            // Executar após a animação terminar
+            setTimeout(() => {
+                finishSpin(randomSegment, reward);
+            }, spinTime * 1000);
+        }
 
         async function finishSpin(winningSegment, reward) {
             if (!reward) {
@@ -6557,10 +6800,11 @@ function closeSpamtonShop(){
             document.getElementById('lootboxModal').classList.remove('active');
         }
 
-        // Carregar giros ao abrir a página
+        // Carregar giros e itens ao abrir a página
         window.addEventListener('load', () => {
             if (localStorage.getItem('token')) {
                 loadSpinsFromDatabase();
+                syncItemsFromDatabase(); // Sincronizar itens do backup
             }
         });
          function syncGameListWithGrid() {
@@ -6750,6 +6994,7 @@ function perguntarSave() {
             
             // IMPORTANTE: Aguardar sincronização de moedas ANTES de continuar
             await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
+            await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
             
             // Atualizar display de moedas
             updateCoinsDisplay();
@@ -6841,6 +7086,13 @@ function perguntarSave() {
       // Restaurar itens comprados
       if (dadosBackup.purchasedItems && Array.isArray(dadosBackup.purchasedItems)) {
         dadosBackup.purchasedItems.forEach(itemId => {
+          localStorage.setItem(`item-${itemId}`, 'owned');
+        });
+      }
+
+      // Restaurar itens comprados do Spamton
+      if (dadosBackup.purchasedItemsSpamton && Array.isArray(dadosBackup.purchasedItemsSpamton)) {
+        dadosBackup.purchasedItemsSpamton.forEach(itemId => {
           localStorage.setItem(`item-${itemId}`, 'owned');
         });
       }
@@ -6937,8 +7189,7 @@ async function salvarBackup() {
     // 4. CONQUISTAS DESBLOQUEADAS
     const conquistas = [];
     const achiList = [
-      'detective', 'lucky', 'infinity', 'timeMaster', 'richGuy', 
-      'socialButterfly', 'gameCollector', 'weeklyWarrior'
+      'detective', 'lucky', 'infinity', 'gaster'
     ];
     achiList.forEach(achi => {
       if (localStorage.getItem(`ach-${achi}`) === 'unlocked') {
