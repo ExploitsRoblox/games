@@ -6575,7 +6575,7 @@ function closeSpamtonShop(){
     document.getElementById('wheelRewardText').innerHTML = `✅ <strong>${quantidade} giro(s) completado(s)!</strong><br>🎊 Você ganhou um total de +${totalMoedasGanhas} moedas!`;
 }
 
-       function performFastSpin() { // Mudamos o nome e tiramos o 'async'
+    function performFastSpinLocal() { // Mudamos o nome e tiramos o 'async'
     const randomSegment = selectWeightedReward();
     const reward = WHEEL_REWARDS[randomSegment];
     
