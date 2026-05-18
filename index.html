@@ -6532,82 +6532,78 @@ function closeSpamtonShop(){
         }
 
         async function startMultipleSpin() {
-            const quantidadeStr = prompt(`🎡 QUANTOS GIROS VOCÊ QUER GIRAR?\n\n(Você tem ${spinsRemaining} giros disponíveis)\n\nDigite um número de 1 a ${spinsRemaining}:`, '1');
-            
-            if (quantidadeStr === null) {
-                // Usuário cancelou
-                return;
-            }
-            
-            let quantidade = parseInt(quantidadeStr);
-            
-            // Validar entrada
-            if (isNaN(quantidade) || quantidade < 1) {
-                alert('❌ Digite um número válido!');
-                return;
-            }
-            
-            if (quantidade > spinsRemaining) {
-                alert(`❌ Você só tem ${spinsRemaining} giro(s) disponível(is)!`);
-                return;
-            }
-            
-            // Desabilitar botão e mostrar que está girando
-            isSpinning = true;
-            document.getElementById('spinBtn').disabled = true;
-            
-            // Executar múltiplos giros em sequência
-            document.getElementById('wheelRewardText').innerHTML = `Girando ${quantidade} vez(es)...`;
-            
-            for (let i = 0; i < quantidade; i++) {
-                // Fazer um giro instantâneo (sem animação visual)
-                await performFastSpin();
-                
-                // Pequena pausa entre giros para visual melhor
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-            
-            // Re-habilitar botão
-            isSpinning = false;
-            document.getElementById('spinBtn').disabled = false;
-            
-            // Atualizar display de giros
-            document.getElementById('spinsCount').textContent = spinsRemaining;
-            
-            // Mensagem final
-            document.getElementById('wheelRewardText').innerHTML = `✅ <strong>${quantidade} giro(s) completado(s)!</strong><br>🎊 Confira suas recompensas!`;
-        }
+    const quantidadeStr = prompt(`🎡 QUANTOS GIROS VOCÊ QUER GIRAR?\n\n(Você tem ${spinsRemaining} giros disponíveis)\n\nDigite um número de 1 a ${spinsRemaining}:`, '1');
+    
+    if (quantidadeStr === null) return;
+    
+    let quantidade = parseInt(quantidadeStr);
+    
+    // Validações básicas
+    if (isNaN(quantidade) || quantidade < 1) { alert('❌ Digite um número válido!'); return; }
+    if (quantidade > spinsRemaining) { alert(`❌ Você só tem ${spinsRemaining} giro(s) disponível(is)!`); return; }
+    
+    isSpinning = true;
+    document.getElementById('spinBtn').disabled = true;
+    document.getElementById('wheelRewardText').innerHTML = `Processando ${quantidade} giro(s) instantaneamente...`;
+    
+    let totalMoedasGanhas = 0;
+    
+    // Executa todos os giros na memória (Leva menos de 1 milissegundo)
+    for (let i = 0; i < quantidade; i++) {
+        totalMoedasGanhas += performFastSpinLocal();
+    }
+    
+    // --- SALVAMENTO ÚNICO NO BANCO DE DADOS ---
+    // 1. Se ganhou moedas, adiciona todas de uma vez só
+    if (totalMoedasGanhas > 0) {
+        await addCoins(totalMoedasGanhas); 
+    }
+    
+    // 2. Salva a nova quantidade de giros restantes
+    await saveSpinsToDatabase(spinsRemaining);
+    
+    // 3. Sincroniza o banco final
+    await syncCoinsFromDatabase();
+    // ------------------------------------------
+    
+    // Re-habilitar interface
+    isSpinning = false;
+    document.getElementById('spinBtn').disabled = false;
+    document.getElementById('spinsCount').textContent = spinsRemaining;
+    
+    // Mensagem final
+    document.getElementById('wheelRewardText').innerHTML = `✅ <strong>${quantidade} giro(s) completado(s)!</strong><br>🎊 Você ganhou um total de +${totalMoedasGanhas} moedas!`;
+}
 
-        async function performFastSpin() {
-            // Simular um giro instantâneo sem animação visual
-            const randomSegment = selectWeightedReward();
-            const reward = WHEEL_REWARDS[randomSegment];
-            
-            spinsRemaining--;
-            
-            // Processar recompensa
-            if (reward.type === 'coins') {
-                await addCoins(reward.coins);
-            } else if (reward.type === 'item') {
-                const user = JSON.parse(localStorage.getItem('user') || '{}');
-                const itensComprados = user.itensComprados || [];
-                
-                if (!itensComprados.includes(reward.itemId)) {
-                    itensComprados.push(reward.itemId);
-                    user.itensComprados = itensComprados;
-                    localStorage.setItem('user', JSON.stringify(user));
-                    localStorage.setItem(`item-${reward.itemId}`, 'owned');
-                } else {
-                    // Se já tem o item, dar moedas compensatórias
-                    const compensacaoCoins = 250;
-                    await addCoins(compensacaoCoins);
-                }
-            }
-            
-            // Salvar no banco de dados
-            await saveSpinsToDatabase(spinsRemaining);
-            await syncCoinsFromDatabase();
+       function performFastSpin() { // Mudamos o nome e tiramos o 'async'
+    const randomSegment = selectWeightedReward();
+    const reward = WHEEL_REWARDS[randomSegment];
+    
+    spinsRemaining--;
+    
+    let moedasGanhasNesseGiro = 0;
+    
+    // Processar recompensa
+    if (reward.type === 'coins') {
+        moedasGanhasNesseGiro = reward.coins;
+    } else if (reward.type === 'item') {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const itensComprados = user.itensComprados || [];
+        
+        if (!itensComprados.includes(reward.itemId)) {
+            itensComprados.push(reward.itemId);
+            user.itensComprados = itensComprados;
+            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem(`item-${reward.itemId}`, 'owned');
+        } else {
+            // Se já tem o item, acumula moedas compensatórias
+            moedasGanhasNesseGiro = 250;
         }
+    }
+    
+    // Retorna a quantidade de moedas ganhas para somarmos tudo no final
+    return moedasGanhasNesseGiro;
+}
 
         function performSingleSpin() {
             isSpinning = true;
