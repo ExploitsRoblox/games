@@ -2824,226 +2824,6 @@ button.door {
             background: rgba(255, 255, 255, 0.08) !important;
         }
 
-        /* === SISTEMA DE CHAT === */
-        .chat-sidebar {
-            flex-direction: column !important;
-            padding: 10px !important;
-        }
-
-        .chat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--accent-color);
-            padding-bottom: 10px;
-        }
-
-        .chat-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .chat-tab {
-            padding: 8px 15px;
-            background: transparent;
-            border: 2px solid rgba(207, 57, 57, 0.3);
-            color: var(--text-color);
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-        }
-
-        .chat-tab:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        .chat-tab.active {
-            background: var(--accent-color);
-            color: #000;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 10px rgba(207, 57, 57, 0.5);
-        }
-
-        .chat-tab-content {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .chat-tab-content.active {
-            display: flex;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            margin-bottom: 10px;
-            padding: 10px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .chat-message {
-            padding: 10px 12px;
-            background: rgba(255, 255, 255, 0.08);
-            border-left: 3px solid var(--accent-color);
-            border-radius: 4px;
-            word-wrap: break-word;
-            font-size: 0.9rem;
-            animation: slideInLeft 0.3s ease;
-        }
-
-        .chat-message.own {
-            background: rgba(207, 57, 57, 0.2);
-            border-left-color: var(--gold);
-            align-self: flex-end;
-            max-width: 85%;
-        }
-
-        .chat-message-user {
-            font-weight: 700;
-            color: var(--accent-color);
-            font-size: 0.8rem;
-            margin-bottom: 3px;
-        }
-
-        .chat-message-time {
-            font-size: 0.7rem;
-            color: #888;
-            margin-top: 3px;
-        }
-
-        .chat-input-area {
-            display: flex;
-            gap: 8px;
-            margin-top: auto;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--accent-color);
-            border-radius: 4px;
-            color: var(--text-color);
-            font-size: 0.85rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .chat-input:focus {
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 8px rgba(207, 57, 57, 0.3);
-        }
-
-        .chat-send-btn {
-            padding: 8px 15px;
-            background: var(--accent-color);
-            color: #000;
-            border: none;
-            border-radius: 4px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-        }
-
-        .chat-send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(207, 57, 57, 0.5);
-        }
-
-        .private-conversations-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        .conversation-item {
-            padding: 10px 12px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(207, 57, 57, 0.3);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-
-        .conversation-item:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: var(--accent-color);
-        }
-
-        .conversation-item.active {
-            background: rgba(207, 57, 57, 0.2);
-            border-color: var(--accent-color);
-        }
-
-        .conversation-name {
-            font-weight: 700;
-            color: var(--text-color);
-            font-size: 0.9rem;
-        }
-
-        .conversation-preview {
-            font-size: 0.75rem;
-            color: #aaa;
-            margin-top: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .conversation-unread {
-            position: absolute;
-            top: 5px;
-            right: 8px;
-            background: var(--error-color);
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 700;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--accent-color);
-            border-radius: 3px;
-        }
-
     </style>
 </head>
 <body>
@@ -3058,7 +2838,7 @@ button.door {
             <!-- Menu Central -->
             <nav class="navbar-menu">
                 <button class="navbar-btn" onclick="toggleLeftSidebar()">FILTROS</button>
-                <button class="navbar-btn" onclick="toggleChatSidebar()">CHAT</button>
+                <button class="navbar-btn" onclick="toggleRightSidebar()">MEUS JOGOS</button>
                 <button class="navbar-btn" onclick="openLeaderboard()">PLACAR</button>
                 <button class="navbar-btn" onclick="openInventory()">INVENTÁRIO</button>
                 <button class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
@@ -3506,37 +3286,9 @@ button.door {
     </nav>
     
 
-    <!-- Chat Sidebar -->
-    <nav id="right-sidebar" class="sidebar chat-sidebar">
-        <div class="chat-header">
-            <h3 style="margin: 0; color: var(--accent-color);">CHAT</h3>
-            <div class="chat-notifications-badge" id="chatNotificationsBadge" style="display: none; background: var(--error-color); color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: bold;">0</div>
-        </div>
-        
-        <!-- Abas de Chat -->
-        <div class="chat-tabs">
-            <button class="chat-tab active" data-tab="global" onclick="switchChatTab('global')">GLOBAL</button>
-            <button class="chat-tab" data-tab="private" onclick="switchChatTab('private')">PRIVADO</button>
-        </div>
-        
-        <!-- Chat Global -->
-        <div id="globalChatTab" class="chat-tab-content active">
-            <div class="chat-messages" id="globalMessages"></div>
-            <div class="chat-input-area">
-                <input type="text" id="globalMessageInput" placeholder="Mensagem global..." class="chat-input" onkeypress="handleChatKeypress(event, 'global')">
-                <button class="chat-send-btn" onclick="sendMessage('global')">Enviar</button>
-            </div>
-        </div>
-        
-        <!-- Chat Privado -->
-        <div id="privateChatTab" class="chat-tab-content">
-            <div class="private-conversations-list" id="privateConversationsList"></div>
-            <div class="chat-messages hidden" id="privateMessages"></div>
-            <div class="chat-input-area hidden" id="privateInputArea">
-                <input type="text" id="privateMessageInput" placeholder="Mensagem privada..." class="chat-input" onkeypress="handleChatKeypress(event, 'private')">
-                <button class="chat-send-btn" onclick="sendMessage('private')">Enviar</button>
-            </div>
-        </div>
+    <nav id="right-sidebar" class="sidebar">
+        <ul class="game-list" id="sideList">
+        </ul>
     </nav>
 
     <main>
@@ -3808,17 +3560,17 @@ function audiogaster() {
             document.getElementById('left-sidebar').classList.toggle('active');
             document.body.classList.toggle('left-active');
             
-            // Opcional: fechar o chat ao abrir o esquerdo para não espremer a tela
+            // Opcional: fechar o direito ao abrir o esquerdo para não espremer a tela
             if(document.body.classList.contains('right-active')) {
-                toggleChatSidebar();
+                toggleRightSidebar();
             }
         }
 
-        function toggleChatSidebar() {
+        function toggleRightSidebar() {
             document.getElementById('right-sidebar').classList.toggle('active');
             document.body.classList.toggle('right-active');
             
-            // Opcional: fechar o esquerdo ao abrir o chat
+            // Opcional: fechar o esquerdo ao abrir o direito
             if(document.body.classList.contains('left-active')) {
                 toggleLeftSidebar();
             }
@@ -4151,6 +3903,8 @@ async function openSpamtonShop() {
         spamtonPopup();
         return;
     } else {
+        // Sincronizar itens do backend antes de abrir a loja
+        await syncItemsFromDatabase();
         
         const modal = document.getElementById('shopSModal');
             modal.classList.add('active');
@@ -5943,7 +5697,15 @@ function closeSpamtonShop(){
         function logoutUser() {
             const resposta = confirm('⚠️ Deseja realmente sair?');
             if (resposta) {
-                localStorage.clear();
+                // Remover APENAS dados de autenticação, preservando progresso do jogo
+                localStorage.removeItem('token');
+                localStorage.removeItem('usuarioLogado');
+                localStorage.removeItem('isAdmin');
+                localStorage.removeItem('userProfilePic');
+                localStorage.removeItem('userTag');
+                localStorage.removeItem('userTagColor');
+                localStorage.removeItem('userTagColorType');
+                // Preservar: userCoins, userPlaytime, destaque, conquistas, itens comprados, jogos desbloqueados
                 location.reload();
             }
         }
@@ -7186,351 +6948,6 @@ function perguntarSave() {
             const totalAch = ach1 + ach2;
             document.getElementById('achievementsDisplay').textContent = `${totalAch}/2`;
         }
-
-        // === SISTEMA DE CHAT ===
-        
-        // Armazenamento local de mensagens e conversas
-        let chatData = {
-            globalMessages: [],
-            privateConversations: {},
-            unreadCount: 0,
-            currentUser: localStorage.getItem('usuarioLogado') || 'Anônimo',
-            token: localStorage.getItem('token')
-        };
-
-        // Recuperar dados de chat do servidor
-        async function loadChatData() {
-            chatData.currentUser = localStorage.getItem('usuarioLogado') || 'Anônimo';
-            chatData.token = localStorage.getItem('token');
-            
-            // Carregar mensagens globais
-            try {
-                const response = await fetch(`${API_URL}/chat/mensagens-globais`);
-                const data = await response.json();
-                if (data.ok) {
-                    chatData.globalMessages = data.mensagens.map(msg => ({
-                        user: msg.usuario,
-                        message: msg.mensagem,
-                        time: new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-                        id: msg._id
-                    }));
-                }
-            } catch (err) {
-                console.error('[CHAT] Erro ao carregar mensagens globais:', err);
-            }
-
-            // Carregar notificações de mensagens não lidas
-            if (chatData.token) {
-                try {
-                    const response = await fetch(`${API_URL}/chat/nao-lidas`, {
-                        headers: { 'Authorization': `Bearer ${chatData.token}` }
-                    });
-                    const data = await response.json();
-                    if (data.ok) {
-                        chatData.unreadCount = data.naoLidas;
-                    }
-                } catch (err) {
-                    console.error('[CHAT] Erro ao contar não lidas:', err);
-                }
-            }
-        }
-
-        // Inicializar chat ao carregar a página
-        document.addEventListener('DOMContentLoaded', async function() {
-            await loadChatData();
-            updateChatDisplay();
-        });
-
-        // Alternar entre abas do chat
-        function switchChatTab(tab) {
-            // Remover classe active de todos os tabs
-            document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.chat-tab-content').forEach(c => c.classList.remove('active'));
-
-            // Adicionar classe active ao tab selecionado
-            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
-            document.getElementById(`${tab}ChatTab`).classList.add('active');
-
-            if (tab === 'private') {
-                updatePrivateConversationsList();
-            }
-
-            updateChatDisplay();
-        }
-
-        // Enviar mensagem (global ou privada)
-        async function sendMessage(type) {
-            if (!chatData.token) {
-                alert('Você precisa estar logado para enviar mensagens!');
-                return;
-            }
-
-            const inputId = type === 'global' ? 'globalMessageInput' : 'privateMessageInput';
-            const input = document.getElementById(inputId);
-            const message = input.value.trim();
-
-            if (!message) return;
-
-            try {
-                if (type === 'global') {
-                    const response = await fetch(`${API_URL}/chat/enviar-global`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${chatData.token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ mensagem: message })
-                    });
-
-                    const data = await response.json();
-                    if (data.ok) {
-                        input.value = '';
-                        await loadChatData();
-                        displayGlobalMessages();
-                        console.log('[CHAT] Mensagem global enviada com sucesso');
-                    } else {
-                        alert('Erro: ' + data.mensagem);
-                    }
-                } else {
-                    // Mensagem privada
-                    const conversationId = document.querySelector('.conversation-item.active')?.dataset.user;
-                    if (!conversationId) {
-                        alert('Selecione uma conversa privada primeiro!');
-                        return;
-                    }
-
-                    const response = await fetch(`${API_URL}/chat/enviar-privada`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${chatData.token}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ 
-                            destinatario: conversationId, 
-                            mensagem: message 
-                        })
-                    });
-
-                    const data = await response.json();
-                    if (data.ok) {
-                        input.value = '';
-                        await displayPrivateMessages(conversationId);
-                        showNotification(`Mensagem enviada para ${conversationId}`);
-                        console.log('[CHAT] Mensagem privada enviada com sucesso');
-                    } else {
-                        alert('Erro: ' + data.mensagem);
-                    }
-                }
-            } catch (err) {
-                console.error('[CHAT] Erro ao enviar:', err);
-                alert('Erro ao enviar mensagem: ' + err.message);
-            }
-        }
-
-        // Lidar com Enter no input
-        function handleChatKeypress(event, type) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage(type);
-            }
-        }
-
-        // Exibir mensagens globais
-        function displayGlobalMessages() {
-            const container = document.getElementById('globalMessages');
-            container.innerHTML = '';
-
-            chatData.globalMessages.slice(-50).forEach(msg => {
-                const msgDiv = document.createElement('div');
-                msgDiv.className = msg.user === chatData.currentUser ? 'chat-message own' : 'chat-message';
-                msgDiv.innerHTML = `
-                    <div class="chat-message-user">${msg.user}</div>
-                    <div>${msg.message}</div>
-                    <div class="chat-message-time">${msg.time}</div>
-                `;
-                container.appendChild(msgDiv);
-            });
-
-            container.scrollTop = container.scrollHeight;
-        }
-
-        // Exibir mensagens privadas
-        async function displayPrivateMessages(conversationId) {
-            if (!chatData.token) {
-                alert('Você precisa estar logado!');
-                return;
-            }
-
-            const container = document.getElementById('privateMessages');
-            container.classList.remove('hidden');
-            document.getElementById('privateInputArea').classList.remove('hidden');
-            document.getElementById('privateConversationsList').classList.add('hidden');
-
-            try {
-                const response = await fetch(`${API_URL}/chat/conversa-privada/${conversationId}`, {
-                    headers: { 'Authorization': `Bearer ${chatData.token}` }
-                });
-
-                const data = await response.json();
-                if (!data.ok) {
-                    console.error('[CHAT] Erro ao obter conversa:', data.mensagem);
-                    return;
-                }
-
-                container.innerHTML = '';
-                data.mensagens.forEach(msg => {
-                    const msgDiv = document.createElement('div');
-                    const isOwn = msg.remetente === chatData.currentUser;
-                    msgDiv.className = isOwn ? 'chat-message own' : 'chat-message';
-                    msgDiv.innerHTML = `
-                        <div class="chat-message-user">${msg.remetente}</div>
-                        <div>${msg.mensagem}</div>
-                        <div class="chat-message-time">${new Date(msg.timestamp).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</div>
-                    `;
-                    container.appendChild(msgDiv);
-                });
-
-                container.scrollTop = container.scrollHeight;
-
-                // Recarregar conversas para atualizar contador de não lidas
-                await updatePrivateConversationsList();
-            } catch (err) {
-                console.error('[CHAT] Erro ao exibir conversa:', err);
-            }
-        }
-
-        // Atualizar lista de conversas privadas
-        async function updatePrivateConversationsList() {
-            const container = document.getElementById('privateConversationsList');
-            
-            if (!chatData.token) {
-                container.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">Você precisa estar logado!</div>';
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_URL}/chat/conversas-privadas`, {
-                    headers: { 'Authorization': `Bearer ${chatData.token}` }
-                });
-
-                const data = await response.json();
-                if (!data.ok) {
-                    console.error('[CHAT] Erro ao obter conversas:', data.mensagem);
-                    return;
-                }
-
-                container.innerHTML = '';
-
-                if (data.conversas.length === 0) {
-                    container.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">Nenhuma conversa ainda.<br>Crie uma nova digitando um nome:</div>';
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.className = 'chat-input';
-                    input.placeholder = 'Nome do usuário...';
-                    input.style.marginTop = '10px';
-                    const btn = document.createElement('button');
-                    btn.className = 'chat-send-btn';
-                    btn.textContent = 'Iniciar';
-                    btn.onclick = () => {
-                        if (input.value.trim()) {
-                            startPrivateConversation(input.value.trim());
-                        }
-                    };
-                    container.appendChild(input);
-                    container.appendChild(btn);
-                } else {
-                    data.conversas.forEach(conv => {
-                        const item = document.createElement('div');
-                        item.className = 'conversation-item';
-                        item.dataset.user = conv.usuario;
-                        item.innerHTML = `
-                            <div class="conversation-name">${conv.usuario}</div>
-                            <div class="conversation-preview">${conv.ultimaMensagem.substring(0, 30)}</div>
-                            ${conv.naoLidas > 0 ? `<div class="conversation-unread">${conv.naoLidas}</div>` : ''}
-                        `;
-                        item.onclick = async () => {
-                            document.querySelectorAll('.conversation-item').forEach(c => c.classList.remove('active'));
-                            item.classList.add('active');
-                            await displayPrivateMessages(conv.usuario);
-                        };
-                        container.appendChild(item);
-                    });
-                }
-            } catch (err) {
-                console.error('[CHAT] Erro ao atualizar conversas:', err);
-                container.innerHTML = '<div style="text-align: center; color: #ff4646; padding: 20px;">Erro ao carregar conversas</div>';
-            }
-        }
-
-        // Iniciar nova conversa privada
-        async function startPrivateConversation(userName) {
-            if (!chatData.token) {
-                alert('Você precisa estar logado!');
-                return;
-            }
-
-            await updatePrivateConversationsList();
-            const item = document.querySelector(`[data-user="${userName}"]`);
-            if (item) {
-                item.click();
-            } else {
-                alert(`Usuário "${userName}" não encontrado`);
-            }
-        }
-
-        // Atualizar exibição do chat
-        function updateChatDisplay() {
-            displayGlobalMessages();
-            updateNotificationsBadge();
-        }
-
-        // Sistema de notificações
-        function showNotification(message) {
-            chatData.unreadCount++;
-            updateNotificationsBadge();
-
-            const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAAB9AAACABAAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj==');
-            audio.play().catch(() => {});
-        }
-
-        // Atualizar badge de notificações
-        async function updateNotificationsBadge() {
-    const badge = document.getElementById('chatNotificationsBadge');
-    
-    // Se o elemento badge não existir na página, para a execução para evitar erros
-    if (!badge) return; 
-
-    if (chatData.token) {
-        try {
-            const response = await fetch(`${API_URL}/chat/nao-lidas`, {
-                headers: { 'Authorization': `Bearer ${chatData.token}` }
-            });
-
-            const data = await response.json();
-            if (data.ok) {
-                chatData.unreadCount = data.naoLidas;
-            }
-        } catch (err) {
-            console.error('[CHAT] Erro ao sincronizar notificações:', err);
-        }
-    }
-
-    if (chatData.unreadCount > 0) {
-        badge.style.display = 'flex';
-        badge.textContent = chatData.unreadCount;
-    } else {
-        badge.style.display = 'none';
-    }
-}
-
-// Atualizar notificações a cada 5 segundos se o chat estiver visível
-setInterval(async () => {
-    const chatSidebar = document.getElementById('right-sidebar');
-    if (chatSidebar && chatSidebar.classList.contains('active')) {
-        await updateNotificationsBadge();
-    }
-}, 5000);
-
         
         window.onload = async function() {
             // Sincronizar lista com grid automaticamente
@@ -7732,9 +7149,8 @@ async function salvarBackup() {
       userProfilePic: localStorage.getItem('userProfilePic'),
       destaque: localStorage.getItem('destaque'),
       lucky_used: localStorage.getItem('lucky_used'),
-      "ach-gaster": localStorage.getItem('ach-gaster'),
-      infinity_get: localStorage.getItem('infinity_get'),
-      "item-key": localStorage.getItem('item-key'),
+      gaster_unlocked: localStorage.getItem('ach-gaster'),
+      infinity_used: localStorage.getItem('infinity_used'),
       lastDailyRewardDate: localStorage.getItem('lastDailyRewardDate')
     };
 
