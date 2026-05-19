@@ -7531,21 +7531,6 @@ setInterval(async () => {
     }
 }, 5000);
 
-// Limpar notificações ao abrir o chat e iniciar conquistas
-document.addEventListener('DOMContentLoaded', function() {
-    const chatBtn = document.querySelector('[onclick*="toggleChatSidebar"]');
-    if (chatBtn) {
-        chatBtn.addEventListener('click', async function() {
-            chatData.unreadCount = 0;
-            await updateNotificationsBadge();
-        });
-    }
-
-    const achievementsDisplay = document.getElementById('achievementsDisplay');
-    if (achievementsDisplay) {
-        achievementsDisplay.textContent = `${totalAch}/2`;
-    }
-}); // <-- Agora fechando corretamente o DOMContentLoaded
         
         window.onload = async function() {
             // Sincronizar lista com grid automaticamente
