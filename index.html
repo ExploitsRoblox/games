@@ -6,23 +6,23 @@
     <title>Sala Do Futuro Aluno</title>
     <link rel="icon" href="favicon.png" type="image/png">
     <style>
-
-        :root {
+:root {
     --sidebar-width: 300px;
-    --bg-dark: #000000;        /* Roxo quase preto para o fundo */
-    --sidebar-bg: #000000;     /* Roxo escuro para os menus */
-    --accent-color: #cf3939;    /* Roxo vibrante (estilo Twitch/Neon) */
-    --text-color: #f8fafc;     /* Branco levemente azulado */
-    --card-bg: #64080c;        /* Roxo médio para os cards */
+    --bg-dark: #0b071e;         /* Roxo espacial ultra escuro para o fundo geral */
+    --sidebar-bg: #130c2a;      /* Roxo escuro para os menus */
+    --accent-color: #f43f5e;    /* Roxo claro/Rosa vibrante (estilo Neon Magenta) */
+    --text-color: #f8fafc;      /* Branco levemente azulado para leitura confortável */
+    --card-bg: #1e113c;         /* Roxo intermediário para destacar os cards */
     --success-color: #22c55e;   /* Verde mantido para sucesso */
-    --error-color: #ff4646;     /* Vermelho para erro */
-    --gold: #ffd700; 
-    --rainbow: (#ff0000, #ff8000, #ffff00, #00ff00, #00ffff, #0000ff, #8000ff);          /* Dourado para as conquistas */
+    --error-color: #ef4444;     /* Vermelho para erro */
+    --gold: #38bdf8;            /* Azul Ciano brilhante para conquistas/troféus */
     
-    /* Adicional: uma cor para dar profundidade aos hovers */
-    --accent-hover: #ff5e00; 
+    /* Arco-íris focado na transição entre Azul, Roxo, Rosa e Ciano */
+    --rainbow: linear-gradient(90deg, #f43f5e, #a855f7, #3b82f6, #06b6d4, #3b82f6, #a855f7, #f43f5e);
+    
+    /* Azul elétrico brilhante para os hovers, criando o contraste perfeito com o rosa/roxo */
+    --accent-hover: #2563eb; 
 }
-
         body {
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
@@ -76,11 +76,11 @@
 
         .navbar-menu {
             display: flex;
-            gap: 0px;
+            gap: 2px;
             flex: 0 1 auto;
             align-items: center;
-            flex-wrap: nowrap;
-            justify-content: flex-start;
+            flex-wrap: wrap;
+            justify-content: center;
             flex-direction: row;
             overflow: hidden;
         }
@@ -89,7 +89,7 @@
             background: transparent;
             color: var(--text-color);
             border: none;
-            padding: 8px 12px;
+            padding: 4px 6px;
             font-size: 0.85rem;
             font-weight: 600;
             cursor: pointer;
@@ -153,18 +153,6 @@
     display: block;
     max-width: 200px; /* Ou o tamanho que preferir */
 }
-
-        .coins-display {
-            background: rgba(229, 9, 20, 0.2);
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 8px 15px;
-            border-radius: 4px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            white-space: nowrap;
-        }
-
         .navbar-auth-btn {
             background: var(--error-color);
             color: #ffffff;
@@ -938,27 +926,25 @@
         
         /* Sistema de Moedas */
         .coins-display {
-            position: fixed;
             top: 90px;
-            left: 8%;
-            transform: translateX(-50%);
-            background: var(--gold);
-            color: #000;
-            padding: 2px 2px;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
-            border: 2px solid #ffb800;
-        }
+            left: 12%;
+    background: rgba(244, 63, 94, 0.08); /* Fundo sutil para não brigar com o texto */
+    border: 2px solid #f43f5e;           /* Borda rosa neon um pouco mais espessa */
+    color: #e2e8f0;                      /* Texto em branco azulado para alto contraste */
+    padding: 10px 24px;                  /* Mais espaço nas laterais para respirar */
+    border-radius: 50px;                 /* Arredondamento perfeito estilo pílula */
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    display: inline-flex;                /* Alinha o ícone e o texto perfeitamente no centro */
+    align-items: center;
+    gap: 12px;                           /* Cria um espaço perfeito entre o diamante e o número */
+    box-shadow: 0 0 15px rgba(244, 63, 94, 0.2); /* Um leve brilho neon na borda */
+}
         
         .coins-display:hover {
-            transform: translateX(-50%) scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(252, 0, 168, 0.6);
         }
         
         @font-face {
@@ -3398,6 +3384,105 @@ button.door {
             }
         }
 
+        /* === POPUP PRIMEIRA VISITA === */
+        .first-visit-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .first-visit-overlay.show {
+            display: flex;
+        }
+
+        .first-visit-popup {
+            background: linear-gradient(135deg, #1e113c 0%, #130c2a 100%);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(244, 63, 94, 0.4);
+            animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .first-visit-popup h1 {
+            color: var(--accent-color);
+            font-size: 2rem;
+            margin: 0 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
+        }
+
+        .first-visit-popup p {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .first-visit-popup .emoji-large {
+            font-size: 4rem;
+            margin: 20px 0;
+        }
+
+        .first-visit-popup button {
+            background: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+        }
+
+        .first-visit-popup button:hover {
+            background: #ff5a7e;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6);
+        }
+
+        .first-visit-popup button:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -3412,7 +3497,7 @@ button.door {
             <!-- Menu Central -->
             <nav class="navbar-menu">
                 <button class="navbar-btn" onclick="toggleLeftSidebar()">FILTROS</button>
-                <button class="navbar-btn" onclick="openSkinsMenu()">🎨 SKINS</button>
+                <button class="navbar-btn" onclick="openSkinsMenu()">SKINS</button>
                 <button class="navbar-btn" onclick="openLeaderboard()">PLACAR</button>
                 <button class="navbar-btn" onclick="openInventory()">INVENTÁRIO</button>
                 <button class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
@@ -3423,7 +3508,7 @@ button.door {
             
             <!-- Lado direito: Moedas e Botões de Autenticação -->
             <div class="navbar-right">
-                <div class="coins-display" id="coinsDisplay">💰 0 Moedas</div>
+                <div class="coins-display" id="coinsDisplay">💎 0 Gemas</div>
                 <button id="notificationsBtn" class="navbar-notifications-btn" style="display: none" onclick="openNotifications()">
                     🔔 
                     <span class="notification-badge" id="notificationBadge"></span>
@@ -3433,6 +3518,26 @@ button.door {
             </div>
         </div>
     </header>
+    
+    <!-- Popup Primeira Visita -->
+    <div id="firstVisitOverlay" class="first-visit-overlay">
+        <div class="first-visit-popup">
+            <h1 style="font-size: 1.6rem;">Comunicado Importante</h1>
+            <p style="font-size: 0.8rem;">Pessoal, hoje o meu ciclo aqui na escola chega ao fim e mal consigo me despedir, foram mais de 5 meses de dedicação a esse projeto incrível. Parece que foi ontem que eu adicionei o leaderboard, os bugs que aconteciam de vez em quando e os jogos novos que eu adicionei. O apoio de vocês foi o combustível para tudo isso acontecer. Tudo o que é bom dura pouco, Esse projeto é um pedaço de mim, por isso, mesmo de longe, vou continuar atualizando o site sempre que puder. O meu último pedido a vocês é: não deixem esse sonho morrer. Continuem espalhando o nosso site para todo mundo. Muito obrigado por tudo, vou sentir saudades!</p>
+            <h2>Agradecimentos Especiais</h2>
+            <h1 style="font-size: 0.8rem;">
+                peedrt,
+                Admin.Geraldão,
+                Beluga,
+                MolestadinhoGames,
+                meliodas,
+                BatatinhaVerisima,
+                El Theteu,
+            </h1>
+            <p>E principalmente a Você =D</p>
+            <button onclick="closeFirstVisitPopup()">Fechar</button>
+        </div>
+    </div>
     
     <!-- Modal de Notificações -->
     <div id="notificationsModal" class="notifications-modal" onclick="closeNotifications(event)">
@@ -3546,7 +3651,7 @@ button.door {
                 <h3 id="selectedDayTitle">Dia 1 de 30</h3>
                 <div class="reward-icon" id="rewardIcon">💰</div>
                 <div class="reward-amount" id="rewardAmount">150</div>
-                <p style="color: var(--accent-color); margin: 10px 0;" id="rewardDescription">Moedas ganhas!</p>
+                <p style="color: var(--accent-color); margin: 10px 0;" id="rewardDescription">Gemas ganhas!</p>
                 <p style="color: #cbd5e1; font-size: 0.9rem; margin: 10px 0;" id="bonusDescription"></p>
                 <button id="claimRewardBtn" onclick="claimDailyReward()">Coletar Recompensa</button>
                 <div id="nextRewardTime" style="color: #cbd5e1; font-size: 0.85rem; margin-top: 10px;"></div>
@@ -3563,7 +3668,7 @@ button.door {
             </div>
             <div class="leaderboard-tabs">
                 <button class="leaderboard-tab active" onclick="switchLeaderboardTab('tempo')">⏱️ Tempo de Jogo</button>
-                <button class="leaderboard-tab" onclick="switchLeaderboardTab('moedas')">💰 Moedas</button>
+                <button class="leaderboard-tab" onclick="switchLeaderboardTab('moedas')">💎 Gemas</button>
                 <button class="leaderboard-tab" onclick="switchLeaderboardTab('giros')">🎡 Giros</button>
             </div>
             <div class="leaderboard-list" id="leaderboardList">
@@ -3623,7 +3728,7 @@ button.door {
                 <button class="admin-close" onclick="closeAdminPanel()">✕</button>
             </div>
             <div class="admin-tabs-container">
-                <button class="admin-tab-btn active" onclick="switchAdminTab(0)">💰 Moedas & Jogos</button>
+                <button class="admin-tab-btn active" onclick="switchAdminTab(0)">💎 Gemas & Jogos</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab(1)">👤 Perfil de Usuários</button>
                 <button class="admin-tab-btn" id="adminAdvancedTabBtn" style="display: none;" onclick="switchAdminTab(2)">⚙️ Gerenciamento Avançado</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab(3)">🚨 Emergência</button>
@@ -3634,22 +3739,22 @@ button.door {
                     <!-- Seção para Yohanan (Dono) - Adicionar Moedas -->
                     <div class="admin-section">
                         <div id="adminAddCoinsSection" style="display: none;">
-                            <h3>💰 Adicionar Moedas</h3>
+                            <h3>💎 Adicionar Gemas</h3>
                             <div class="admin-form">
                                 <input type="text" class="admin-input" id="adminUserCoins" placeholder="Nome do usuário">
-                                <input type="number" class="admin-input" id="adminCoinsAmount" placeholder="Quantidade de moedas" min="1">
-                                <button class="admin-btn" onclick="adminAddCoins()">Adicionar Moedas</button>
+                                <input type="number" class="admin-input" id="adminCoinsAmount" placeholder="Quantidade de gemas" min="1">
+                                <button class="admin-btn" onclick="adminAddCoins()">Adicionar Gemas</button>
                             </div>
                         </div>
                         
                         <!-- Seção para Admins (não-dona) - Solicitar Moedas -->
                         <div id="adminRequestCoinsSection" style="display: none;">
-                            <h3>📋 Solicitar Moedas</h3>
+                            <h3>📋 Solicitar Gemas</h3>
                             <div class="admin-form">
                                 <input type="text" class="admin-input" id="requestUserCoins" placeholder="Nome do usuário">
-                                <input type="number" class="admin-input" id="requestCoinsAmount" placeholder="Quantidade de moedas" min="1">
+                                <input type="number" class="admin-input" id="requestCoinsAmount" placeholder="Quantidade de gemas" min="1">
                                 <input type="text" class="admin-input" id="requestCoinsMotive" placeholder="Motivo (opcional)">
-                                <button class="admin-btn" onclick="adminRequestCoins()">Solicitar Moedas</button>
+                                <button class="admin-btn" onclick="adminRequestCoins()">Solicitar Gemas</button>
                             </div>
                         </div>
                         
@@ -4173,6 +4278,42 @@ button.door {
     </main>
 
     <script>
+    // === POPUP PRIMEIRA VISITA ===
+    function showFirstVisitPopup() {
+        const visited = localStorage.getItem('siteVisited');
+        
+        if (!visited) {
+            const overlay = document.getElementById('firstVisitOverlay');
+            if (overlay) {
+                overlay.classList.add('show');
+                localStorage.setItem('siteVisited', 'true');
+            }
+        }
+    }
+
+    function closeFirstVisitPopup() {
+        const overlay = document.getElementById('firstVisitOverlay');
+        if (overlay) {
+            overlay.classList.remove('show');
+        }
+    }
+
+    // Fechar o popup clicando fora dele (no overlay)
+    document.addEventListener('DOMContentLoaded', function() {
+        const overlay = document.getElementById('firstVisitOverlay');
+        
+        if (overlay) {
+            overlay.addEventListener('click', function(event) {
+                if (event.target === overlay) {
+                    closeFirstVisitPopup();
+                }
+            });
+        }
+        
+        // Mostrar o popup na primeira visita
+        showFirstVisitPopup();
+    });
+
     // === SISTEMA DE MODAL DE JOGO COM IFRAME ===
     let isGameFullscreen = false;
 
@@ -4506,10 +4647,10 @@ atualizarDataCommit();
                 const gameId = DATABASE_CODES[code];
                 unlockGame(gameId);
                 
-                // Ganhar moedas ao desbloquear um jogo secreto
+                // Ganhar gemas ao desbloquear um jogo secreto
                 await addCoins(50);
                 
-                feedback.textContent = "🎉 Jogo Desbloqueado! +50 moedas";
+                feedback.textContent = "🎉 Jogo Desbloqueado! +50 gemas";
                 feedback.className = "success";
                 feedback.style.display = "block";
                 input.value = "";
@@ -4961,7 +5102,7 @@ function conquistaAnimacao(tipo) {
             const coins = getCoins();
             const coinsDisplay = document.getElementById('coinsDisplay');
             if (coinsDisplay) {
-                coinsDisplay.textContent = `💰 ${coins} Moedas`;
+                coinsDisplay.textContent = `💎 ${coins} Gemas`;
             }
         }
 
@@ -5338,7 +5479,7 @@ function typeWriter(text, elementId = 'dialogText') {
             
             const coins = getCoins();
             if (coins < customTagPrice) {
-                alert(`❌ Você não tem moedas suficientes! Precisa de ${customTagPrice} moedas para usar a Tag Personalizada.`);
+                alert(`❌ Você não tem gemas suficientes! Precisa de ${customTagPrice} gemas para usar a Tag Personalizada.`);
                 return;
             }
             
@@ -5384,7 +5525,7 @@ function typeWriter(text, elementId = 'dialogText') {
             // Validar se o usuário tem moedas suficientes para usar a cor
             const coins = getCoins();
             if (coins < colorPrice) {
-                alert(`❌ Você não tem moedas suficientes! Precisa de ${colorPrice} moedas para usar a "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"!`);
+                alert(`❌ Você não tem gemas suficientes! Precisa de ${colorPrice} gemas para usar a "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"!`);
                 return;
             }
 
@@ -5663,7 +5804,7 @@ function spamtonSelectItem(itemId, price) {
     const coins = getCoins();
     
     if (coins < price) {
-        typeWriter('* [[VOCÊ NÃO TEM OURO SUFICIENTE]]\n* [[VOLTE QUANDO TIVER MAIS DINHEIRO]]\n* [[PEQUENO COÁGULO]]', 'dialogTextS');
+        typeWriter('* [[VOCÊ NÃO TEM GEMAS SUFICIENTES]]\n* [[VOLTE QUANDO TIVER MAIS GEMAS]]\n* [[PEQUENO COÁGULO]]', 'dialogTextS');
         return;
     }
     
@@ -5682,7 +5823,7 @@ function spamtonSelectItem(itemId, price) {
     if (isReusable && owned) {
         // Validar se o usuário tem moedas suficientes para usar o item
         if (coins < price) {
-            typeWriter('* [[VOCÊ NÃO TEM OURO SUFICIENTE]]\n* [[PARA CUSTOMIZAR]]\n* [[VOLTE DEPOIS]]', 'dialogTextS');
+            typeWriter('* [[VOCÊ NÃO TEM GEMAS SUFICIENTES]]\n* [[PARA CUSTOMIZAR]]\n* [[VOLTE DEPOIS]]', 'dialogTextS');
             return;
         }
         
@@ -5730,7 +5871,7 @@ async function spamtonConfirmBuy(itemId, price) {
     if (!item) return;
     
     if (coins < price) {
-        alert('❌ Moedas insuficientes!');
+        alert('❌ Gemas insuficientes!');
         return;
     }
     
@@ -5967,7 +6108,7 @@ function closeSpamtonShop(){
                 27: { coins: 380, item: 'lootbox-epica', description: 'Moedas + Lootbox Épica! 🟪', icon: '🟪' },
                 28: { coins: 420, item: null, description: 'Penúltimo dia! Resista!', icon: '💪' },
                 29: { coins: 450, item: 'cor-especial', description: 'Moedas + Cor da Tag (Especial)! ✨', icon: '✨' },
-                30: { coins: 1000, item: 'lootbox-lendaria', description: '🎉 MEGA RECOMPENSA! 1000 moedas + Lootbox Lendária! 👑', icon: '👑' }
+                30: { coins: 1000, item: 'spin-50', description: '🎉 MEGA RECOMPENSA! 1000 moedas + Lootbox Lendária! 👑', icon: '👑' }
             };
 
             return rewards[day] || { coins: 100, item: null, description: 'Moedas ganhas!', icon: '💰' };
@@ -6138,7 +6279,7 @@ function closeSpamtonShop(){
             // Atualizar calendário visualmente
             updateDailyRewardModal();
             
-            let mensagem = `🎉 Você ganhou ${reward.coins} moedas!`;
+            let mensagem = `🎉 Você ganhou ${reward.coins} gemas!`;
             if (reward.item) {
                 const itemNames = {
                     'custom-tag': '🏷️ Tag Personalizada',
@@ -6267,7 +6408,7 @@ function closeSpamtonShop(){
                 } else if (tipo === 'moedas') {
                     statsHTML = `
                         <div class="leaderboard-time">
-                            <div class="leaderboard-time-label">Total de Moedas</div>
+                            <div class="leaderboard-time-label">Total de Gemas</div>
                             <div class="leaderboard-time-value">${moedas}</div>
                         </div>
                     `;
@@ -6290,7 +6431,7 @@ function closeSpamtonShop(){
                         ${statsHTML}
                     </div>
                     <div class="leaderboard-reward ${rewardClass}">
-                        🏅 ${user.premio} ${tipo === 'giros' ? 'giros' : 'moedas'}
+                        🏅 ${user.premio} ${tipo === 'giros' ? 'giros' : 'gemas'}
                     </div>
                 `;
                 leaderboardList.appendChild(item);
@@ -7786,9 +7927,6 @@ function perguntarSave() {
             // Sincronizar lista com grid automaticamente
             syncGameListWithGrid();
             
-            // Carregar cores salvas do localStorage
-            loadInventoryFromLocalStorage();
-            
             Object.values(DATABASE_CODES).forEach(gameId => {
                 if (localStorage.getItem(gameId) === "unlocked") {
                     unlockGame(gameId);
@@ -7820,17 +7958,16 @@ function perguntarSave() {
             gasterText(); // verifica se deve mostrar texto do Gaster
             showifadmin(); // verifica se deve mostrar painel de admin
             checkIfGaster();
-            
-            // IMPORTANTE: Aguardar sincronização de moedas ANTES de continuar
-            await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
-            await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
-            
+
             // Atualizar display de moedas
             updateCoinsDisplay();
 
             // Atualizar o botão de autenticação
             updateAuthBtn();
-            
+            if (window.url = "file:") { // Verifica se está no protocólo file:
+            await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
+            await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
+            }
             // Garante que o botão LOGIN tem conteúdo
             setTimeout(() => {
                 const authBtn = document.getElementById('authBtn');
