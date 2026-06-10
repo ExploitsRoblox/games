@@ -5180,22 +5180,38 @@ async function carregarConversasPrivadas() {
     if (!chatState.token) return;
     
     try {
-        const res = await fetch(`${API_URL_BACKEND}/chat/conversas-privadas`, {
+        // Buscar conversas existentes
+        const resConversas = await fetch(`${API_URL_BACKEND}/chat/conversas-privadas`, {
             headers: { 'Authorization': `Bearer ${chatState.token}` }
         });
         
-        if (!res.ok) throw new Error('Erro ao carregar conversas');
+        if (!resConversas.ok) throw new Error('Erro ao carregar conversas');
         
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.mensagem);
+        const dataConversas = await resConversas.json();
+        if (!dataConversas.ok) throw new Error(dataConversas.mensagem);
         
-        exibirConversasPrivadas(data.conversas);
+        // Buscar lista de usuários disponíveis
+        const resUsuarios = await fetch(`${API_URL_BACKEND}/chat/usuarios-online`);
+        const dataUsuarios = await resUsuarios.json();
+        
+        // Extrair nomes dos usuários (o backend retorna objetos com nome, foto_perfil, etc)
+        let usuariosDisponiveis = [];
+        if (dataUsuarios.ok && Array.isArray(dataUsuarios.usuarios)) {
+            usuariosDisponiveis = dataUsuarios.usuarios.map(u => 
+                typeof u === 'string' ? u : u.nome
+            );
+        }
+        
+        // Filtrar usuários para não mostrar o usuário atual
+        const usuariosOutros = usuariosDisponiveis.filter(u => u !== chatState.usuarioAtual);
+        
+        exibirConversasPrivadas(dataConversas.conversas, usuariosOutros);
     } catch (err) {
         console.error('[CHAT] Erro ao carregar conversas:', err);
     }
 }
 
-function exibirConversasPrivadas(conversas) {
+function exibirConversasPrivadas(conversas, usuariosDisponiveis = []) {
     const container = document.querySelector('[data-chat-content="privado"]');
     if (!container) return;
     
@@ -5220,22 +5236,60 @@ function exibirConversasPrivadas(conversas) {
     // Limpar lista
     listElement.innerHTML = '';
     
-    // Adicionar conversas
-    conversas.forEach(conv => {
-        const div = document.createElement('div');
-        div.className = 'conversation-item' + (chatState.conversaAtiva === conv.usuario ? ' active' : '');
-        div.onclick = () => abrirConversaPrivada(conv.usuario);
+    // Obter lista de usuários já em conversa
+    const usuariosEmConversa = conversas.map(c => c.usuario);
+    
+    // Se não tem conversas nem usuários disponíveis
+    if (conversas.length === 0 && usuariosDisponiveis.length === 0) {
+        listElement.innerHTML = '<div style="padding: 10px; color: #999; font-size: 0.9rem; text-align: center;">Nenhum usuário disponível</div>';
+        return;
+    }
+    
+    // SEÇÃO: Conversas Ativas
+    if (conversas.length > 0) {
+        const sectionTitle = document.createElement('div');
+        sectionTitle.style.cssText = 'padding: 8px 10px; background: rgba(244, 63, 94, 0.2); font-size: 0.8rem; font-weight: bold; color: var(--accent-color); border-bottom: 1px solid #444; position: sticky; top: 0; z-index: 1;';
+        sectionTitle.textContent = '💬 Conversas Ativas';
+        listElement.appendChild(sectionTitle);
         
-        const preview = conv.ultimaMensagem.substring(0, 30) + (conv.ultimaMensagem.length > 30 ? '...' : '');
+        conversas.forEach(conv => {
+            const div = document.createElement('div');
+            div.className = 'conversation-item' + (chatState.conversaAtiva === conv.usuario ? ' active' : '');
+            div.onclick = () => abrirConversaPrivada(conv.usuario);
+            
+            const preview = conv.ultimaMensagem.substring(0, 30) + (conv.ultimaMensagem.length > 30 ? '...' : '');
+            
+            div.innerHTML = `
+                <div class="conversation-name">${conv.usuario}</div>
+                <div class="conversation-preview">${preview}</div>
+                ${conv.naoLidas > 0 ? `<div class="conversation-unread">${conv.naoLidas}</div>` : ''}
+            `;
+            
+            listElement.appendChild(div);
+        });
+    }
+    
+    // SEÇÃO: Usuários Disponíveis
+    const usuariosNovos = usuariosDisponiveis.filter(u => !usuariosEmConversa.includes(u));
+    if (usuariosNovos.length > 0) {
+        const sectionTitle = document.createElement('div');
+        sectionTitle.style.cssText = 'padding: 8px 10px; background: rgba(168, 85, 247, 0.2); font-size: 0.8rem; font-weight: bold; color: #a855f7; border-bottom: 1px solid #444; margin-top: 5px; position: sticky; top: 0; z-index: 1;';
+        sectionTitle.textContent = '👥 Usuários Disponíveis';
+        listElement.appendChild(sectionTitle);
         
-        div.innerHTML = `
-            <div class="conversation-name">${conv.usuario}</div>
-            <div class="conversation-preview">${preview}</div>
-            ${conv.naoLidas > 0 ? `<div class="conversation-unread">${conv.naoLidas}</div>` : ''}
-        `;
-        
-        listElement.appendChild(div);
-    });
+        usuariosNovos.forEach(usuario => {
+            const div = document.createElement('div');
+            div.className = 'conversation-item' + (chatState.conversaAtiva === usuario ? ' active' : '');
+            div.onclick = () => abrirConversaPrivada(usuario);
+            
+            div.innerHTML = `
+                <div class="conversation-name">${usuario}</div>
+                <div class="conversation-preview">Nova conversa</div>
+            `;
+            
+            listElement.appendChild(div);
+        });
+    }
     
     // Botão de envio
     const sendBtn = container.querySelector('.chat-send-btn');
