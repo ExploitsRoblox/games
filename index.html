@@ -1711,6 +1711,302 @@
             border-radius: 3px;
         }
 
+        /* === CHAT SIDEBAR PRINCIPAL === */
+        .chat-sidebar {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 350px;
+            height: 500px;
+            background: var(--sidebar-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.5);
+            margin: 20px;
+            margin-bottom: 0;
+        }
+
+        .chat-header {
+            padding: 15px;
+            border-bottom: 2px solid var(--accent-color);
+            background: rgba(244, 63, 94, 0.1);
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .chat-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #444;
+        }
+
+        .chat-tab {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: var(--text-color);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .chat-tab:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--accent-color);
+        }
+
+        .chat-tab.active {
+            background: var(--accent-color);
+            color: #000;
+            border-color: var(--accent-color);
+        }
+
+        .chat-tab-content {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-tab-content.active {
+            display: flex;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .chat-message {
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .chat-message.own {
+            background: rgba(168, 85, 247, 0.2);
+            border-left-color: var(--gold);
+            align-self: flex-end;
+            max-width: 85%;
+        }
+
+        .chat-message-user {
+            font-size: 0.75rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .chat-message-time {
+            font-size: 0.7rem;
+            color: #aaa;
+            margin-top: 3px;
+        }
+
+        .chat-input-area {
+            padding: 10px;
+            border-top: 1px solid #444;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: var(--text-color);
+            border-radius: 5px;
+            font-size: 0.85rem;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+        }
+
+        .chat-input::placeholder {
+            color: #888;
+        }
+
+        .chat-send-btn {
+            padding: 8px 15px;
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .chat-send-btn:hover {
+            background: #ff5a6e;
+            transform: scale(1.05);
+        }
+
+        .private-conversations-list {
+            overflow-y: auto;
+        }
+
+        .conversation-item {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .conversation-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .conversation-item.active {
+            background: rgba(168, 85, 247, 0.2);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .conversation-name {
+            font-weight: bold;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+        }
+
+        .conversation-preview {
+            font-size: 0.75rem;
+            color: #aaa;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .conversation-unread {
+            display: inline-block;
+            background: var(--error-color);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .conversation-messages {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === CHAT MODAL === */
+        .chat-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: flex-end;
+            animation: slideInRight 0.3s ease;
+        }
+
+        .chat-modal.active {
+            display: flex;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .chat-modal-content {
+            background: var(--sidebar-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            width: 400px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chat-close-btn {
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chat-close-btn:hover {
+            color: var(--error-color);
+            transform: scale(1.2);
+        }
+
+        /* Botão do Chat no Navbar */
+        .navbar-chat-btn {
+            background: rgba(244, 63, 94, 0.15);
+            color: var(--accent-color);
+            border: 2px solid var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+            margin-right: 10px;
+        }
+
+        .navbar-chat-btn:hover {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .chat-modal-content {
+                width: 320px;
+                height: 500px;
+                margin-right: 10px;
+                margin-bottom: 10px;
+            }
+        }
 
         /* Painel de Admin */
         .admin-panel-btn {
@@ -2132,7 +2428,7 @@
             padding: 10px 20px;
             animation: flow 2s linear infinite;
             text-align: center;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         }
 
         h1:hover {
@@ -3513,6 +3809,7 @@ button.door {
                     🔔 
                     <span class="notification-badge" id="notificationBadge"></span>
                 </button>
+                <button id="chatBtn" class="navbar-chat-btn" style="display: none;" onclick="openChatModal()">💬 Chat</button>
                 <button id="userPanelBtn" class="user-panel-btn" style="display: none;" onclick="toggleUserPanel()"></button>
                 <button id="authBtn" class="navbar-auth-btn" onclick="">🔐 LOGIN</button>
             </div>
@@ -4042,6 +4339,46 @@ button.door {
         <ul class="game-list" id="sideList">
         </ul>
     </nav>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="chat-modal" onclick="fecharChatModal(event)">
+        <div class="chat-modal-content" onclick="event.stopPropagation()">
+            <div class="chat-header">
+                <h3>💬 Chat</h3>
+                <button class="chat-close-btn" onclick="fecharChatModal()">✕</button>
+            </div>
+            
+            <div class="chat-tabs">
+                <button class="chat-tab active" data-chat-tab="global" data-tab="global">Global</button>
+                <button class="chat-tab" data-chat-tab="privado" data-tab="privado">Mensagens</button>
+            </div>
+            
+            <!-- Chat Global -->
+            <div class="chat-tab-content active" data-chat-content="global" data-chat-global>
+                <div class="chat-messages"></div>
+                <div class="chat-input-area">
+                    <input type="text" class="chat-input" placeholder="Mensagem global...">
+                    <button class="chat-send-btn">Enviar</button>
+                </div>
+            </div>
+            
+            <!-- Chat Privado -->
+            <div class="chat-tab-content" data-chat-content="privado">
+                <div style="display: flex; gap: 0; height: 100%;">
+                    <div class="private-conversations-list" style="width: 30%; border-right: 1px solid #444; max-height: 400px; overflow-y: auto;">
+                        <!-- Carregado dinamicamente -->
+                    </div>
+                    <div class="conversation-messages" style="width: 70%; display: flex; flex-direction: column;">
+                        <div class="chat-messages" style="flex: 1; overflow-y: auto;"></div>
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" placeholder="Mensagem privada...">
+                            <button class="chat-send-btn">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <main>
         <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">DESTAQUE DA SEMANA</span>
@@ -4628,6 +4965,415 @@ function audiogaster() {
 
 
 atualizarDataCommit();
+
+// ===== SISTEMA DE CHAT =====
+const API_URL_BACKEND = "https://login-nqot.onrender.com";
+
+// Estado global do chat
+let chatState = {
+    usuarioAtual: null,
+    token: null,
+    conversaAtiva: null,
+    atualizandoChat: false
+};
+
+// Funções para abrir e fechar o modal do chat
+function openChatModal() {
+    const chatModal = document.getElementById('chatModal');
+    if (chatModal) {
+        chatModal.classList.add('active');
+        carregarMensagensGlobais();
+        carregarConversasPrivadas();
+    }
+}
+
+function fecharChatModal(event) {
+    // Se clicar no background, fecha
+    if (event && event.target.id !== 'chatModal') return;
+    
+    const chatModal = document.getElementById('chatModal');
+    if (chatModal) {
+        chatModal.classList.remove('active');
+    }
+}
+
+// Mostrar/ocultar botão do chat baseado no login
+function atualizarBotaoChat() {
+    const chatBtn = document.getElementById('chatBtn');
+    const usuarioLogado = localStorage.getItem('usuarioLogado');
+    const token = localStorage.getItem('token');
+    
+    if (chatBtn) {
+        if (usuarioLogado && token) {
+            chatBtn.style.display = 'inline-block';
+            chatState.usuarioAtual = usuarioLogado;
+            chatState.token = token;
+        } else {
+            chatBtn.style.display = 'none';
+            chatState.usuarioAtual = null;
+            chatState.token = null;
+        }
+    }
+}
+
+// Inicializar chat quando página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    atualizarBotaoChat();
+    
+    if (chatState.usuarioAtual && chatState.token) {
+        console.log('[CHAT] Inicializando para:', chatState.usuarioAtual);
+        setTimeout(inicializarChat, 500);
+        // Atualizar chat a cada 3 segundos
+        setInterval(atualizarChatAtivo, 3000);
+    }
+});
+
+// Também inicializar quando usuário faz login
+function verificarChatAposLogin() {
+    atualizarBotaoChat();
+    
+    if (chatState.usuarioAtual && chatState.token) {
+        console.log('[CHAT] Usuário logado, inicializando chat');
+        inicializarChat();
+    }
+}
+
+function inicializarChat() {
+    // Carregar abas de chat
+    const chatTabs = document.querySelectorAll('.chat-tab');
+    chatTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            trocarAbaChat(this.dataset.tab);
+        });
+    });
+    
+    // Carregar mensagens globais
+    carregarMensagensGlobais();
+    
+    // Carregar conversas privadas
+    carregarConversasPrivadas();
+    
+    // Botão de envio de mensagem global
+    const sendBtnGlobal = document.querySelector('[data-chat-global] .chat-send-btn');
+    if (sendBtnGlobal) {
+        sendBtnGlobal.addEventListener('click', enviarMensagemGlobal);
+    }
+}
+
+function trocarAbaChat(aba) {
+    // Remover ativo de todas abas
+    document.querySelectorAll('.chat-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.chat-tab-content').forEach(c => c.classList.remove('active'));
+    
+    // Ativar a selecionada
+    const tabBtn = document.querySelector(`[data-chat-tab="${aba}"]`);
+    const tabContent = document.querySelector(`[data-chat-content="${aba}"]`);
+    
+    if (tabBtn) tabBtn.classList.add('active');
+    if (tabContent) tabContent.classList.add('active');
+    
+    if (aba === 'global') {
+        carregarMensagensGlobais();
+    } else if (aba === 'privado') {
+        carregarConversasPrivadas();
+    }
+}
+
+// ===== CHAT GLOBAL =====
+async function carregarMensagensGlobais() {
+    if (chatState.atualizandoChat) return;
+    chatState.atualizandoChat = true;
+    
+    try {
+        const res = await fetch(`${API_URL_BACKEND}/chat/mensagens-globais`);
+        if (!res.ok) throw new Error('Erro ao carregar mensagens');
+        
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.mensagem);
+        
+        exibirMensagensGlobais(data.mensagens);
+    } catch (err) {
+        console.error('[CHAT-GLOBAL] Erro:', err);
+    } finally {
+        chatState.atualizandoChat = false;
+    }
+}
+
+function exibirMensagensGlobais(mensagens) {
+    const container = document.querySelector('[data-chat-content="global"] .chat-messages');
+    if (!container) return;
+    
+    const scrollPos = container.scrollHeight - container.scrollTop;
+    const wasAtBottom = scrollPos < 100;
+    
+    // Limpar se houver muitas mensagens
+    const mensagensExistentes = container.querySelectorAll('.chat-message').length;
+    if (mensagensExistentes !== mensagens.length) {
+        container.innerHTML = '';
+        
+        mensagens.forEach(msg => {
+            const div = document.createElement('div');
+            div.className = 'chat-message' + (msg.usuario === chatState.usuarioAtual ? ' own' : '');
+            
+            const timestamp = new Date(msg.timestamp).toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            div.innerHTML = `
+                <div class="chat-message-user">${msg.usuario}</div>
+                <div>${msg.mensagem}</div>
+                <div class="chat-message-time">${timestamp}</div>
+            `;
+            
+            container.appendChild(div);
+        });
+    }
+    
+    // Scroll automático
+    if (wasAtBottom) {
+        container.scrollTop = container.scrollHeight;
+    }
+}
+
+async function enviarMensagemGlobal() {
+    const input = document.querySelector('[data-chat-global] .chat-input');
+    const mensagem = input.value.trim();
+    
+    if (!mensagem) {
+        alert('Digite uma mensagem!');
+        return;
+    }
+    
+    if (!chatState.token) {
+        alert('Você precisa estar logado!');
+        return;
+    }
+    
+    try {
+        const res = await fetch(`${API_URL_BACKEND}/chat/enviar-global`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${chatState.token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ mensagem })
+        });
+        
+        if (!res.ok) throw new Error('Erro ao enviar');
+        const data = await res.json();
+        
+        if (data.ok) {
+            input.value = '';
+            carregarMensagensGlobais();
+        } else {
+            alert(data.mensagem || 'Erro ao enviar mensagem');
+        }
+    } catch (err) {
+        console.error('[CHAT-GLOBAL] Erro ao enviar:', err);
+        alert('Erro ao enviar mensagem');
+    }
+}
+
+// ===== CHAT PRIVADO =====
+async function carregarConversasPrivadas() {
+    if (!chatState.token) return;
+    
+    try {
+        const res = await fetch(`${API_URL_BACKEND}/chat/conversas-privadas`, {
+            headers: { 'Authorization': `Bearer ${chatState.token}` }
+        });
+        
+        if (!res.ok) throw new Error('Erro ao carregar conversas');
+        
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.mensagem);
+        
+        exibirConversasPrivadas(data.conversas);
+    } catch (err) {
+        console.error('[CHAT] Erro ao carregar conversas:', err);
+    }
+}
+
+function exibirConversasPrivadas(conversas) {
+    const container = document.querySelector('[data-chat-content="privado"]');
+    if (!container) return;
+    
+    // Verificar se lista de conversas existe
+    let listElement = container.querySelector('.private-conversations-list');
+    if (!listElement) {
+        container.innerHTML = `
+            <div style="display: flex; gap: 0; height: 100%;">
+                <div class="private-conversations-list" style="width: 30%; border-right: 1px solid #444; max-height: 400px; overflow-y: auto;"></div>
+                <div class="conversation-messages" style="width: 70%; display: flex; flex-direction: column;">
+                    <div class="chat-messages" style="flex: 1; overflow-y: auto;"></div>
+                    <div class="chat-input-area">
+                        <input type="text" class="chat-input" placeholder="Mensagem privada...">
+                        <button class="chat-send-btn">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        listElement = container.querySelector('.private-conversations-list');
+    }
+    
+    // Limpar lista
+    listElement.innerHTML = '';
+    
+    // Adicionar conversas
+    conversas.forEach(conv => {
+        const div = document.createElement('div');
+        div.className = 'conversation-item' + (chatState.conversaAtiva === conv.usuario ? ' active' : '');
+        div.onclick = () => abrirConversaPrivada(conv.usuario);
+        
+        const preview = conv.ultimaMensagem.substring(0, 30) + (conv.ultimaMensagem.length > 30 ? '...' : '');
+        
+        div.innerHTML = `
+            <div class="conversation-name">${conv.usuario}</div>
+            <div class="conversation-preview">${preview}</div>
+            ${conv.naoLidas > 0 ? `<div class="conversation-unread">${conv.naoLidas}</div>` : ''}
+        `;
+        
+        listElement.appendChild(div);
+    });
+    
+    // Botão de envio
+    const sendBtn = container.querySelector('.chat-send-btn');
+    if (sendBtn) {
+        sendBtn.removeEventListener('click', enviarMensagemPrivada);
+        sendBtn.addEventListener('click', enviarMensagemPrivada);
+    }
+}
+
+async function abrirConversaPrivada(usuario) {
+    chatState.conversaAtiva = usuario;
+    
+    if (!chatState.token) {
+        alert('Você precisa estar logado!');
+        return;
+    }
+    
+    try {
+        const res = await fetch(`${API_URL_BACKEND}/chat/conversa-privada/${usuario}`, {
+            headers: { 'Authorization': `Bearer ${chatState.token}` }
+        });
+        
+        if (!res.ok) throw new Error('Erro ao carregar conversa');
+        
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.mensagem);
+        
+        exibirMensagensPrivadas(data.mensagens);
+        
+        // Marcar conversas como ativa visualmente
+        document.querySelectorAll('.conversation-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        const conversas = document.querySelectorAll('.conversation-item');
+        conversas.forEach(item => {
+            if (item.querySelector('.conversation-name').textContent === usuario) {
+                item.classList.add('active');
+            }
+        });
+        
+    } catch (err) {
+        console.error('[CHAT] Erro ao abrir conversa:', err);
+    }
+}
+
+function exibirMensagensPrivadas(mensagens) {
+    const container = document.querySelector('.conversation-messages .chat-messages');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    mensagens.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = 'chat-message' + (msg.remetente === chatState.usuarioAtual ? ' own' : '');
+        
+        const timestamp = new Date(msg.timestamp).toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        div.innerHTML = `
+            <div class="chat-message-user">${msg.remetente}</div>
+            <div>${msg.mensagem}</div>
+            <div class="chat-message-time">${timestamp}</div>
+        `;
+        
+        container.appendChild(div);
+    });
+    
+    container.scrollTop = container.scrollHeight;
+}
+
+async function enviarMensagemPrivada() {
+    if (!chatState.conversaAtiva) {
+        alert('Selecione uma conversa!');
+        return;
+    }
+    
+    const input = document.querySelector('.conversation-messages .chat-input');
+    const mensagem = input.value.trim();
+    
+    if (!mensagem) {
+        alert('Digite uma mensagem!');
+        return;
+    }
+    
+    if (!chatState.token) {
+        alert('Você precisa estar logado!');
+        return;
+    }
+    
+    try {
+        const res = await fetch(`${API_URL_BACKEND}/chat/enviar-privada`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${chatState.token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                destinatario: chatState.conversaAtiva,
+                mensagem
+            })
+        });
+        
+        if (!res.ok) throw new Error('Erro ao enviar');
+        const data = await res.json();
+        
+        if (data.ok) {
+            input.value = '';
+            abrirConversaPrivada(chatState.conversaAtiva);
+        } else {
+            alert(data.mensagem || 'Erro ao enviar mensagem');
+        }
+    } catch (err) {
+        console.error('[CHAT] Erro ao enviar mensagem privada:', err);
+        alert('Erro ao enviar mensagem');
+    }
+}
+
+async function atualizarChatAtivo() {
+    if (chatState.conversaAtiva && chatState.token) {
+        try {
+            const res = await fetch(`${API_URL_BACKEND}/chat/conversa-privada/${chatState.conversaAtiva}`, {
+                headers: { 'Authorization': `Bearer ${chatState.token}` }
+            });
+            
+            if (res.ok) {
+                const data = await res.json();
+                if (data.ok) {
+                    exibirMensagensPrivadas(data.mensagens);
+                }
+            }
+        } catch (err) {
+            // Silenciosamente falha
+        }
+    }
+}
 
         // --- SISTEMA DE CÓDIGOS ---
         const DATABASE_CODES = {
@@ -6680,6 +7426,15 @@ function closeSpamtonShop(){
                 localStorage.removeItem('userTagColor');
                 localStorage.removeItem('userTagColorType');
                 // Preservar: userCoins, userPlaytime, destaque, conquistas, itens comprados, jogos desbloqueados
+                
+                // Ocultar botão do chat e fechar modal
+                const chatBtn = document.getElementById('chatBtn');
+                const chatModal = document.getElementById('chatModal');
+                if (chatBtn) chatBtn.style.display = 'none';
+                if (chatModal) chatModal.classList.remove('active');
+                chatState.usuarioAtual = null;
+                chatState.token = null;
+                
                 location.reload();
             }
         }
