@@ -9020,6 +9020,8 @@ function perguntarSave() {
   // Se o back-end enviou o documento bruto do banco, pegamos a propriedade interna .dados
   // Caso contrário, usamos o próprio objeto retornado.
   const dadosBackup = resposta.dados.dados ? resposta.dados.dados : resposta.dados;
+  console.log("CONQUISTAS DO BACKEND:", dadosBackup.achievements);
+  console.log("JOGOS DO BACKEND:", dadosBackup.unlockedGames);
   
   console.log("Estrutura do Backup recebido:", dadosBackup);
 
