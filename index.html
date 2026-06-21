@@ -6315,26 +6315,34 @@ function conquistaAnimacao(tipo) {
         }
 
         function updateRankDisplay() {
-            const rank = parseInt(localStorage.getItem('userRank') || 1);
-            const xp = parseInt(localStorage.getItem('userXp') || 0);
+            let rank = parseInt(localStorage.getItem('userRank') || 1);
+            let xp = parseInt(localStorage.getItem('userXp') || 0);
             const hasPremium = localStorage.getItem('item-premium-xp') === 'owned';
+            
+            // Verificar e promover automaticamente se XP >= necessário
+            let currentRankInfo = RANKS_TABLE.find(r => r.rank === rank);
+            while (rank < 30 && currentRankInfo) {
+                const nextRankInfo = RANKS_TABLE.find(r => r.rank === rank + 1);
+                if (nextRankInfo && xp >= nextRankInfo.xpRequired) {
+                    rank++;
+                    currentRankInfo = nextRankInfo;
+                    localStorage.setItem('userRank', rank);
+                } else {
+                    break;
+                }
+            }
             
             // Obter nome do rank da tabela
             const rankInfo = RANKS_TABLE.find(r => r.rank === rank) || RANKS_TABLE[0];
             const rankName = rankInfo.name;
             
-            // XP necessário para cada rank
-            const xpPerRank = [
-                0, 100, 500, 1500, 3700, 7100, 12300, 20000, 29000, 41000,
-                57000, 76000, 98000, 125000, 156000, 192000, 233000, 280000, 332000, 390000,
-                455000, 527000, 606000, 692000, 787000, 889000, 1000000, 1122000, 1255000, 1400000, 1020000
-            ];
-            
-            const nextRankXp = xpPerRank[Math.min(rank, 30)] || 102000;
-            const currentRankXp = rank > 1 ? xpPerRank[rank - 1] : 0;
+            // Encontrar o próximo rank
+            const nextRankInfo = RANKS_TABLE.find(r => r.rank === rank + 1);
+            const nextRankXp = nextRankInfo ? nextRankInfo.xpRequired : rankInfo.xpRequired;
+            const currentRankXp = rankInfo.xpRequired;
             const xpInCurrentRank = xp - currentRankXp;
             const xpNeededForNextRank = nextRankXp - currentRankXp;
-            const xpPercentage = (xpInCurrentRank / xpNeededForNextRank) * 100;
+            const xpPercentage = nextRankInfo ? (xpInCurrentRank / xpNeededForNextRank) * 100 : 100;
             
             // Atualizar elemento de rank se existir
             const rankDisplay = document.getElementById('rankDisplay');
