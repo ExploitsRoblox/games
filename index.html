@@ -6022,6 +6022,62 @@ function conquistaAnimacao(tipo) {
             }
         }
 
+        async function syncUnlockedGames() {
+            const token = localStorage.getItem('token');
+            if (!token) return; // Não sincroniza senão estiver logado
+            
+            try {
+                const API_URL = "https://login-nqot.onrender.com";
+                const res = await fetch(`${API_URL}/jogos-secretos`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.ok && data.jogosSecretos) {
+                        // Sincronizar jogos secretos do backend com localStorage
+                        data.jogosSecretos.forEach(jogoId => {
+                            localStorage.setItem(`jogo-secreto-${jogoId}`, 'unlocked');
+                        });
+                        
+                        console.log(`[SYNC] ${data.jogosSecretos.length} jogos secretos sincronizados do servidor:`, data.jogosSecretos);
+                    }
+                }
+            } catch (err) {
+                console.error('Erro ao sincronizar jogos secretos do servidor:', err);
+            }
+        }
+
+        async function syncAchievements() {
+            const token = localStorage.getItem('token');
+            if (!token) return; // Não sincroniza senão estiver logado
+            
+            try {
+                const API_URL = "https://login-nqot.onrender.com";
+                const res = await fetch(`${API_URL}/achievements-usuario`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.ok && data.achievements) {
+                        // Sincronizar achievements do backend com localStorage
+                        data.achievements.forEach(achievementId => {
+                            localStorage.setItem(`achievement-${achievementId}`, 'unlocked');
+                        });
+                        
+                        console.log(`[SYNC] ${data.achievements.length} conquistas sincronizadas do servidor:`, data.achievements);
+                    }
+                }
+            } catch (err) {
+                console.error('Erro ao sincronizar achievements do servidor:', err);
+            }
+        }
+
         async function syncCoinsToDatabase(amount) {
             const token = localStorage.getItem('token');
             if (!token) return false; // Não sincroniza se não estiver logado
@@ -6661,6 +6717,8 @@ function typeWriter(text, elementId = 'dialogText') {
             modal.classList.add('active');
             initializeShop();
             await syncItemsFromDatabase(); // Sincronizar itens do backend
+            await syncAchievements(); // Sincronizar conquistas do backend
+            await syncUnlockedGames(); // Sincronizar jogos secretos do backend
             loadSpinsFromDatabase(); // Carregar giros quando abrir a loja
             playShopMusic();
             const optionsDiv = document.querySelector('.dialog-options');
@@ -8943,6 +9001,8 @@ function perguntarSave() {
             if (window.url = "file:") { // Verifica se está no protocólo file:
             await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
             await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
+            await syncAchievements(); // sincroniza conquistas do banco de dados
+            await syncUnlockedGames(); // sincroniza jogos secretos do banco de dados
             }
             // Garante que o botão LOGIN tem conteúdo
             setTimeout(() => {
@@ -9046,26 +9106,12 @@ function perguntarSave() {
     });
   }
 
-  // 4. Restaurar conquistas (Garante salvamento como "true")
-  if (dadosBackup.achievements && Array.isArray(dadosBackup.achievements)) {
-  dadosBackup.achievements.forEach(ach => {
-    localStorage.setItem(`ach-${ach}`, 'true'); 
-  });
-}
-
-  // 5. Restaurar preferências
+  // 4. Restaurar preferências
   if (dadosBackup.preferences) {
     localStorage.setItem('userPreferences', JSON.stringify(dadosBackup.preferences));
   }
 
-  // 6. Restaurar jogos desbloqueados por código
-  if (dadosBackup.unlockedGames && Array.isArray(dadosBackup.unlockedGames)) {
-    dadosBackup.unlockedGames.forEach(gameId => {
-      localStorage.setItem(gameId, 'unlocked');
-    });
-  }
-
-  // 7. Se "all-games" foi comprado, desbloquear todos os jogos secretos
+  // 5. Se "all-games" foi comprado, desbloquear todos os jogos secretos
   if (dadosBackup.purchasedItems && dadosBackup.purchasedItems.includes('all-games')) {
     const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
     allSecretGames.forEach(gameId => {
@@ -9074,6 +9120,11 @@ function perguntarSave() {
   }
 
   console.log("✅ Backup restaurado!");
+  
+  // Sincronizar achievements e jogos secretos do backend
+  await syncAchievements();
+  await syncUnlockedGames();
+  
   alert("✅ Backup restaurado com sucesso!");
   window.location.reload();
 } else {
@@ -9461,7 +9512,5 @@ achiList.forEach(achi => {
         }
         
     </script>
-</body>
-</html>
 </body>
 </html>
