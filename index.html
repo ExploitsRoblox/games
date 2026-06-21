@@ -467,11 +467,40 @@
     }
 
     .achievements-list {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        width: 100%;
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    
+    /* Novas propriedades para ativar o scroll */
+    max-height: 300px;  /* Ajuste os 300px para a altura máxima que você quiser */
+    overflow-y: auto;   /* Adiciona o scroll vertical apenas quando necessário */
+    
+    /* Opcional: evita que os itens grudem na borda direita quando a barra de scroll aparecer */
+    padding-right: 5px; 
+}
+
+/* 1. Define a largura da barra de scroll vertical */
+.achievements-list::-webkit-scrollbar {
+    width: 8px; /* Deixa a barra mais fina e elegante */
+}
+
+/* 2. O "fundo" da barra (a pista por onde o scroll corre) */
+.achievements-list::-webkit-scrollbar-track {
+    background: #4000d4; /* Cor de fundo da pista */
+    border-radius: 10px; /* Deixa os cantos arredondados */
+}
+
+/* 3. O "botão" (a parte que o usuário clica e arrasta) */
+.achievements-list::-webkit-scrollbar-thumb {
+    background: rgb(53, 8, 8);
+    border-radius: 10px; /* Deixa o botão arredondado */
+}
+
+/* 4. Efeito visual quando o usuário passa o mouse por cima do botão */
+.achievements-list::-webkit-scrollbar-thumb:hover {
+    background: #db4040; /* Escurece a cor ao passar o mouse */
+}
 
         .achievement {
             display: flex;
@@ -530,7 +559,7 @@
             width: 80%;
             max-width: 1200px;
             height: 300px;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('tankilogo.jpg');
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('images/ufo.png');
             background-size: cover;
             background-position: center;
             border-radius: 15px;
@@ -3816,7 +3845,7 @@ button.door {
         <div class="navbar-container">
             <!-- Logo -->
             <div class="navbar-logo">
-                <img src="logo.png" alt="Logo" style="width: 180px; height: 60px;">
+                <img src="images/logo.png" alt="Logo" style="width: 180px; height: 60px;">
             </div>
             
             <!-- Menu Central -->
@@ -3912,7 +3941,7 @@ button.door {
             
             <!-- Sans Character -->
             <div class="sans-character">
-                <img src="sprite.png" alt="Sans">
+                <img src="images/sprite.png" alt="Sans">
             </div>
             
             <!-- Shop Items Grid (Hidden by default) -->
@@ -3940,7 +3969,7 @@ button.door {
             
             <!-- Spamton Character -->
             <div class="spamton-character">
-                <img src="spamton.png" alt="Spamton">
+                <img src="images/spamton.png" alt="Spamton">
             </div>
             
             <!-- Shop Items Grid (Hidden by default) -->
@@ -4017,8 +4046,6 @@ button.door {
                 <h3>🎡 Roleta da Sorte</h3>
                 <button class="wheel-button" onclick="openWheel(); closeInventory();" style="width: 100%;">🎰 Abrir Roleta</button>
             </div>
-            <button class="gastersprite" onclick="gasterFadeOut()">
-    <img src="gastersprite.png" alt="Redacted">
 </button>
         </div>
     </div>
@@ -4027,7 +4054,7 @@ button.door {
     <div id="wheelModal" class="wheel-modal" onclick="closeWheel(event)">
         <div class="wheel-content" onclick="event.stopPropagation();">
             <div class="wheel-container">
-                <img class="wheel-spinner" id="wheelSpinner" src="wheel.png" alt="Wheel Sprite" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                <img class="wheel-spinner" id="wheelSpinner" src="images/wheel.png" alt="Wheel Sprite" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
                 <div class="wheel-pointer"></div>
             </div>
             <div class="wheel-info" id="wheelRewardText">Clique em girar para começar!</div>
@@ -4041,8 +4068,8 @@ button.door {
             <button class="wheel-close" onclick="closeWheel()">Fechar</button>
            
         </div> 
-        <div class="jevil"><img src="jevil.png" alt="Jevil"></div>
-        <button class="door" onclick="opendoor()"><img src="door.jpg" alt="Door"></img></button>
+        <div class="jevil"><img src="images/jevil.png" alt="Jevil"></div>
+        <button class="door" onclick="opendoor()"><img src="images/door.jpg" alt="Door"></img></button>
     </div>
     
     <!-- Modal de Admin -->
@@ -4294,20 +4321,20 @@ button.door {
     
     <!-- Containers das Skins (Imagens) -->
     <div id="skinContainer1" class="skin-display-container skin-hidden">
-        <img id="skinImage1" src="skin1.png" alt="Skin 1: Pixel" class="skin-image">
+        <img id="skinImage1" src="images/skin1.png" alt="Skin 1: Pixel" class="skin-image">
     </div>
     
     <div id="skinContainer2" class="skin-display-container skin-hidden">
-        <img id="skinImage2" src="skin2.png" alt="Skin 2: Noturna" class="skin-image">
+        <img id="skinImage2" src="images/skin2.png" alt="Skin 2: Noturna" class="skin-image">
     </div>
     
     <div id="skinContainer3" class="skin-display-container skin-hidden">
-        <img id="skinImage3" src="skin3.png" alt="Skin 3: Cósmica" class="skin-image">
+        <img id="skinImage3" src="images/skin3.png" alt="Skin 3: Cósmica" class="skin-image">
     </div>
 
      
     <div id="skinContainer4" class="skin-display-container skin-hidden">
-        <img id="skinImage4" src="skin4.png" alt="Skin 4: Futurista" class="skin-image">
+        <img id="skinImage4" src="images/skin4.png" alt="Skin 4: Futurista" class="skin-image">
     </div>
     
     <!-- Modal de Jogo com Iframe -->
@@ -4327,16 +4354,19 @@ button.door {
     </div>
     
     <div class="detetiveimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-        <img src="detetive.png" alt="Detetive" >
+        <img src="images/detetive.png" alt="Detetive" >
     </div>
     <div class="sortudoimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-        <img src="sortudo.png" alt="Sortudo" >
+        <img src="images/sortudo.png" alt="Sortudo" >
     </div>
     <div class="infinityimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-        <img src="infinity.png" alt="Infinity" >
+        <img src="images/infinity.png" alt="Infinity" >
     </div>
+    <div class="img50" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
+    <img src="images/50goal.png" alt="50 Goal">
+</div>
     <div class="gasterimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-        <img src="gaster.png" alt="Gaster" >
+        <img src="images/gaster.png" alt="Gaster" >
     </div>
     <nav id="left-sidebar" class="sidebar">
         <div class="search-container">
@@ -4409,196 +4439,196 @@ button.door {
     </div>
 
     <main>
-        <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">DESTAQUE DA SEMANA</span>
-        <div class="featured-banner" onclick="destaque()">
-            <h2 style="margin: 0; font-size: 2rem;">Tanki Online</h2>
-            <p style="margin: 5px 0 0 0;">Derrote os Inimigos!</p>
+        <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">Metas de Jogo</span>
+        <div class="featured-banner">
+            <h2 style="margin: 0; font-size: 2rem;">Objetivo: Alcance 50 pontos em Jogo de UFO</h2>
+            <p id="50goaltext" style="margin: 5px 0 0 0;">0/50</p>
         </div>
 
         <div class="grid-container" id="gameGrid">
             <a href="https://neeexusbr.github.io/apostilas" class="game-card" data-name="Apostilas" data-category="educativo">
-                <img src="apostila.png" alt="Apostilas">
+                <img src="images/apostila.png" alt="Apostilas">
                 <span>Apostilas</span>
             </a>
 
             <a href="https://neeexusbr.github.io/gdclicker" class="game-card" data-name="Geometry Dash Clicker" data-category="arcade">
-                <img src="gdclicker.png" alt="GD Clicker">
+                <img src="images/gdclicker.png" alt="GD Clicker">
                 <span>GD Clicker</span>
             </a>
 
             <a href="https://neeexusbr.github.io/undertale" class="game-card" data-name="Undertale Barato" data-category="aventura">
-                <img src="undertale.png" alt="Undertale">
+                <img src="images/undertale.png" alt="Undertale">
                 <span>Undertale Barato</span>
             </a>
             <a href="https://neeexusbr.github.io/ufo" class="game-card" data-name="Jogo de UFO" data-category="arcade">
-                <img src="ufo.png" alt="UFO">
+                <img src="images/ufo.png" alt="UFO">
                 <span>Jogo de UFO</span>
             </a>
 
             <a href="https://neeexusbr.github.io/wave" class="game-card" data-name="Wave Game" data-category="arcade">
-                <img src="wave.png" alt="Wave">
+                <img src="images/wave.png" alt="Wave">
                 <span>Wave Game</span>
             </a>
 
             <a href="https://neeexusbr.github.io/snake" class="game-card" data-name="Slither.io" data-category="multijogador">
-                <img src="snake.png" alt="Slither">
+                <img src="images/snake.png" alt="Slither">
                 <span>Slither.io</span>
             </a>
 
             <a href="https://neeexusbr.github.io/LevelDevil" class="game-card" data-name="Level Devil" data-category="acao">
-                <img src="leveldevil.png" alt="Level Devil">
+                <img src="images/leveldevil.png" alt="Level Devil">
                 <span>Level Devil</span>
             </a>
 
             <a href="https://neeexusbr.github.io/ultrakill" class="game-card" data-name="Ultrakill" data-category="acao">
-                <img src="ultrakill.jpg" alt="Ultrakill">
+                <img src="images/ultrakill.jpg" alt="Ultrakill">
                 <span>Ultrakill</span>
             </a>
 
             <a href="https://neeexusbr.github.io/sab" class="game-card" data-name="Roube um Brainrot" data-category="acao">
-                <img src="sab.jpg" alt="Roube um Brainrot">
+                <img src="images/sab.jpg" alt="Roube um Brainrot">
                 <span>Roube um Brainrot</span>
             </a>
 
             <a href="https://neeexusbr.github.io/koopa" class="game-card" data-name="A Koopa Revenge 2" data-category="aventura">
-                <img src="koopa.jpg" alt="A Koopa Revenge 2">
+                <img src="images/koopa.jpg" alt="A Koopa Revenge 2">
                 <span>A Koopa Revenge 2</span>
             </a>
 
             <a href="https://neeexusbr.github.io/totm" class="game-card" data-name="Tomb Of the Mask" data-category="aventura">
-                <img src="tomt.png" alt="Tomb Of the Mask">
+                <img src="images/tomt.png" alt="Tomb Of the Mask">
                 <span>Tomb Of the Mask</span>
             </a>
 
             <a href="https://neeexusbr.github.io/gdl" class="game-card" data-name="Geometry Dash Lite" data-category="arcade">
-                <img src="geoemetrydash.png" alt="Geometry Dash Lite">
+                <img src="images/geometrydash.png" alt="Geometry Dash Lite">
                 <span>Geometry Dash Lite</span>
             </a>
 
             <a href="https://neeexusbr.github.io/deltarune" class="game-card" data-name="Deltarune" data-category="arcade">
-                <img src="deltarune.jpg" alt="Deltarune">
+                <img src="images/deltarune.jpg" alt="Deltarune">
                 <span>Deltarune</span>
             </a>
 
             <a href="https://neeexusbr.github.io/amongus" class="game-card" data-name="Among Us" data-category="multijogador">
-                <img src="amongus.png" alt="Among Us">
+                <img src="images/amongus.png" alt="Among Us">
                 <span>Among Us</span>
             </a>
 
             <a href="https://neeexusbr.github.io/fnaf" class="game-card" data-name="FNAF 4" data-category="horror">
-                <img src="fnaf.png" alt="FNAF 4">
+                <img src="images/fnaf.png" alt="FNAF 4">
                 <span>FNAF 4</span>
             </a>
 
             <a href="https://neeexusbr.github.io/subway" class="game-card" data-name="Subway Surfers" data-category="arcade">
-                <img src="subway.png" alt="Subway Surfers">
+                <img src="images/subway.png" alt="Subway Surfers">
                 <span>Subway Surfers</span>
             </a>
 
             <a href="https://neeexusbr.github.io/granny" class="game-card" data-name="Granny" data-category="horror">
-                <img src="granny.png" alt="Granny">
+                <img src="images/granny.png" alt="Granny">
                 <span>Granny</span>
             </a>
 
              <a href="https://neeexusbr.github.io/nm" class="game-card" data-name="Número Mágico" data-category="acao">
-                <img src="nm.jpg" alt="Número Mágico">
+                <img src="images/nm.jpg" alt="Número Mágico">
                 <span>Número Mágico</span>
             </a>
 
             <a href="https://neeexusbr.github.io/baldi" class="game-card" data-name="Baldi's Basics" data-category="horror">
-                <img src="baldi.png" alt="Baldi's Basics">
+                <img src="images/baldi.png" alt="Baldi's Basics">
                 <span>Baldi's Basics</span>
             </a>
 
             <a href="https://neeexusbr.github.io/sm64/sm64" class="game-card" data-name="Super Mario 64" data-category="aventura">
-                <img src="sm64.png" alt="Super Mario 64">
+                <img src="images/sm64.png" alt="Super Mario 64">
                 <span>Super Mario 64</span>
             </a>
 
             <a href="https://neeexusbr.github.io/snowrider" class="game-card" data-name="Snow Rider 3D" data-category="arcade">
-                <img src="snowrider.png" alt="Snow Rider 3D">
+                <img src="images/snowrider.png" alt="Snow Rider 3D">
                 <span>Snow Rider 3D</span>
             </a>
 
             <a href="https://neeexusbr.github.io/survival" class="game-card" data-name="Survival Race Drift" data-category="arcade">
-                <img src="survival.jpg" alt="Survival Race Drift">
+                <img src="images/survival.jpg" alt="Survival Race Drift">
                 <span>Survival Race Drift</span>
             </a>
 
             <a href="https://neeexusbr.github.io/cod" class="game-card" data-name="Call of Duty" data-category="acao">
-                <img src="cod.jpg" alt="Call of Duty">
+                <img src="images/cod.jpg" alt="Call of Duty">
                 <span>Call of Duty: Shopee Edition</span>
             </a>
             
             <a href="https://neeexusbr.github.io/racing" class="game-card" data-name="Racing" data-category="aventura">
-                <img src="racing.png" alt="Racing">
+                <img src="images/racing.png" alt="Racing">
                 <span>Ultimate Racing</span>
             </a>
 
             <a href="https://playtankisandbox.github.io/" class="game-card" data-name="TO" data-category="acao">
-                <img src="tanki.jpg" alt="TO">
+                <img src="images/tanki.jpg" alt="TO">
                 <span>Tanki Online</span>
             </a>
 
 
             <a href="http://neeexusbr.github.io/sf" class="game-card" data-name="Bad Time Simulator" data-category="horror">
-                <img src="badtime.png" alt="Bad Time Simulator">
+                <img src="images/badtime.png" alt="Bad Time Simulator">
                 <span>Bad Time Simulator</span>
             </a>
 
             <a href="http://neeexusbr.github.io/lb" class="game-card" data-name="Mad Time Simulator" data-category="horror">
-                <img src="lastbreath.png" alt="Mad Time Simulator">
+                <img src="images/lastbreath.png" alt="Mad Time Simulator">
                 <span>Mad Time Simulator</span>
             </a>
 
             <a href="https://freak-games-studio.github.io/talking-ben/" class="game-card" data-name="Talking Ben" data-category="arcade">
-                <img src="talkingben.png" alt="Talking Ben">
+                <img src="images/talkingben.png" alt="Talking Ben">
                 <span>Talking Ben</span>
             </a>
 
             
             <a href="https://neeexusbr.github.io/minecraft" class="game-card" data-name="Minecraft" data-category="aventura">
-                <img src="minecraft.png" alt="Minecraft">
+                <img src="images/minecraft.png" alt="Minecraft">
                 <span>Minecraft</span>
             </a>
 
             <a href="https://neeexusbr.github.io/fnf" class="game-card" data-name="Friday Night Funkin" data-category="ritmo">
-                <img src="fnf.png" alt="Friday Night Funkin">
+                <img src="images/fnf.png" alt="Friday Night Funkin">
                 <span>Friday Night Funkin</span>
             </a>
 
             <a href="https://neeexusbr.github.io/blockblast" class="game-card" data-name="Block Blast" data-category="arcade">
-                <img src="blockblast.png" alt="Block Blast">
+                <img src="images/blockblast.png" alt="Block Blast">
                 <span>Block Blast</span>
             </a>
 
             <a href="https://neeexusbr.github.io/1234players" class="game-card" data-name="2 3 4 Player Games" data-category="multijogador">
-                <img src="1234players.png" alt="2 3 4 Player Games">
+                <img src="images/1234players.png" alt="2 3 4 Player Games">
                 <span>2 3 4 Player Games</span>
             </a>
 
             <a href="https://neeexusbr.github.io/guloso" class="game-card secret-hidden" id="secret1" data-name="Guloso" data-category="secreto">
-                <img src="secret.jpg" alt="Guloso">
+                <img src="images/secret.jpg" alt="Guloso">
                 <span>Guloso (Secreto)</span>
             </a>
 
             <a href="https://neeexusbr.github.io/secret" class="game-card secret-hidden" id="secret3" data-name="Bruno" data-category="secreto">
-                <img src="secret.jpg" alt="Bruno">
+                <img src="images/secret.jpg" alt="Bruno">
                 <span>Bruno (Secreto)</span>
             </a>
             
             <a href="https://neeexusbr.github.io/flappydiv" class="game-card secret-hidden" id="secret2" data-name="Flappy Div" data-category="secreto">
-                <img src="secret.jpg" alt="Flappy Div">
+                <img src="images/secret.jpg" alt="Flappy Div">
                 <span>Flappy Div (Secreto)</span>
             </a>
 
             <a href="https://neeexusbr.github.io/indexgames" class="game-card secret-hidden" id="secret4" data-name="indgames" data-category="secreto">
-                <img src="secret.jpg" alt="Jogos Indexados">
+                <img src="images/secret.jpg" alt="Jogos Indexados">
                 <span>Jogos Indexados (Secreto)</span>
             </a>
 
             <a href="https://neeexusbr.github.io/flash" class="game-card secret-hidden" id="secret5" data-name="Flash Games" data-category="secreto">
-                <img src="flash.png" alt="Jogos Flash">
+                <img src="images/flash.png" alt="Jogos Flash">
                 <span>Jogos Flash (Secreto)</span>
             </a>
             
@@ -4616,7 +4646,7 @@ button.door {
                     <div class="achievement-icon">🔍</div>
                     <div class="achievement-text">
                         <div class="achievement-name">Detetive</div>
-                        <div class="achievement-desc">Clique no destaque da semana</div>
+                        <div class="achievement-desc">Conquista que era obtida por clicar nos destaques</div>
                     </div>
                 </div>
                 <div class="achievement achievement-locked" id="ach-lucky">
@@ -4639,6 +4669,14 @@ button.door {
                          <div class="achievement-name">☝︎✌︎💧︎❄︎☜︎☼︎</div>
                          <div class="achievement-desc">☜︎☠︎👍︎⚐︎☠︎❄︎☼︎☜︎ ⚐︎ ☝︎✌︎💧︎❄︎☜︎☼︎</div>
                      </div>
+                </div>
+                <div class="achievement achievement-locked" id="ach-50goal">
+                    <div class="achievement-icon">🎯</div>
+                    <div class="achievement-text">
+                            <div class="achievement-name">Melhor que você</div>
+                            <div class="achievement-desc">Alcance 50 pontos no Jogo de UFO</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4695,6 +4733,10 @@ button.door {
 
         // Configurar o iframe
         gameIframe.src = url;
+        if (gameIframe.src = 'https://neeexusbr.github.io/ufo') {
+            IsPlayingUfo = true
+            InjetarUfo();
+        }
         gameModalTitle.textContent = gameName || 'Jogo';
         isGameFullscreen = false;
         fullscreenBtn.textContent = '⛶ Tela Cheia';
@@ -4882,7 +4924,7 @@ button.door {
     }
 }
 function audiogaster() {
-    const audio = new Audio('vanish.mp3');
+    const audio = new Audio('audios/vanish.mp3');
     audio.play();
 }
         function gasterFadeOut() {
@@ -4902,7 +4944,58 @@ function audiogaster() {
         }, 1000);
     }
 }
-        function toggleLeftSidebar() {
+let IsPlayingUfo = false;
+
+function InjetarUfo() {
+const iframe = document.getElementById('gameIframe');
+if (iframe && iframe.src === 'https://neeexusbr.github.io/ufo') {
+    // Garante que o iframe terminou de carregar o jogo antes de injetar o código
+    iframe.addEventListener('load', function() {
+        try {
+            const iframeWindow = iframe.contentWindow;
+
+            // 1. Intercepta a função gameOver dentro do escopo do iframe
+            if (typeof iframeWindow.gameOver === 'function') {
+                const funcaoOriginalGameOver = iframeWindow.gameOver;
+
+                iframeWindow.gameOver = function() {
+                    // Executa a lógica padrão do jogo
+                    funcaoOriginalGameOver();
+
+                    // Executa o rastreador passando a janela do iframe
+                    console.log("Game Over interceptado com sucesso no iframe!");
+                    trackScore(iframeWindow);
+                };
+                console.log("Injeção realizada: monitorando o fim do jogo.");
+            } else {
+                console.error("A função 'gameOver' não foi encontrada no escopo do iframe.");
+            }
+        } catch (error) {
+            console.error("Erro ao acessar o iframe. Verifique se o jogo está no mesmo domínio da página principal.", error);
+        }
+    });
+}
+}
+
+// 2. Função de salvamento (lê os dados de onde o jogo está rodando)
+function trackScore(windowDoJogo) {
+    let prevscore = parseInt(localStorage.getItem("score")) || 0;
+
+    // Busca a variável que retornou '2' no seu console
+    if (windowDoJogo && typeof windowDoJogo.score !== 'undefined') {
+        let atualScore = windowDoJogo.score;
+
+        if (atualScore > prevscore && atualScore >= 1) {
+            localStorage.setItem("score", atualScore);
+            console.log(`Novo recorde salvo: ${atualScore} (Anterior: ${prevscore})`);
+        } else {
+            console.log(`Pontuação atual (${atualScore}) não superou o recorde (${prevscore}).`);
+        }
+    } else {
+        console.error("Não foi possível ler a variável 'score' de dentro do iframe através do script.");
+    }
+}
+function toggleLeftSidebar() {
             document.getElementById('left-sidebar').classList.toggle('active');
             document.body.classList.toggle('left-active');
             
@@ -4958,6 +5051,7 @@ function audiogaster() {
             const texto = pai.querySelector('.achievement-desc');
             if(infinity == 'true') {
                 texto.textContent = "Chegue ao infinito em Gd Clicker para desbloquear essa conquista!";
+                localStorage.setItem('ach-infinity', 'true');
             } else {
                 texto.textContent = "???????";
             }
@@ -5092,6 +5186,32 @@ function inicializarChat() {
         sendBtnGlobal.addEventListener('click', enviarMensagemGlobal);
     }
 }
+
+function updateScoreCounter() {
+    const scoreCounter = document.getElementById('50goaltext');
+    const score = parseInt(localStorage.getItem("score")) || 0;
+    
+    // 1. Verifica e libera a conquista (apenas uma vez)
+    if (score >= 50 && !localStorage.getItem("ach-50goal")) {
+        localStorage.setItem("ach-50goal", "true");
+        conquistaAnimacao('50goal');
+    }
+    
+    // 2. Atualiza a interface visual do contador de forma correta
+    if (scoreCounter) {
+        if (score >= 50) {
+            // Se já bateu a meta, mostra o texto de completo
+            scoreCounter.textContent = "Completo! 50/50";
+        } else {
+            // Se ainda não bateu, mostra o progresso atual
+            scoreCounter.textContent = `${score}/50`;
+        }
+    }
+}
+
+setInterval(() => {
+    updateScoreCounter();
+}, 5000);
 
 function trocarAbaChat(aba) {
     // Remover ativo de todas abas
@@ -5532,19 +5652,19 @@ async function atualizarChatAtivo() {
         }
         function checkAchievements() {
             // Detetive
-            if (localStorage.getItem('destaque') > 0) {
+            if (localStorage.getItem('ach-destaque') == 'true') {
                 const detetive = document.getElementById('ach-detetive');
                 detetive.classList.add('unlocked');
                 detetive.classList.remove('achievement-locked');
             }
             // Sortudo
-            if (localStorage.getItem('lucky_used') == 'true') {
+            if (localStorage.getItem('ach-lucky') == 'true') {
                 const sortudo = document.getElementById('ach-lucky');
                 sortudo.classList.add('unlocked');
                 sortudo.classList.remove('achievement-locked');
             }
             // Infinity
-            if (localStorage.getItem('infinity_get') == 'true') {
+            if (localStorage.getItem('ach-infinity') == 'true') {
                 const infinity = document.getElementById('ach-infinity');
                 infinity.classList.add('unlocked');
                 infinity.classList.remove('achievement-locked');
@@ -5554,6 +5674,12 @@ async function atualizarChatAtivo() {
                 const gaster = document.getElementById('ach-gaster');
                 gaster.classList.add('unlocked');
                 gaster.classList.remove('achievement-locked');
+            }
+            //50 goal
+            if (localStorage.getItem('ach-50goal') == 'true') {
+                const goal = document.getElementById('ach-50goal');
+                goal.classList.add('unlocked');
+                goal.classList.remove('achievement-locked');
             }
         }
 
@@ -5612,7 +5738,7 @@ async function atualizarChatAtivo() {
 
         function opendoor(){
            fadeinblackscreen();
-           const audio = new Audio('dooropen.mp3');
+           const audio = new Audio('audios/dooropen.mp3');
            audio.play();
            setTimeout(() => {
              fadeoutblackscreen();
@@ -5622,7 +5748,7 @@ async function atualizarChatAtivo() {
 
         function closedoor(){
            fadeinblackscreen();
-           const audio = new Audio('doorclose.mp3');
+           const audio = new Audio('audios/doorclose.mp3');
            audio.play();
            setTimeout(() => {
              fadeoutblackscreen();
@@ -5634,9 +5760,9 @@ async function atualizarChatAtivo() {
         async function imFeelingLucky() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
             if (cards.length > 0) {
-                if (!localStorage.getItem('lucky_used')) {
+                if (!localStorage.getItem('ach-lucky')) {
                     conquistaAnimacao('sortudo');
-                    localStorage.setItem('lucky_used', 'true');
+                    localStorage.setItem('ach-lucky', 'true');
                     await addCoins(200);
                     updateCoinsDisplay();
                     setInterval(() => {
@@ -5645,7 +5771,7 @@ async function atualizarChatAtivo() {
                     }, 3000);
                 } else {
                     const randomCard = cards[Math.floor(Math.random() * cards.length)];
-                    localStorage.setItem('lucky_used', 'true');
+                    localStorage.setItem('ach-lucky', 'true');
                     window.location.href = randomCard.href;
                 }
             }
@@ -5685,7 +5811,7 @@ function spamtonPopup() {
 
     popup.innerHTML = `
         <button onclick="this.parentElement.remove()">
-            <img src="popup.png" alt="[[BIG SHOT]]">
+            <img src="images/popup.png" alt="[[BIG SHOT]]">
         </button>
     `;
 
@@ -5696,7 +5822,7 @@ function spamtonPopup() {
         popup.classList.add('show');
     }, 10);
     // Som
-    const audio = new Audio('popup.mp3');
+    const audio = new Audio('audios/popup.mp3');
     audio.play();
 
     console.log(`Popup criada em: ${popup.style.top}, ${popup.style.left}`);
@@ -5731,7 +5857,8 @@ function conquistaAnimacao(tipo) {
         'detetive': '.detetiveimg',
         'sortudo': '.sortudoimg',
         'infinity': '.infinityimg',
-        'gaster': '.gasterimg'
+        'gaster': '.gasterimg',
+        '50goal': '.img50' // Corrigido aqui! Começa com letra agora.
     };
     
     const selector = selectorMap[tipo];
@@ -5747,7 +5874,7 @@ function conquistaAnimacao(tipo) {
     div.style.transform = 'translate(-50%, -100px)';
 
     // Toca o som
-    const audio = new Audio('achi.mp3');
+    const audio = new Audio('audios/achi.mp3');
     audio.play();
 
     // Depois de 3 segundos, volta para baixo
@@ -6024,11 +6151,11 @@ function changeSansSprite(state) {
     if (!sansImg) return;
     
     if (state === 'normal') {
-        sansImg.src = 'sprite.png';
+        sansImg.src = 'images/sprite.png';
     } else if (state === 'idle') {
-        sansImg.src = 'sprite2.jpg';
+        sansImg.src = 'images/sprite2.jpg';
     } else if (state === 'joking') {
-        sansImg.src = 'spritejoking.png';
+        sansImg.src = 'images/spritejoking.png';
     }
 
 }
@@ -6064,7 +6191,7 @@ function typeWriter(text, elementId = 'dialogText') {
 
     // Escolher som de acordo com o elemento
     const isSpamton = elementId === 'dialogTextS';
-    const audioFile = isSpamton ? 'spamtontalking.mp3' : 'sans.mp3';
+    const audioFile = isSpamton ? 'audios/spamtontalking.mp3' : 'audios/sans.mp3';
     const talkSound = new Audio(audioFile); 
     talkSound.volume = isSpamton ? 0.1 : 0.1; // Ajusta o volume para diferenciar os sons
 
@@ -6548,7 +6675,7 @@ function typeWriter(text, elementId = 'dialogText') {
 function playShopMusic() {
     // Se já estiver tocando, não criamos outro para não sobrepor
     if (!shopAudio) {
-        shopAudio = new Audio('shoptheme.mp3');
+        shopAudio = new Audio('audios/shoptheme.mp3');
         shopAudio.loop = true;
         shopAudio.volume = 0.5;
     }
@@ -7358,12 +7485,13 @@ function closeSpamtonShop(){
             document.getElementById('playtimeDisplay').textContent = `${horas}h ${minutos}m`;
             
             // Contar conquistas desbloqueadas
-            const ach1 = localStorage.getItem('destaque') ? 1 : 0;
-            const ach2 = localStorage.getItem('lucky_used') ? 1 : 0;
-            const ach3 = localStorage.getItem('infinity_get') ? 1 : 0;
+            const ach1 = localStorage.getItem('ach-destaque') ? 1 : 0;
+            const ach2 = localStorage.getItem('ach-lucky') ? 1 : 0;
+            const ach3 = localStorage.getItem('ach-infinity') ? 1 : 0;
             const ach4 = localStorage.getItem('ach-gaster') ? 1 : 0; // Nova conquista para completar os 4 slots
-            const totalAch = ach1 + ach2 + ach3 + ach4;
-            document.getElementById('achievementsDisplay').textContent = `${totalAch}/4`;
+            const ach5 = localStorage.getItem('ach-50goal') ? 1 : 0; // Nova conquista para completar os 5 slots
+            const totalAch = ach1 + ach2 + ach3 + ach4 + ach5;
+            document.getElementById('achievementsDisplay').textContent = `${totalAch}/5`;
             
             // Contar itens comprados
             let ownedItems = 0;
@@ -8211,7 +8339,7 @@ function closeSpamtonShop(){
         }
         function startIdleMusic() {
             stopIdleMusic();
-            wheelMusicAudio = new Audio('wheelidle.mp3');
+            wheelMusicAudio = new Audio('audios/wheelidle.mp3');
             wheelMusicAudio.volume = 0.5;
             wheelMusicAudio.playbackRate = 0.8;
             wheelMusicAudio.loop = true;
@@ -8225,15 +8353,15 @@ function closeSpamtonShop(){
 
     if (jevilImg) {
         if (sprite === 'idle') {
-            jevilImg.src = 'jevil.png';
+            jevilImg.src = 'images/jevil.png';
         } else if (sprite === 'spinning') {
-            jevilImg.src = 'jevilgif.gif';
+            jevilImg.src = 'images/jevilgif.gif';
         }
     }
 }
         function startWheelMusic() {
             stopWheelMusic();
-            wheelMusicAudio = new Audio('spinningwheel.mp3');
+            wheelMusicAudio = new Audio('audios/spinningwheel.mp3');
             wheelMusicAudio.volume = 0.5;
             wheelMusicAudio.playbackRate = 1; // Aumentar um pouco a velocidade para mais emoção
             wheelMusicAudio.currentTime = Math.random() * 70; // Iniciar em um ponto aleatório para evitar repetição
@@ -8759,13 +8887,18 @@ function perguntarSave() {
         }
 
         function reloadAchievements() {
-            const ach1 = localStorage.getItem('destaque') ? 1 : 0;
-            const ach2 = localStorage.getItem('lucky_used') ? 1 : 0;
-            const totalAch = ach1 + ach2;
-            document.getElementById('achievementsDisplay').textContent = `${totalAch}/2`;
+            const ach1 = localStorage.getItem('ach-destaque') ? 1 : 0;
+            const ach2 = localStorage.getItem('ach-lucky') ? 1 : 0;
+            const ach3 = localStorage.getItem('ach-infinity') ? 1 : 0;
+            const ach4 = localStorage.getItem('ach-gaster') ? 1 : 0;
+            const ach5 = localStorage.getItem('ach-50goal') ? 1 : 0;
+            const totalAch = ach1 + ach2 + ach3 + ach4 + ach5;
+            document.getElementById('achievementsDisplay').textContent = `${totalAch}/5`;
         }
         
         window.onload = async function() {
+            
+
             // Sincronizar lista com grid automaticamente
             syncGameListWithGrid();
             
@@ -8796,6 +8929,7 @@ function perguntarSave() {
             filterGames(); // aplica filtro inicial de categorias/pesquisa
             checkAchievements(); // verifica conquistas ao carregar
             reloadAchievements(); // atualiza display de conquistas
+            updateScoreCounter(); // atualiza display de score
             secretText(); // verifica se deve mostrar texto secreto
             gasterText(); // verifica se deve mostrar texto do Gaster
             showifadmin(); // verifica se deve mostrar painel de admin
@@ -8959,10 +9093,6 @@ async function salvarBackup() {
       userTagColor: localStorage.getItem('userTagColor'),
       userTagColorType: localStorage.getItem('userTagColorType'),
       userProfilePic: localStorage.getItem('userProfilePic'),
-      destaque: localStorage.getItem('destaque'),
-      lucky_used: localStorage.getItem('lucky_used'),
-      gaster_unlocked: localStorage.getItem('ach-gaster'),
-      infinity_used: localStorage.getItem('infinity_used'),
       lastDailyRewardDate: localStorage.getItem('lastDailyRewardDate')
     };
 
@@ -8997,7 +9127,7 @@ async function salvarBackup() {
     // 4. CONQUISTAS DESBLOQUEADAS
     const conquistas = [];
     const achiList = [
-      'detective', 'lucky', 'infinity', 'gaster'
+      'detetive', 'lucky', 'infinity', 'gaster', '50goal'
     ];
     achiList.forEach(achi => {
       if (localStorage.getItem(`ach-${achi}`) === 'unlocked') {
