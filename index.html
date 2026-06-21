@@ -3837,6 +3837,91 @@ button.door {
             }
         }
 
+        /* === RANK DISPLAY STYLES === */
+        .rank-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 2px solid rgba(168, 85, 247, 0.5);
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+
+        .rank-badge-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            position: relative;
+            width: 60px;
+            height: auto;
+        }
+
+        .rank-badge {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+            z-index: 3;
+        }
+
+        .premium-crown {
+            font-size: 24px;
+            line-height: 1;
+            margin-top: 4px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+            position: absolute;
+            width: 95px;
+            filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
+        }
+
+        .premium-crown.show {
+            opacity: 1;
+        }
+
+        .rank-info {
+            flex: 1;
+        }
+
+        .rank-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fbbf24;
+            margin-bottom: 6px;
+        }
+
+        .xp-bar-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            margin-bottom: 4px;
+        }
+
+        .xp-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #a855f7, #3b82f6);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .xp-text {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+
+        .rank-container.premium-active {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2)) !important;
+            border: 2px solid rgba(251, 191, 36, 0.7) !important;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), inset 0 0 10px rgba(251, 191, 36, 0.2);
+        }
+
     </style>
 </head>
 <body>
@@ -3857,7 +3942,9 @@ button.door {
                 <button class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
                 <button class="navbar-btn" onclick="openShop()">LOJA</button>
                 <button class="navbar-btn" onclick="toggleAchievements()">CONQUISTAS</button>
+                <button id="chatBtn" class="navbar-btn" style="display: none;" onclick="openChatModal()">CHAT</button>
                 <button class="navbar-btn" id="adminPanelBtn" style="display: none;" onclick="openAdminPanel()">PAINEL</button>
+
             </nav>
             
             <!-- Lado direito: Moedas e Botões de Autenticação -->
@@ -3867,7 +3954,6 @@ button.door {
                     🔔 
                     <span class="notification-badge" id="notificationBadge"></span>
                 </button>
-                <button id="chatBtn" class="navbar-chat-btn" style="display: none;" onclick="openChatModal()">💬 Chat</button>
                 <button id="userPanelBtn" class="user-panel-btn" style="display: none;" onclick="toggleUserPanel()"></button>
                 <button id="authBtn" class="navbar-auth-btn" onclick="">🔐 LOGIN</button>
             </div>
@@ -4257,6 +4343,7 @@ button.door {
                     <span class="stat-label">Itens Comprados</span>
                     <span class="stat-value" id="unlockedGamesDisplay">0</span>
                 </div>
+                <div id="rankDisplay"></div>
             </div>
             
             <div class="user-actions-section">
@@ -5591,6 +5678,40 @@ async function atualizarChatAtivo() {
             "FLASH": "secret5"
         };
 
+        // Tabela de Ranks com nomes e XP necessário
+        const RANKS_TABLE = [
+            { rank: 1, name: "Recruta", xpRequired: 0 },
+            { rank: 2, name: "Soldado", xpRequired: 100 },
+            { rank: 3, name: "Taifeiro", xpRequired: 500 },
+            { rank: 4, name: "Cabo", xpRequired: 1500 },
+            { rank: 5, name: "Taifero-mor", xpRequired: 3700 },
+            { rank: 6, name: "Sargento", xpRequired: 7100 },
+            { rank: 7, name: "Terceiro-sargento", xpRequired: 12300 },
+            { rank: 8, name: "Segundo-sargento", xpRequired: 20000 },
+            { rank: 9, name: "Primeiro-sargento", xpRequired: 29000 },
+            { rank: 10, name: "Sargento-mor", xpRequired: 41000 },
+            { rank: 11, name: "Subtenente 1", xpRequired: 57000 },
+            { rank: 12, name: "Subtenente 2", xpRequired: 76000 },
+            { rank: 13, name: "Subtenente 3", xpRequired: 98000 },
+            { rank: 14, name: "Subtenente 4", xpRequired: 125000 },
+            { rank: 15, name: "Subtenente 5", xpRequired: 156000 },
+            { rank: 16, name: "Aspirante-a-Oficial", xpRequired: 192000 },
+            { rank: 17, name: "Segundo-tenente", xpRequired: 233000 },
+            { rank: 18, name: "Primeiro-tenente", xpRequired: 280000 },
+            { rank: 19, name: "Capitão", xpRequired: 332000 },
+            { rank: 20, name: "Major", xpRequired: 390000 },
+            { rank: 21, name: "Tenente-Coronel", xpRequired: 455000 },
+            { rank: 22, name: "Coronel", xpRequired: 527000 },
+            { rank: 23, name: "Brigadeiro", xpRequired: 606000 },
+            { rank: 24, name: "General de Brigada", xpRequired: 692000 },
+            { rank: 25, name: "General de divisão", xpRequired: 787000 },
+            { rank: 26, name: "General de exército", xpRequired: 889000 },
+            { rank: 27, name: "Marechal", xpRequired: 1000000 },
+            { rank: 28, name: "Marechal de Campo", xpRequired: 1122000 },
+            { rank: 29, name: "Comandante", xpRequired: 1255000 },
+            { rank: 30, name: "Generalissimo", xpRequired: 1400000 }
+        ];
+
         async function redeemCode() {
             const input = document.getElementById('redeemInput');
             const feedback = document.getElementById('feedbackMessage');
@@ -5908,6 +6029,7 @@ function conquistaAnimacao(tipo) {
             { id: 'spins-10', name: 'Giros da Roleta (10x)', desc: 'Compre 10 giros para usar na roleta da sorte!', icon: '🎡', price: 1500, isSpins: true, quantity: 10 },
             { id: 'spins-25', name: 'Giros da Roleta (25x)', desc: 'Compre 25 giros com desconto!', icon: '🎡', price: 3000, isSpins: true, quantity: 25 },
             { id: 'spins-50', name: 'Giros da Roleta (50x)', desc: 'Compre 50 giros com grande desconto!', icon: '🎡', price: 5000, isSpins: true, quantity: 50 },
+            { id: 'premium-xp', name: '✨ Premium XP', desc: 'Ganhe 2x XP permanentemente!', icon: '⚡', price: 7500, isPremium: true },
         ];
 
         const SPAMTON_ITEMS = [
@@ -6078,6 +6200,35 @@ function conquistaAnimacao(tipo) {
             }
         }
 
+        async function syncRankAndXp() {
+            const token = localStorage.getItem('token');
+            if (!token) return; // Não sincroniza senão estiver logado
+            
+            try {
+                const API_URL = "https://login-nqot.onrender.com";
+                const res = await fetch(`${API_URL}/rank-xp`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.ok) {
+                        // Sincronizar rank e XP do backend com localStorage
+                        localStorage.setItem('userRank', data.rank || 1);
+                        localStorage.setItem('userXp', data.xp || 0);
+                        localStorage.setItem('premiumXp', data.premium ? 'true' : 'false');
+                        
+                        console.log(`[SYNC] Rank: ${data.rank}/30, XP: ${data.xp}, Premium: ${data.premium}`);
+                        updateRankDisplay();
+                    }
+                }
+            } catch (err) {
+                console.error('Erro ao sincronizar rank e XP do servidor:', err);
+            }
+        }
+
         async function syncCoinsToDatabase(amount) {
             const token = localStorage.getItem('token');
             if (!token) return false; // Não sincroniza se não estiver logado
@@ -6114,11 +6265,102 @@ function conquistaAnimacao(tipo) {
             }
         }
 
+        async function awardXp(amount) {
+            const token = localStorage.getItem('token');
+            if (!token) return false; // Não sincroniza se não estiver logado
+            
+            try {
+                amount = parseInt(amount) || 0;
+                if (amount <= 0) return false;
+                
+                const API_URL = "https://login-nqot.onrender.com";
+                const res = await fetch(`${API_URL}/atualizar-xp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ quantidade: amount })
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok && data.ok) {
+                    console.log(`[XP] ✅ ${amount} XP adicionado! Rank: ${data.rank}/30`);
+                    // Atualizar localStorage com a resposta do servidor
+                    if (data.rank !== undefined) {
+                        localStorage.setItem('userRank', data.rank);
+                    }
+                    if (data.xp !== undefined) {
+                        localStorage.setItem('userXp', data.xp);
+                    }
+                    updateRankDisplay();
+                    return true;
+                } else {
+                    console.error('[XP] ❌ Erro ao adicionar XP:', data.mensagem || 'Erro desconhecido');
+                    return false;
+                }
+            } catch (err) {
+                console.error('[XP] ❌ Erro ao adicionar XP:', err);
+                return false;
+            }
+        }
+
         function updateCoinsDisplay() {
             const coins = getCoins();
             const coinsDisplay = document.getElementById('coinsDisplay');
             if (coinsDisplay) {
                 coinsDisplay.textContent = `💎 ${coins} Gemas`;
+            }
+        }
+
+        function updateRankDisplay() {
+            const rank = parseInt(localStorage.getItem('userRank') || 1);
+            const xp = parseInt(localStorage.getItem('userXp') || 0);
+            const hasPremium = localStorage.getItem('item-premium-xp') === 'owned';
+            
+            // Obter nome do rank da tabela
+            const rankInfo = RANKS_TABLE.find(r => r.rank === rank) || RANKS_TABLE[0];
+            const rankName = rankInfo.name;
+            
+            // XP necessário para cada rank
+            const xpPerRank = [
+                0, 100, 500, 1500, 3700, 7100, 12300, 20000, 29000, 41000,
+                57000, 76000, 98000, 125000, 156000, 192000, 233000, 280000, 332000, 390000,
+                455000, 527000, 606000, 692000, 787000, 889000, 1000000, 1122000, 1255000, 1400000, 1020000
+            ];
+            
+            const nextRankXp = xpPerRank[Math.min(rank, 30)] || 102000;
+            const currentRankXp = rank > 1 ? xpPerRank[rank - 1] : 0;
+            const xpInCurrentRank = xp - currentRankXp;
+            const xpNeededForNextRank = nextRankXp - currentRankXp;
+            const xpPercentage = (xpInCurrentRank / xpNeededForNextRank) * 100;
+            
+            // Atualizar elemento de rank se existir
+            const rankDisplay = document.getElementById('rankDisplay');
+            if (rankDisplay) {
+                const xpBarStyle = hasPremium 
+                    ? `background: linear-gradient(90deg, #fbbf24, #f59e0b); background-repeat: no-repeat; background-position: center;`
+                    : `background: linear-gradient(90deg, #a855f7, #3b82f6);`;
+                
+                rankDisplay.innerHTML = `
+                    <div class="rank-container ${hasPremium ? 'premium-active' : ''}">
+                        <div class="rank-badge-wrapper">
+                            <img src="images/ranks/${rank}.png" alt="Rank ${rank}" class="rank-badge">
+                            <img src="images/ranks/premium.png" alt="Premium" class="premium-crown ${hasPremium ? 'show' : ''}"></img>
+                        </div>
+                        <div class="rank-info">
+                            <div class="rank-title">
+                                ${rankName} • Rank ${rank}/30
+                                ${hasPremium ? '👑 PREMIUM' : ''}
+                            </div>
+                            <div class="xp-bar-container">
+                                <div class="xp-bar" style="width: ${xpPercentage}%; ${xpBarStyle}"></div>
+                            </div>
+                            <div class="xp-text">${xpInCurrentRank}/${xpNeededForNextRank} XP ${hasPremium ? '(2x Multiplicador)' : ''}</div>
+                        </div>
+                    </div>
+                `;
             }
         }
 
@@ -6459,6 +6701,30 @@ function typeWriter(text, elementId = 'dialogText') {
                 });
                 alert('🔓 Todos os jogos secretos foram desbloqueados!');
             } 
+            // Se for Premium XP
+            else if (itemId === 'premium-xp') {
+                if (token) {
+                    const API_URL = "https://login-nqot.onrender.com";
+                    try {
+                        const res = await fetch(`${API_URL}/ativar-premium`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${token}`,
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        
+                        if (res.ok) {
+                            const data = await res.json();
+                            localStorage.setItem('premiumXp', 'true');
+                            alert('✨ Premium XP ativado! Você ganha 2x XP a partir de agora!');
+                            updateRankDisplay();
+                        }
+                    } catch (err) {
+                        console.error('Erro ao ativar Premium:', err);
+                    }
+                }
+            }
             // Se for cor comum, abrir seletor de cores
             else if (itemId === 'cor-comum') {
                 promptTagColor('comum');
@@ -6719,6 +6985,7 @@ function typeWriter(text, elementId = 'dialogText') {
             await syncItemsFromDatabase(); // Sincronizar itens do backend
             await syncAchievements(); // Sincronizar conquistas do backend
             await syncUnlockedGames(); // Sincronizar jogos secretos do backend
+            await syncRankAndXp(); // Sincronizar rank e XP do backend
             loadSpinsFromDatabase(); // Carregar giros quando abrir a loja
             playShopMusic();
             const optionsDiv = document.querySelector('.dialog-options');
@@ -7564,6 +7831,7 @@ function closeSpamtonShop(){
         function toggleUserPanel() {
             const modal = document.getElementById('userPanelModal');
             modal.classList.toggle('active');
+            updateRankDisplay();
         }
         
         function closeUserPanel() {
@@ -9003,6 +9271,7 @@ function perguntarSave() {
             await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
             await syncAchievements(); // sincroniza conquistas do banco de dados
             await syncUnlockedGames(); // sincroniza jogos secretos do banco de dados
+            await syncRankAndXp(); // sincroniza rank e XP do banco de dados
             }
             // Garante que o botão LOGIN tem conteúdo
             setTimeout(() => {
