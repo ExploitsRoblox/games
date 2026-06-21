@@ -5652,7 +5652,7 @@ async function atualizarChatAtivo() {
         }
         function checkAchievements() {
             // Detetive
-            if (localStorage.getItem('ach-destaque') == 'true') {
+            if (localStorage.getItem('ach-detetive') == 'true') {
                 const detetive = document.getElementById('ach-detetive');
                 detetive.classList.add('unlocked');
                 detetive.classList.remove('achievement-locked');
@@ -7543,7 +7543,7 @@ function closeSpamtonShop(){
             document.getElementById('playtimeDisplay').textContent = `${horas}h ${minutos}m`;
             
             // Contar conquistas desbloqueadas
-            const ach1 = localStorage.getItem('ach-destaque') ? 1 : 0;
+            const ach1 = localStorage.getItem('ach-detetive') ? 1 : 0;
             const ach2 = localStorage.getItem('ach-sortudo') ? 1 : 0;
             const ach3 = localStorage.getItem('ach-infinity') ? 1 : 0;
             const ach4 = localStorage.getItem('ach-gaster') ? 1 : 0; // Nova conquista para completar os 4 slots
@@ -8945,7 +8945,7 @@ function perguntarSave() {
         }
 
         function reloadAchievements() {
-            const ach1 = localStorage.getItem('ach-destaque') ? 1 : 0;
+            const ach1 = localStorage.getItem('ach-detetive') ? 1 : 0;
             const ach2 = localStorage.getItem('ach-sortudo') ? 1 : 0;
             const ach3 = localStorage.getItem('ach-infinity') ? 1 : 0;
             const ach4 = localStorage.getItem('ach-gaster') ? 1 : 0;
