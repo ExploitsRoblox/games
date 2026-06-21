@@ -5451,6 +5451,13 @@ async function carregarConversasPrivadas() {
     }
 }
 
+
+setInterval(() => {
+    if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token')) {
+        awardXp("100")
+    }
+}, 10000);
+
 function exibirConversasPrivadas(conversas, usuariosDisponiveis = []) {
     const container = document.querySelector('[data-chat-content="privado"]');
     if (!container) return;
