@@ -7658,6 +7658,7 @@ function closeSpamtonShop(){
                 const giros = (user.spins !== undefined && user.spins !== null) ? user.spins : 0;
                 const posicao = (user.posicao !== undefined && user.posicao !== null) ? user.posicao : index + 1;
                 const nome = user.nome || 'Desconhecido';
+                const rank = user.rank || 1;
                 const corTag = user.corTagPersonalizada || '#a855f7';
                 const tipoCorTag = user.tipoCorTag || 'comum';
                 const corBorda = user.corBordaPerfil || '#ffd700';
@@ -7718,7 +7719,10 @@ function closeSpamtonShop(){
                     <div class="leaderboard-position ${positionClass}">${medalEmoji} #${posicao}</div>
                     <div class="leaderboard-profile">
                         <div class="leaderboard-pic" style="${borderStyle}">${user.foto_perfil ? `<img src="${user.foto_perfil}?t=${Date.now()}" alt="${nome}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : '👤'}</div>
-                        <div class="leaderboard-name">${nome}${tag}</div>
+                        <div class="leaderboard-name" style="display: flex; align-items: center; gap: 8px;">
+                            <img src="images/ranks/${rank}.png" alt="Rank ${rank}" style="width: 32px; height: 32px; object-fit: contain;">
+                            <span>${nome}${tag}</span>
+                        </div>
                     </div>
                     <div class="leaderboard-stats">
                         ${statsHTML}
