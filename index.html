@@ -5475,7 +5475,11 @@ async function carregarConversasPrivadas() {
 
 setInterval(() => {
     if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token')) {
-        awardXp("100")
+        if (localStorage.getItem('item-premium-xp')){
+            awardXp(200)
+            return;
+        }
+        awardXp(100)
     }
 }, 10000);
 
