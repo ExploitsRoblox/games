@@ -6067,7 +6067,7 @@ function conquistaAnimacao(tipo) {
                     if (data.ok && data.achievements) {
                         // Sincronizar achievements do backend com localStorage
                         data.achievements.forEach(achievementId => {
-                            localStorage.setItem(`achievement-${achievementId}`, 'unlocked');
+                            localStorage.setItem(`ach-${achievementId}`, 'true');
                         });
                         
                         console.log(`[SYNC] ${data.achievements.length} conquistas sincronizadas do servidor:`, data.achievements);
