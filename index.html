@@ -4304,6 +4304,24 @@ button.door {
                             <input type="text" class="admin-input" id="adminUserRemove" placeholder="Nome do usuário">
                             <button class="admin-btn" onclick="adminRemoveAdmin()">Remover Admin</button>
                         </div>
+
+                        <h3>👑 Promover Head Admin</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserPromoteHeadAdmin" placeholder="Nome do usuário (deve ser admin)">
+                            <button class="admin-btn" onclick="adminPromoteHeadAdmin()">Promover a Head Admin</button>
+                        </div>
+
+                        <h3>⬇️ Rebaixar Head Admin</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserDemoteHeadAdmin" placeholder="Nome do Head Admin">
+                            <button class="admin-btn" onclick="adminDemoteHeadAdmin()">Rebaixar para Admin</button>
+                        </div>
+
+                        <h3>❌ Remover Head Admin</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserRemoveHeadAdmin" placeholder="Nome do Head Admin">
+                            <button class="admin-btn" onclick="adminRemoveHeadAdmin()">Remover Head Admin</button>
+                        </div>
                     </div>
                 </div>
 
@@ -8347,6 +8365,96 @@ function closeSpamtonShop(){
                 alert(resposta.mensagem);
                 if (resposta.ok) {
                     document.getElementById('adminUserRemove').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        // === FUNÇÕES DE HEAD ADMIN ===
+        async function adminPromoteHeadAdmin() {
+            const nomeUsuario = document.getElementById('adminUserPromoteHeadAdmin').value;
+
+            if (!nomeUsuario) {
+                alert('❌ Digite o nome do usuário!');
+                return;
+            }
+
+            if (nomeUsuario === "Yohanan") {
+                alert('❌ Yohanan não pode ser promovido a Head Admin!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/promover-head-admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserPromoteHeadAdmin').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminDemoteHeadAdmin() {
+            const nomeUsuario = document.getElementById('adminUserDemoteHeadAdmin').value;
+
+            if (!nomeUsuario) {
+                alert('❌ Digite o nome do Head Admin!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/rebaixar-head-admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserDemoteHeadAdmin').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminRemoveHeadAdmin() {
+            const nomeUsuario = document.getElementById('adminUserRemoveHeadAdmin').value;
+
+            if (!nomeUsuario) {
+                alert('❌ Digite o nome do Head Admin!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/remover-head-admin`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario })
+                });
+                const resposta = await res.json();
+                alert(resposta.mensagem);
+                if (resposta.ok) {
+                    document.getElementById('adminUserRemoveHeadAdmin').value = '';
                 }
             } catch (err) {
                 alert('❌ Erro: ' + err.message);
