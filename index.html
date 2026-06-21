@@ -9046,10 +9046,10 @@ function perguntarSave() {
 
   // 4. Restaurar conquistas (Garante salvamento como "true")
   if (dadosBackup.achievements && Array.isArray(dadosBackup.achievements)) {
-    dadosBackup.achievements.forEach(ach => {
-      localStorage.setItem(`ach-${ach}`, 'true'); 
-    });
-  }
+  dadosBackup.achievements.forEach(ach => {
+    localStorage.setItem(`ach-${ach}`, 'true'); 
+  });
+}
 
   // 5. Restaurar preferências
   if (dadosBackup.preferences) {
