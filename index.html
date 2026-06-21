@@ -4649,7 +4649,7 @@ button.door {
                         <div class="achievement-desc">Conquista que era obtida por clicar nos destaques</div>
                     </div>
                 </div>
-                <div class="achievement achievement-locked" id="ach-lucky">
+                <div class="achievement achievement-locked" id="ach-sortudo">
                     <div class="achievement-icon">🍀</div>
                     <div class="achievement-text">
                         <div class="achievement-name">Sortudo</div>
@@ -5658,8 +5658,8 @@ async function atualizarChatAtivo() {
                 detetive.classList.remove('achievement-locked');
             }
             // Sortudo
-            if (localStorage.getItem('ach-lucky') == 'true') {
-                const sortudo = document.getElementById('ach-lucky');
+            if (localStorage.getItem('ach-sortudo') == 'true') {
+                const sortudo = document.getElementById('ach-sortudo');
                 sortudo.classList.add('unlocked');
                 sortudo.classList.remove('achievement-locked');
             }
@@ -5760,9 +5760,9 @@ async function atualizarChatAtivo() {
         async function imFeelingLucky() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
             if (cards.length > 0) {
-                if (!localStorage.getItem('ach-lucky')) {
+                if (!localStorage.getItem('ach-sortudo')) {
                     conquistaAnimacao('sortudo');
-                    localStorage.setItem('ach-lucky', 'true');
+                    localStorage.setItem('ach-sortudo', 'true');
                     await addCoins(200);
                     updateCoinsDisplay();
                     setInterval(() => {
@@ -5771,7 +5771,7 @@ async function atualizarChatAtivo() {
                     }, 3000);
                 } else {
                     const randomCard = cards[Math.floor(Math.random() * cards.length)];
-                    localStorage.setItem('ach-lucky', 'true');
+                    localStorage.setItem('ach-sortudo', 'true');
                     window.location.href = randomCard.href;
                 }
             }
@@ -7486,7 +7486,7 @@ function closeSpamtonShop(){
             
             // Contar conquistas desbloqueadas
             const ach1 = localStorage.getItem('ach-destaque') ? 1 : 0;
-            const ach2 = localStorage.getItem('ach-lucky') ? 1 : 0;
+            const ach2 = localStorage.getItem('ach-sortudo') ? 1 : 0;
             const ach3 = localStorage.getItem('ach-infinity') ? 1 : 0;
             const ach4 = localStorage.getItem('ach-gaster') ? 1 : 0; // Nova conquista para completar os 4 slots
             const ach5 = localStorage.getItem('ach-50goal') ? 1 : 0; // Nova conquista para completar os 5 slots
@@ -8888,7 +8888,7 @@ function perguntarSave() {
 
         function reloadAchievements() {
             const ach1 = localStorage.getItem('ach-destaque') ? 1 : 0;
-            const ach2 = localStorage.getItem('ach-lucky') ? 1 : 0;
+            const ach2 = localStorage.getItem('ach-sortudo') ? 1 : 0;
             const ach3 = localStorage.getItem('ach-infinity') ? 1 : 0;
             const ach4 = localStorage.getItem('ach-gaster') ? 1 : 0;
             const ach5 = localStorage.getItem('ach-50goal') ? 1 : 0;
@@ -9017,59 +9017,64 @@ function perguntarSave() {
 
     const resposta = await res.json();
     if (resposta.ok && resposta.dados) {
-      // Restaurar dados principais
-      const dadosBackup = resposta.dados;
-      
-      // Restaurar dados simples
-      for (const chave in dadosBackup.dados) {
-        localStorage.setItem(chave, dadosBackup.dados[chave]);
-      }
+  // Se o back-end enviou o documento bruto do banco, pegamos a propriedade interna .dados
+  // Caso contrário, usamos o próprio objeto retornado.
+  const dadosBackup = resposta.dados.dados ? resposta.dados.dados : resposta.dados;
+  
+  console.log("Estrutura do Backup recebido:", dadosBackup);
 
-      // Restaurar itens comprados
-      if (dadosBackup.purchasedItems && Array.isArray(dadosBackup.purchasedItems)) {
-        dadosBackup.purchasedItems.forEach(itemId => {
-          localStorage.setItem(`item-${itemId}`, 'owned');
-        });
-      }
+  // 1. Restaurar dados simples (moedas, playtime, etc)
+  if (dadosBackup.dados) {
+    for (const chave in dadosBackup.dados) {
+      localStorage.setItem(chave, dadosBackup.dados[chave]);
+    }
+  }
 
-      // Restaurar itens comprados do Spamton
-      if (dadosBackup.purchasedItemsSpamton && Array.isArray(dadosBackup.purchasedItemsSpamton)) {
-        dadosBackup.purchasedItemsSpamton.forEach(itemId => {
-          localStorage.setItem(`item-${itemId}`, 'owned');
-        });
-      }
+  // 2. Restaurar itens comprados
+  if (dadosBackup.purchasedItems && Array.isArray(dadosBackup.purchasedItems)) {
+    dadosBackup.purchasedItems.forEach(itemId => {
+      localStorage.setItem(`item-${itemId}`, 'owned');
+    });
+  }
 
-      // Restaurar conquistas (se existirem)
-      if (dadosBackup.achievements && Array.isArray(dadosBackup.achievements)) {
-        dadosBackup.achievements.forEach(ach => {
-          localStorage.setItem(`ach-${ach}`, 'unlocked');
-        });
-      }
+  // 3. Restaurar itens comprados do Spamton
+  if (dadosBackup.purchasedItemsSpamton && Array.isArray(dadosBackup.purchasedItemsSpamton)) {
+    dadosBackup.purchasedItemsSpamton.forEach(itemId => {
+      localStorage.setItem(`item-${itemId}`, 'owned');
+    });
+  }
 
-      // Restaurar preferências
-      if (dadosBackup.preferences) {
-        localStorage.setItem('userPreferences', JSON.stringify(dadosBackup.preferences));
-      }
+  // 4. Restaurar conquistas (Garante salvamento como "true")
+  if (dadosBackup.achievements && Array.isArray(dadosBackup.achievements)) {
+    dadosBackup.achievements.forEach(ach => {
+      localStorage.setItem(`ach-${ach}`, 'true'); 
+    });
+  }
 
-      // Restaurar jogos desbloqueados por código
-      if (dadosBackup.unlockedGames && Array.isArray(dadosBackup.unlockedGames)) {
-        dadosBackup.unlockedGames.forEach(gameId => {
-          localStorage.setItem(gameId, 'unlocked');
-        });
-      }
+  // 5. Restaurar preferências
+  if (dadosBackup.preferences) {
+    localStorage.setItem('userPreferences', JSON.stringify(dadosBackup.preferences));
+  }
 
-      // Se "all-games" foi comprado, desbloquear todos os jogos secretos
-      if (dadosBackup.purchasedItems && dadosBackup.purchasedItems.includes('all-games')) {
-        const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
-        allSecretGames.forEach(gameId => {
-          localStorage.setItem(gameId, 'unlocked');
-        });
-      }
+  // 6. Restaurar jogos desbloqueados por código
+  if (dadosBackup.unlockedGames && Array.isArray(dadosBackup.unlockedGames)) {
+    dadosBackup.unlockedGames.forEach(gameId => {
+      localStorage.setItem(gameId, 'unlocked');
+    });
+  }
 
-      console.log("✅ Backup restaurado!");
-      alert("✅ Backup restaurado com sucesso!");
-      window.location.reload();
-    } else {
+  // 7. Se "all-games" foi comprado, desbloquear todos os jogos secretos
+  if (dadosBackup.purchasedItems && dadosBackup.purchasedItems.includes('all-games')) {
+    const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
+    allSecretGames.forEach(gameId => {
+      localStorage.setItem(gameId, 'unlocked');
+    });
+  }
+
+  console.log("✅ Backup restaurado!");
+  alert("✅ Backup restaurado com sucesso!");
+  window.location.reload();
+} else {
       console.log("Nenhum backup encontrado.");
       alert("⚠️ Nenhum backup encontrado.");
     }
@@ -9125,16 +9130,22 @@ async function salvarBackup() {
     });
 
     // 4. CONQUISTAS DESBLOQUEADAS
-    const conquistas = [];
-    const achiList = [
-      'detetive', 'lucky', 'infinity', 'gaster', '50goal'
-    ];
-    achiList.forEach(achi => {
-      if (localStorage.getItem(`ach-${achi}`) === 'unlocked') {
-        conquistas.push(achi);
-      }
-    });
+const conquistas = [];
+const achiList = [
+  'detetive', 
+  'sortudo', // CORRIGIDO: mudado de 'lucky' para 'sortudo' para bater com o resto do sistema
+  'infinity', 
+  'gaster', 
+  '50goal'
+];
 
+achiList.forEach(achi => {
+  // Ajuste para validar tanto se for 'unlocked' quanto se for 'true'
+  const valor = localStorage.getItem(`ach-${achi}`);
+  if (valor === 'unlocked' || valor === 'true') {
+    conquistas.push(achi);
+  }
+});
     // 5. PREFERÊNCIAS (filtros de categorias)
     const preferences = {
       darkMode: localStorage.getItem('darkMode'),
