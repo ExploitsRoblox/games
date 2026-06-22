@@ -31,7 +31,7 @@
         "Salvamento automático de progresso",
         "Disfarce e Proxy para Jogar em qualquer lugar",
         "Personalização De Perfil",
-        "Sistema de lojas e skins, gemas e ranking",
+        "Sistema de lojas e skins, gemas e ranking"
       ]
     }
     </script>
@@ -4111,6 +4111,7 @@ button.door {
                 <button class="leaderboard-tab active" onclick="switchLeaderboardTab('tempo')">⏱️ Tempo de Jogo</button>
                 <button class="leaderboard-tab" onclick="switchLeaderboardTab('moedas')">💎 Gemas</button>
                 <button class="leaderboard-tab" onclick="switchLeaderboardTab('giros')">🎡 Giros</button>
+                 <button class="leaderboard-tab" onclick="switchLeaderboardTab('rank')">👑 Rank</button>
             </div>
             <div class="leaderboard-list" id="leaderboardList">
                 <!-- Carregado dinamicamente -->
@@ -7663,6 +7664,8 @@ function closeSpamtonShop(){
                     endpoint = '/leaderboard/moedas';
                 } else if (tipo === 'giros') {
                     endpoint = '/leaderboard/giros';
+                } else if (tipo === 'rank') {
+                    endpoint = '/leaderboard/rank';
                 }
                 
                 const response = await fetch(`${API_URL}${endpoint}`);
