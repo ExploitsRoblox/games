@@ -3843,7 +3843,7 @@ button.door {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 12px 16px;
+            padding: 12px;
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
             border: 2px solid rgba(168, 85, 247, 0.5);
             border-radius: 12px;
@@ -3859,9 +3859,9 @@ button.door {
         /* Quando o usuário for Premium, adicionamos o fundo atrás */
 .rank-container.premium::before {
     content: "";
-    position: absolute;
-    width: 46px;  /* Ajuste o tamanho para ficar um pouco maior que os 32px do rank se necessário */
-    height: 46px;
+    position: relative;
+    width: 32px;  /* Ajuste o tamanho para ficar um pouco maior que os 32px do rank se necessário */
+    height: 32px;
     background-image: url('images/ranks/premium.png'); /* Substitua pelo caminho correto da imagem de fundo */
     background-size: contain;
     background-repeat: no-repeat;
