@@ -3851,6 +3851,15 @@ button.door {
             margin: 10px 0;
         }
 
+        .rank-badge-profile {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+            /* filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6)); */
+            z-index: 3;
+        }
+
         .rank-container img {
             width: 32px;
             height: 32px;
@@ -6413,7 +6422,7 @@ function conquistaAnimacao(tipo) {
                 rankDisplay.innerHTML = `
                     <div class="rank-container ${hasPremium ? 'premium-active' : ''}">
                         <div class="rank-badge-wrapper">
-                            <img src="images/ranks/${rank}.png" alt="Rank ${rank}" class="rank-badge">
+                            <img src="images/ranks/${rank}.png" alt="Rank ${rank}" class="rank-badge-profile">
                             <img src="images/ranks/premium.png" alt="Premium" class="premium-crown ${hasPremium ? 'show' : ''}"></img>
                         </div>
                         <div class="rank-info">
