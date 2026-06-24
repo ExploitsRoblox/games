@@ -6288,7 +6288,7 @@ function conquistaAnimacao(tipo) {
                         localStorage.setItem('userXp', data.xp || 0);
                         localStorage.setItem('premiumXp', data.premium ? 'true' : 'false');
                         
-                        console.log(`[SYNC] Rank: ${data.rank}/30, XP: ${data.xp}, Premium: ${data.premium}`);
+                        console.log(`[SYNC] Rank: ${data.rank}/31, XP: ${data.xp}, Premium: ${data.premium}`);
                         updateRankDisplay();
                     }
                 }
@@ -6354,7 +6354,7 @@ function conquistaAnimacao(tipo) {
                 const data = await res.json();
                 
                 if (res.ok && data.ok) {
-                    console.log(`[XP] ✅ ${amount} XP adicionado! Rank: ${data.rank}/30`);
+                    console.log(`[XP] ✅ ${amount} XP adicionado! Rank: ${data.rank}/31`);
                     // Atualizar localStorage com a resposta do servidor
                     if (data.rank !== undefined) {
                         localStorage.setItem('userRank', data.rank);
@@ -6427,7 +6427,7 @@ function conquistaAnimacao(tipo) {
                         </div>
                         <div class="rank-info">
                             <div class="rank-title">
-                                ${rankName} • Rank ${rank}/30
+                                ${rankName} • Rank ${rank}/31
                                 ${hasPremium ? '👑 PREMIUM' : ''}
                             </div>
                             <div class="xp-bar-container">
