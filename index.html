@@ -19,8 +19,9 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Neeexusbr Games",
-      "url": "https://neeexusbr.github.io",
+      "alternateName": ["Neeexus br", "Neeexusbr Games", "Nexus Games"],
+      "name": "neeexusbr",
+      "url": "https://neeexusbr.github.io/games",
       "applicationCategory": "GameApplication",
       "operatingSystem": "Web Browser",
       "description": "A Neeexusbr é uma plataforma de jogos voltada para amantes de jogos na web.",
@@ -3849,6 +3850,19 @@ button.door {
             margin: 10px 0;
         }
 
+        /* Quando o usuário for Premium, adicionamos o fundo atrás */
+.rank-container.premium::before {
+    content: "";
+    position: absolute;
+    width: 46px;  /* Ajuste o tamanho para ficar um pouco maior que os 32px do rank se necessário */
+    height: 46px;
+    background-image: url('images/ranks/premium.png'); /* Substitua pelo caminho correto da imagem de fundo */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 1; /* Garante que fica atrás do ícone do rank */
+}
+
         .rank-badge-wrapper {
             display: flex;
             flex-direction: column;
@@ -3860,22 +3874,22 @@ button.door {
         }
 
         .rank-badge {
-            width: 60px;
-            height: 60px;
+            width: 75px;
+            height: 75px;
             object-fit: contain;
-            filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+            /* filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6)); */
             z-index: 3;
         }
 
         .premium-crown {
             font-size: 24px;
             line-height: 1;
-            margin-top: 4px;
+            margin-top: -5px;
             opacity: 0;
             transition: opacity 0.3s ease;
             z-index: 2;
             position: absolute;
-            width: 95px;
+            width: 80px;
             filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
         }
 
@@ -5742,7 +5756,8 @@ async function atualizarChatAtivo() {
             { rank: 27, name: "Marechal", xpRequired: 1000000 },
             { rank: 28, name: "Marechal de Campo", xpRequired: 1122000 },
             { rank: 29, name: "Comandante", xpRequired: 1255000 },
-            { rank: 30, name: "Generalissimo", xpRequired: 1400000 }
+            { rank: 30, name: "Generalissimo", xpRequired: 1400000 },
+            { rank: 31, name: "Lenda", xpRequired: 2000000 }
         ];
 
         async function redeemCode() {
@@ -6354,7 +6369,7 @@ function conquistaAnimacao(tipo) {
             
             // Verificar e promover automaticamente se XP >= necessário
             let currentRankInfo = RANKS_TABLE.find(r => r.rank === rank);
-            while (rank < 30 && currentRankInfo) {
+            while (rank < 31 && currentRankInfo) {
                 const nextRankInfo = RANKS_TABLE.find(r => r.rank === rank + 1);
                 if (nextRankInfo && xp >= nextRankInfo.xpRequired) {
                     rank++;
@@ -7683,79 +7698,96 @@ function closeSpamtonShop(){
         }
 
         function renderLeaderboardByType(usuarios, tipo) {
-            const leaderboardList = document.getElementById('leaderboardList');
-            leaderboardList.innerHTML = '';
-            
-            usuarios.forEach((user, index) => {
-                // Tratamento defensivo para valores undefined
-                const tempo = (user.tempo_jogo !== undefined && user.tempo_jogo !== null) ? user.tempo_jogo : 0;
-                const moedas = (user.moedas !== undefined && user.moedas !== null) ? user.moedas : 0;
-                const giros = (user.spins !== undefined && user.spins !== null) ? user.spins : 0;
-                const posicao = (user.posicao !== undefined && user.posicao !== null) ? user.posicao : index + 1;
-                const nome = user.nome || 'Desconhecido';
-                const rank = user.rank || 1;
-                const corTag = user.corTagPersonalizada || '#a855f7';
-                const tipoCorTag = user.tipoCorTag || 'comum';
-                const corBorda = user.corBordaPerfil || '#ffd700';
-                const idCorBorda = user.idCorBordaPerfil || 'gold';
-                
-                // Verificar se a cor da borda tem animação
-                let borderStyle = '';
-                if (corBorda.includes('linear-gradient')) {
-                    // Arco-iris
-                    borderStyle = `border: 3px solid transparent; background: ${corBorda} padding-box, ${corBorda} border-box; background-size: 200% 100%; animation: gradient-shift 3s ease-in-out infinite;`;
-                } else {
-                    borderStyle = `border: 3px solid ${corBorda};`;
-                }
-                
-                const tagStyle = tipoCorTag === 'especial' && corTag.includes('linear-gradient') 
-                    ? `style="font-size: 0.8em; background: ${corTag}; margin-left: 8px; font-weight: bold; padding: 2px 8px; border-radius: 4px; background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"` 
-                    : `style="font-size: 0.8em; color: ${corTag}; margin-left: 8px; font-weight: bold;"`;
-                const tag = user.tagPersonalizada ? `<span ${tagStyle}> ${user.tagPersonalizada}</span>` : '';
-                
-                const medalEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '📊';
-                const positionClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
-                
-                const tempoHoras = Math.floor(tempo / 60);
-                const tempoMinutos = tempo % 60;
-                
-                const rewardClass = index === 0 ? '' : index === 1 ? 'silver' : index === 2 ? 'bronze' : 'other';
-                
-                console.log(`[LEADERBOARD-${tipo.toUpperCase()}-RENDER] #${posicao} ${nome}:`, {tempo, moedas, giros});
-                
-                const item = document.createElement('div');
-                item.className = 'leaderboard-item';
-                
-                let statsHTML = '';
-                if (tipo === 'tempo') {
-                    statsHTML = `
-                        <div class="leaderboard-time">
-                            <div class="leaderboard-time-label">Tempo de Jogo</div>
-                            <div class="leaderboard-time-value">${tempoHoras}h ${tempoMinutos}m</div>
-                        </div>
-                    `;
-                } else if (tipo === 'moedas') {
-                    statsHTML = `
-                        <div class="leaderboard-time">
-                            <div class="leaderboard-time-label">Total de Gemas</div>
-                            <div class="leaderboard-time-value">${moedas}</div>
-                        </div>
-                    `;
-                } else if (tipo === 'giros') {
-                    statsHTML = `
-                        <div class="leaderboard-time">
-                            <div class="leaderboard-time-label">Giros Realizados</div>
-                            <div class="leaderboard-time-value">${giros}</div>
-                        </div>
-                    `;
-                }
-                
+    const leaderboardList = document.getElementById('leaderboardList');
+    leaderboardList.innerHTML = '';
+    
+    usuarios.forEach((user, index) => {
+        // Tratamento defensivo para valores undefined
+        const tempo = (user.tempo_jogo !== undefined && user.tempo_jogo !== null) ? user.tempo_jogo : 0;
+        const moedas = (user.moedas !== undefined && user.moedas !== null) ? user.moedas : 0;
+        const giros = (user.spins !== undefined && user.spins !== null) ? user.spins : 0;
+        const posicao = (user.posicao !== undefined && user.posicao !== null) ? user.posicao : index + 1;
+        const nome = user.nome || 'Desconhecido';
+        
+        // Mantém o número do rank (ex: 30) para a imagem do ícone
+        const rankNumero = user.rank || 1; 
+        // Resgata o XP total enviado pelo back-end
+        const xp = user.xp || 0; 
+        //
+        const hasPremium = user.hasPremium || false;
+        
+        const corTag = user.corTagPersonalizada || '#a855f7';
+        const tipoCorTag = user.tipoCorTag || 'comum';
+        const corBorda = user.corBordaPerfil || '#ffd700';
+        const idCorBorda = user.idCorBordaPerfil || 'gold';
+        const rankContainerClass = hasPremium ? 'rank-container premium' : 'rank-container';
+        // Verificar se a cor da borda tem animação
+        let borderStyle = '';
+        if (corBorda.includes('linear-gradient')) {
+            // Arco-iris
+            borderStyle = `border: 3px solid transparent; background: ${corBorda} padding-box, ${corBorda} border-box; background-size: 200% 100%; animation: gradient-shift 3s ease-in-out infinite;`;
+        } else {
+            borderStyle = `border: 3px solid ${corBorda};`;
+        }
+        
+        const tagStyle = tipoCorTag === 'especial' && corTag.includes('linear-gradient') 
+            ? `style="font-size: 0.8em; background: ${corTag}; margin-left: 8px; font-weight: bold; padding: 2px 8px; border-radius: 4px; background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"` 
+            : `style="font-size: 0.8em; color: ${corTag}; margin-left: 8px; font-weight: bold;"`;
+        const tag = user.tagPersonalizada ? `<span ${tagStyle}> ${user.tagPersonalizada}</span>` : '';
+        
+        const medalEmoji = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '📊';
+        const positionClass = index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : '';
+        
+        const tempoHoras = Math.floor(tempo / 60);
+        const tempoMinutos = tempo % 60;
+        
+        const rewardClass = index === 0 ? '' : index === 1 ? 'silver' : index === 2 ? 'bronze' : 'other';
+        
+        console.log(`[LEADERBOARD-${tipo.toUpperCase()}-RENDER] #${posicao} ${nome}:`, {tempo, moedas, giros, xp});
+        
+        const item = document.createElement('div');
+        item.className = 'leaderboard-item';
+        
+        let statsHTML = '';
+        if (tipo === 'tempo') {
+            statsHTML = `
+                <div class="leaderboard-time">
+                    <div class="leaderboard-time-label">Tempo de Jogo</div>
+                    <div class="leaderboard-time-value">${tempoHoras}h ${tempoMinutos}m</div>
+                </div>
+            `;
+        } else if (tipo === 'moedas') {
+            statsHTML = `
+                <div class="leaderboard-time">
+                    <div class="leaderboard-time-label">Total de Gemas</div>
+                    <div class="leaderboard-time-value">${moedas}</div>
+                </div>
+            `;
+        } else if (tipo === 'giros') {
+            statsHTML = `
+                <div class="leaderboard-time">
+                    <div class="leaderboard-time-label">Giros Realizados</div>
+                    <div class="leaderboard-time-value">${giros}</div>
+                </div>
+            `;
+        } else if (tipo === 'rank') {
+            // Alterado para mostrar o rótulo de XP e o valor total formatado
+            statsHTML = `
+                <div class="leaderboard-time">
+                    <div class="leaderboard-time-label">XP Total</div>
+                    <div class="leaderboard-time-value">${xp}</div>
+                </div>
+            `;
+        }
+              
                 item.innerHTML = `
                     <div class="leaderboard-position ${positionClass}">${medalEmoji} #${posicao}</div>
                     <div class="leaderboard-profile">
                         <div class="leaderboard-pic" style="${borderStyle}">${user.foto_perfil ? `<img src="${user.foto_perfil}?t=${Date.now()}" alt="${nome}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : '👤'}</div>
                         <div class="leaderboard-name" style="display: flex; align-items: center; gap: 8px;">
-                            <img src="images/ranks/${rank}.png" alt="Rank ${rank}" style="width: 32px; height: 32px; object-fit: contain;">
+                            <div class="${rankContainerClass}">
+                <img src="images/ranks/${rankNumero}.png" alt="Rank ${rankNumero}" class="rank-icon">
+            </div>
                             <span>${nome}${tag}</span>
                         </div>
                     </div>
