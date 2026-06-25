@@ -4594,6 +4594,7 @@ button.door {
     </div>
 
     <main>
+        <div id="title"></div>
         <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">Metas de Jogo</span>
         <div class="featured-banner">
             <h2 style="margin: 0; font-size: 2rem;">Objetivo: Alcance 50 pontos em Jogo de UFO</h2>
@@ -9503,7 +9504,7 @@ function perguntarSave() {
                     }
                 }
                 
-                userName.innerHTML = `Bem-vindo, ${usuario}!${tagHTML}`;
+                userName.innerHTML = `Bem-vindo, ${usuario}${tagHTML}!`;
                 userName.style.color = 'var(--text-color)';
                 userName.style.textAlign = 'center';
                 userName.style.marginBottom = '10px';
@@ -9513,9 +9514,9 @@ function perguntarSave() {
                 await syncItemsFromDatabase();
                 loadInventoryColors();
             } else if (usuario && !token) {
-                alert("Parece que você está logado, mas ocorreu um erro ao carregar seu token. Por motivos de segurança, faça login novamente para garantir que suas conquistas e progresso sejam salvos corretamente.")
                 localStorage.removeItem('usuarioLogado')
                 localStorage.removeItem('isAdmin')
+                alert("Parece que você está logado, mas ocorreu um erro ao carregar seu token. Por motivos de segurança, faça login novamente para garantir que suas conquistas e progresso sejam salvos corretamente.")
                 setTimeout(() => {
                     window.location.href = 'https://neeexusbr.github.io/login';
                 }, 2000);
