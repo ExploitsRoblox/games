@@ -3839,12 +3839,13 @@ button.door {
         }
 
         /* === RANK DISPLAY STYLES === */
+        /* Perfil */
         .rank-container {
             display: flex;
             align-items: center;
             position: relative;
             gap: 15px;
-            padding: 1px;
+            padding: 10px;
             background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
             border: 2px solid rgba(168, 85, 247, 0.5);
             border-radius: 12px;
@@ -3859,30 +3860,7 @@ button.door {
             /* filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6)); */
             z-index: 3;
         }
-
-        .rank-container img {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-            z-index: 2;
-        }
-
-        /* Quando o usuário for Premium, adicionamos o fundo atrás */
-.rank-container.premium::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 32px;  /* Ajuste o tamanho para ficar um pouco maior que os 32px do rank se necessário */
-    height: 32px;
-    background-image: url('images/ranks/premium.png'); /* Substitua pelo caminho correto da imagem de fundo */
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 1; /* Garante que fica atrás do ícone do rank */
-}
-
+        
         .rank-badge-wrapper {
             display: flex;
             flex-direction: column;
@@ -3909,7 +3887,7 @@ button.door {
             transition: opacity 0.3s ease;
             z-index: 2;
             position: absolute;
-            width: 80px;
+            width: 70px;
             filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.8));
         }
 
@@ -3954,6 +3932,40 @@ button.door {
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2)) !important;
             border: 2px solid rgba(251, 191, 36, 0.7) !important;
             box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), inset 0 0 10px rgba(251, 191, 36, 0.2);
+        }
+
+
+        /* Leaderboard */
+        /* Quando o usuário for Premium, adicionamos o fundo atrás */
+.rank-container-leaderboard.premium::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;  /* Ajuste o tamanho para ficar um pouco maior que os 32px do rank se necessário */
+    height: 32px;
+    background-image: url('images/ranks/premium.png'); /* Substitua pelo caminho correto da imagem de fundo */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2; /* Garante que fica atrás do ícone do rank */
+}
+
+.rank-container-leaderboard {
+            display: flex;
+            align-items: center;
+            position: relative;
+            gap: 15px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 2px solid rgba(168, 85, 247, 0.5);
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+ .rank-container-leaderboard img {
+            width: 32px;
+            z-index: 4;
         }
 
     </style>
@@ -7740,7 +7752,7 @@ function closeSpamtonShop(){
         const tipoCorTag = user.tipoCorTag || 'comum';
         const corBorda = user.corBordaPerfil || '#ffd700';
         const idCorBorda = user.idCorBordaPerfil || 'gold';
-        const rankContainerClass = hasPremium ? 'rank-container premium' : 'rank-container';
+        const rankContainerClass = hasPremium ? 'rank-container-leaderboard premium' : 'rank-container-leaderboard';
         // Verificar se a cor da borda tem animação
         let borderStyle = '';
         if (corBorda.includes('linear-gradient')) {
