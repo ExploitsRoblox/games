@@ -4594,7 +4594,6 @@ button.door {
     </div>
 
     <main>
-        <div id="title"></div>
         <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">Metas de Jogo</span>
         <div class="featured-banner">
             <h2 style="margin: 0; font-size: 2rem;">Objetivo: Alcance 50 pontos em Jogo de UFO</h2>
@@ -9489,26 +9488,6 @@ function perguntarSave() {
             const usuario = localStorage.getItem('usuarioLogado');
             const token = localStorage.getItem('token');
             if (usuario && token) {
-                const titleDiv = document.getElementById('title');
-                const userName = document.createElement('h3');
-                const userTag = localStorage.getItem('userTag');
-                const userTagColor = localStorage.getItem('userTagColor') || '#a855f7';
-                const userTagColorType = localStorage.getItem('userTagColorType') || 'comum';
-                
-                let tagHTML = '';
-                if (userTag) {
-                    if (userTagColorType === 'especial' && userTagColor.includes('linear-gradient')) {
-                        tagHTML = ` <span style="font-size: 0.85em; background: ${userTagColor}; font-weight: bold; padding: 4px 10px; border-radius: 4px; background-size: 200% 100%; animation: gradient-rainbow 3s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${userTag}</span>`;
-                    } else {
-                        tagHTML = ` <span style="font-size: 0.85em; color: ${userTagColor}; font-weight: bold;"> ${userTag}</span>`;
-                    }
-                }
-                
-                userName.innerHTML = `Bem-vindo, ${usuario}${tagHTML}!`;
-                userName.style.color = 'var(--text-color)';
-                userName.style.textAlign = 'center';
-                userName.style.marginBottom = '10px';
-                titleDiv.insertBefore(userName, titleDiv.firstChild);
 
                 // Sincronizar itens comprados com o servidor (moedas já foram sincronizadas acima)
                 await syncItemsFromDatabase();
