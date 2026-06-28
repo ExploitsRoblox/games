@@ -1012,6 +1012,11 @@
             src: url('deltarune.ttf') format('truetype');
         }
 
+        @font-face {
+            font-family: 'Quad';
+            src: url('quad.ttf') format('truetype');
+        }
+
         /* Modal da Loja */
         /* === ESTILO UNDERTALE - LOJA DO SANS === */
         .shop-modal {
@@ -3967,7 +3972,21 @@ button.door {
             width: 32px;
             z-index: 4;
         }
-
+#loginNavbarP {
+    font-size: 1.3rem; 
+    margin-left: 30px; 
+    margin-bottom: 20px;
+     background: linear-gradient(90deg, #ff0000, #df6c00,#d2e900ef, #09ff00, #00fcfc, #001eff, #7700ff, #ff00ccee, #ff0000);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200%;
+            font-family: "Quad";
+            font-weight: normal;
+            animation: flow 2s linear infinite;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
     </style>
 </head>
 <body>
@@ -3983,14 +4002,14 @@ button.door {
             <nav class="navbar-menu">
                 <button class="navbar-btn" onclick="toggleLeftSidebar()">FILTROS</button>
                 <button class="navbar-btn" onclick="openSkinsMenu()">SKINS</button>
-                <button class="navbar-btn" onclick="openLeaderboard()">PLACAR</button>
-                <button class="navbar-btn" onclick="openInventory()">INVENTÁRIO</button>
-                <button class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
+                <button id="placarbtn" class="navbar-btn" onclick="openLeaderboard()">PLACAR</button>
+                <button id="inventariobtn" class="navbar-btn" onclick="openInventory()">INVENTÁRIO</button>
+                <button id="recompensabtn" class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
                 <button class="navbar-btn" onclick="openShop()">LOJA</button>
-                <button class="navbar-btn" onclick="toggleAchievements()">CONQUISTAS</button>
+                <button id="conquistasbtn" class="navbar-btn" onclick="toggleAchievements()">CONQUISTAS</button>
                 <button id="chatBtn" class="navbar-btn" style="display: none;" onclick="openChatModal()">CHAT</button>
                 <button class="navbar-btn" id="adminPanelBtn" style="display: none;" onclick="openAdminPanel()">PAINEL</button>
-
+                <p id="loginNavbarP">Crie uma conta para mais!</p>
             </nav>
             
             <!-- Lado direito: Moedas e Botões de Autenticação -->
@@ -4222,7 +4241,7 @@ button.door {
             <div class="admin-body">
                 <!-- TAB 0: Moedas & Jogos -->
                 <div class="admin-tab-content active">
-                    <!-- Seção para Yohanan (Dono) - Adicionar Moedas -->
+                    <!-- Seção para Dogue (Dono) - Adicionar Moedas -->
                     <div class="admin-section">
                         <div id="adminAddCoinsSection" style="display: none;">
                             <h3>💎 Adicionar Gemas</h3>
@@ -5284,14 +5303,30 @@ function atualizarBotaoChat() {
     const chatBtn = document.getElementById('chatBtn');
     const usuarioLogado = localStorage.getItem('usuarioLogado');
     const token = localStorage.getItem('token');
+    const leader = document.getElementById('placarbtn');
+    const conquistas = document.getElementById('conquistasbtn');
+    const inventario = document.getElementById('inventariobtn');
+    const recompensas = document.getElementById('recompensabtn');
+    const loginP = document.getElementById('loginNavbarP');
+    
     
     if (chatBtn) {
         if (usuarioLogado && token) {
             chatBtn.style.display = 'inline-block';
+            conquistas.style.display = 'inline-block';
+            leader.style.display = 'inline-block';
+            inventario.style.display = 'inline-block';
+            recompensas.style.display = 'inline-block';
+            loginP.style.display = 'none';
             chatState.usuarioAtual = usuarioLogado;
             chatState.token = token;
         } else {
             chatBtn.style.display = 'none';
+            conquistas.style.display = 'none';
+            leader.style.display = 'none';
+            inventario.style.display = 'none';
+            recompensas.style.display = 'none';
+            loginP.style.display = 'inline-block';
             chatState.usuarioAtual = null;
             chatState.token = null;
         }
@@ -5793,32 +5828,56 @@ async function atualizarChatAtivo() {
         ];
 
         async function redeemCode() {
-            const input = document.getElementById('redeemInput');
-            const feedback = document.getElementById('feedbackMessage');
-            const code = input.value.trim().toUpperCase();
+    const input = document.getElementById('redeemInput');
+    const feedback = document.getElementById('feedbackMessage');
+    const code = input.value.trim().toUpperCase();
 
-            if (DATABASE_CODES[code]) {
-                const gameId = DATABASE_CODES[code];
-                unlockGame(gameId);
-                
-                // Ganhar gemas ao desbloquear um jogo secreto
-                await addCoins(50);
-                
-                feedback.textContent = "🎉 Jogo Desbloqueado! +50 gemas";
-                feedback.className = "success";
-                feedback.style.display = "block";
-                input.value = "";
+    // 1. Verifica se o código existe no banco de dados
+    if (!DATABASE_CODES[code]) {
+        feedback.textContent = "❌ Código inválido!";
+        feedback.className = "error";
+        feedback.style.display = "block";
+        return; // Para a execução aqui se o código for inválido
+    }
 
-                // Salva no navegador para não perder ao atualizar
-                localStorage.setItem(gameId, "unlocked");
-            } else {
-                feedback.textContent = "❌ Código inválido!";
-                feedback.className = "error";
-                feedback.style.display = "block";
-            }
+    const gameId = DATABASE_CODES[code];
+
+    // 2. Verifica se o jogo já foi desbloqueado antes
+    if (localStorage.getItem(gameId) === "unlocked") {
+        feedback.textContent = "❌ O jogo já foi desbloqueado";
+        feedback.className = "error";
+        feedback.style.display = "block";
+        return; // Para a execução aqui se já foi resgatado
+    }
+
+    // 3. Se passou pelas validações, desbloqueia o jogo
+    unlockGame(gameId);
+    
+    // Ganhar gemas ao desbloquear um jogo secreto
+    await addCoins(100);
+
+    if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token') && localStorage.getItem('userRank') !== '31') {
+        if (localStorage.getItem('item-premium-xp')) {
+            awardXp(1000);
+        } else {
+            awardXp(500);
         }
+        
+        feedback.textContent = "🎉 Jogo Desbloqueado! +100 gemas";
+        feedback.className = "success";
+        feedback.style.display = "block";
+        input.value = "";
+        
+        // Salva no navegador para não perder ao atualizar
+        localStorage.setItem(gameId, "unlocked");
+    }
+}
 
         function toggleAchievements() {
+            if (!localStorage.getItem('usuarioLogado') && !localStorage.getItem('token')) {
+              alert("Você precisa estar logado!")
+              return;
+            }
             const container = document.querySelector('.achievements-container');
             container.classList.toggle('active');
             checkAchievements();
@@ -7328,13 +7387,13 @@ function closeSpamtonShop(){
             modal.classList.add('active');
             switchNotificationTab('pending');
             loadNotifications();
-            if (localStorage.getItem('usuarioLogado') === 'Yohanan') {
+            if (localStorage.getItem('usuarioLogado') === 'Dogue') {
             carregarSolicitacoesPendentes();
             carregarHistoricoSolicitacoes();
             adminLoadCompras();
             }
         }
-        if (localStorage.getItem('usuarioLogado') === 'Yohanan') {
+        if (localStorage.getItem('usuarioLogado') === 'Dogue') {
         setInterval(updateNotificationBadge, 30000); // Atualiza a badge a cada 30 segundos
         setInterval(carregarSolicitacoesPendentes, 30000); // Recarrega solicitações pendentes a cada 30 segundos
         setInterval(carregarHistoricoSolicitacoes, 30000); // Recarrega histórico de solicitações a cada 30 segundos
@@ -7586,6 +7645,10 @@ function closeSpamtonShop(){
         }
         
         function checkDailyReward() {
+            if (!localStorage.getItem('usuarioLogado') && !localStorage.getItem('token')) {
+              alert("Você precisa estar logado!")
+              return;
+            }
             const lastClaimDate = localStorage.getItem('lastDailyRewardDate');
             const today = new Date().toDateString();
             
@@ -7680,6 +7743,10 @@ function closeSpamtonShop(){
 
         // === SISTEMA DE LEADERBOARD ===
         async function openLeaderboard() {
+            if (!localStorage.getItem('usuarioLogado') && !localStorage.getItem('token')) {
+              alert("Você precisa estar logado!")
+              return;
+            }
             document.getElementById('leaderboardModal').classList.add('active');
             await loadLeaderboard('tempo');
         }
@@ -8104,7 +8171,7 @@ function closeSpamtonShop(){
             const usuario = localStorage.getItem('usuarioLogado');
             const advancedTabBtn = document.getElementById('adminAdvancedTabBtn');
             
-            if (usuario === 'Yohanan') {
+            if (usuario === 'Dogue') {
                 // Mostrar aba de Gerenciamento Avançado apenas para o dono
                 advancedTabBtn.style.display = 'block';
             } else {
@@ -8118,8 +8185,8 @@ function closeSpamtonShop(){
             const addCoinsSection = document.getElementById('adminAddCoinsSection');
             const requestCoinsSection = document.getElementById('adminRequestCoinsSection');
             
-            if (usuario === 'Yohanan') {
-                // Yohanan (dono): mostra "Adicionar Moedas"
+            if (usuario === 'Dogue') {
+                // Dogue (dono): mostra "Adicionar Moedas"
                 addCoinsSection.style.display = 'block';
                 requestCoinsSection.style.display = 'none';
             } else {
@@ -8420,8 +8487,8 @@ function closeSpamtonShop(){
                 return;
             }
 
-            if (nomeUsuario === "Yohanan") {
-                alert('❌ Você não pode remover admin de Yohanan!');
+            if (nomeUsuario === "Dogue") {
+                alert('❌ Você não pode remover admin de Dogue!');
                 return;
             }
 
@@ -8454,8 +8521,8 @@ function closeSpamtonShop(){
                 return;
             }
 
-            if (nomeUsuario === "Yohanan") {
-                alert('❌ Yohanan não pode ser promovido a Head Admin!');
+            if (nomeUsuario === "Dogue") {
+                alert('❌ Dogue não pode ser promovido a Head Admin!');
                 return;
             }
 
@@ -8627,7 +8694,7 @@ function closeSpamtonShop(){
         }
 
         async function adminEmergencyReset() {
-            const confirmacao = confirm('⚠️ ACIONADOR DE EMERGÊNCIA!\n\nVocê tem certeza? Todos os admins serão removidos.\nApenas Yohanan permanecerá como admin.\n\nClique OK para confirmar.');
+            const confirmacao = confirm('⚠️ ACIONADOR DE EMERGÊNCIA!\n\nVocê tem certeza? Todos os admins serão removidos.\nApenas Dogue permanecerá como admin.\n\nClique OK para confirmar.');
             
             if (!confirmacao) return;
 
@@ -8671,6 +8738,10 @@ function closeSpamtonShop(){
         ];
 
         function openInventory() {
+            if (!localStorage.getItem('usuarioLogado') && !localStorage.getItem('token')) {
+              alert("Você precisa estar logado!")
+              return;
+            }
             document.getElementById('inventoryModal').classList.add('active');
             loadInventoryColors();
         }
@@ -9169,7 +9240,7 @@ function closeSpamtonShop(){
 
         async function adminAddSpins() {
             const usuario = localStorage.getItem('usuarioLogado');
-            if (usuario !== 'Yohanan') {
+            if (usuario !== 'Dogue') {
                 return alert('❌ Apenas EU posso adicionar giros!');
             }
 
@@ -9207,7 +9278,7 @@ function closeSpamtonShop(){
 
         async function adminAddPlaytime() {
             const usuario = localStorage.getItem('usuarioLogado');
-            if (usuario !== 'Yohanan') {
+            if (usuario !== 'Dogue') {
                 return alert('❌ Apenas EU posso adicionar tempo de jogo!');
             }
 
@@ -9406,7 +9477,7 @@ function perguntarSave() {
                 adminPanel.style.display = 'none';
                 notificationsBtn.style.display = 'none';
             }
-            if (Usuario == "Yohanan" && isAdmin) {
+            if (Usuario == "Dogue" && isAdmin) {
                 notificationsBtn.style.display = 'block';
             } else {
                 notificationsBtn.style.display = 'none';
