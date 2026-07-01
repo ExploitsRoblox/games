@@ -5530,7 +5530,7 @@ function toggleLeftSidebar() {
     }
 }
 
-if (window.location.href.toLowerCase().includes ('file://') === 'false') {
+if (!window.location.href.toLowerCase().includes('file://')) {
  atualizarDataCommit();
 } else if (window.location.href.toLowerCase().includes ('file://')) {
     document.getElementById('updateText').textContent = `Rodando localmente no protocólo file://`;
@@ -5607,7 +5607,7 @@ document.addEventListener('DOMContentLoaded', function() {
     atualizarBotaoChat();
     
     if (chatState.usuarioAtual && chatState.token) {
-        if (window.location.href.toLowerCase().includes ('file://') === 'false') { 
+        if (!window.location.href.toLowerCase().includes('file://')) { 
           console.log('[CHAT] Inicializando para:', chatState.usuarioAtual);
           setTimeout(inicializarChat, 500);
           // Atualizar chat a cada 3 segundos
@@ -5827,7 +5827,7 @@ async function carregarConversasPrivadas() {
 
 
 setInterval(() => {
-    if (window.location.href.toLowerCase().includes ('file://') === 'false') { // 
+    if (!window.location.href.toLowerCase().includes('file://')) { // 
     if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token') && localStorage.getItem('userRank') !== '31') {
         if (localStorage.getItem('item-premium-xp')){
             awardXp(200)
@@ -7836,7 +7836,7 @@ function closeSpamtonShop(){
             }
         }
         if (localStorage.getItem('usuarioLogado') === 'Dogue') {
-        if (window.location.href.toLowerCase().includes ('file://') === 'false') { // 
+        if (!window.location.href.toLowerCase().includes('file://')) { // 
         setInterval(updateNotificationBadge, 30000); // Atualiza a badge a cada 30 segundos
         setInterval(carregarSolicitacoesPendentes, 30000); // Recarrega solicitações pendentes a cada 30 segundos
         setInterval(carregarHistoricoSolicitacoes, 30000); // Recarrega histórico de solicitações a cada 30 segundos
@@ -7846,7 +7846,7 @@ function closeSpamtonShop(){
         
         // Sincronizar moedas a cada 30 segundos se estiver logado
         if (localStorage.getItem('token')) {
-            if (window.location.href.toLowerCase().includes ('file://') === 'false') { // 
+            if (!window.location.href.toLowerCase().includes('file://')) { // 
             setInterval(() => {
                 syncCoinsFromDatabase().catch(err => console.error('[SYNC] Erro ao sincronizar moedas:', err));
             }, 60000);
@@ -8374,7 +8374,7 @@ function closeSpamtonShop(){
                 
                 updateUserPanelButton();
                 updateUserPanelInfo();
-                if (window.location.href.toLowerCase().includes ('file://') === 'false') {
+                if (!window.location.href.toLowerCase().includes('file://')) {
                 updateNotificationBadge();
                 }
             } else {
@@ -9932,7 +9932,7 @@ function closeSpamtonShop(){
 
         // Carregar giros e itens ao abrir a página
         window.addEventListener('load', () => {
-            if (localStorage.getItem('token') && window.location.href.toLowerCase().includes ('file://') == 'false') {
+            if (localStorage.getItem('token') && !window.location.href.toLowerCase().includes('file://')) {
                 loadSpinsFromDatabase();
                 syncItemsFromDatabase(); // Sincronizar itens do backup
             }
@@ -10043,7 +10043,7 @@ function perguntarSave() {
         }
         
         // Rastrear tempo a cada 1 minuto
-        if (window.location.href.toLowerCase().includes ('file://') === 'false') { 
+        if (!window.location.href.toLowerCase().includes('file://')) { 
         setInterval(trackPlaytime, 1 * 60 * 1000);
         }
         
@@ -10158,7 +10158,7 @@ function perguntarSave() {
                 ? tankicard.style.display = 'inline-block'
                 : tankicard.style.display = 'none'
                 
-                if (window.location.href.toLowerCase().includes ('file://') === 'false') { // Verifica se está no protocólo file:
+                if (!window.location.href.toLowerCase().includes('file://')) { // Verifica se está no protocólo file:
                   await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
                   await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
                   await syncAchievements(); // sincroniza conquistas do banco de dados
