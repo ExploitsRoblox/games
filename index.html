@@ -10133,8 +10133,6 @@ function perguntarSave() {
                 }
             });
 
-            await syncUnlockedGamesToDatabase();
-
             // Se o item "all-games" foi comprado, desbloquear todos os jogos secretos
             if (localStorage.getItem('item-all-games') === 'owned') {
                 const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
@@ -10194,6 +10192,7 @@ function perguntarSave() {
                 : tankicard.style.display = 'none'
                 
                 if (!window.location.href.toLowerCase().includes('file://')) { // Verifica se está no protocólo file:
+                  await syncUnlockedGamesToDatabase();
                   await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
                   await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
                   await syncAchievements(); // sincroniza conquistas do banco de dados
