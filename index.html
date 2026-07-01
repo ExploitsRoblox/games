@@ -69,7 +69,7 @@
         .navbar {
             background: linear-gradient(180deg, #1a1a1a 0%, rgba(26, 26, 26, 0.8) 100%);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(229, 9, 20, 0.3);
+            border-bottom: 1px solid color-mix(in srgb, var(--accent-color) 30%, transparent);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -1048,8 +1048,8 @@
         .coins-display {
             top: 90px;
             left: 12%;
-    background: rgba(244, 63, 94, 0.08); /* Fundo sutil para não brigar com o texto */
-    border: 2px solid #f43f5e;           /* Borda rosa neon um pouco mais espessa */
+    background: color-mix(in srgb, var(--accent-color) 8%, transparent);
+    border: 2px solid var(--accent-color);           /* Borda rosa neon um pouco mais espessa */
     color: #e2e8f0;                      /* Texto em branco azulado para alto contraste */
     padding: 10px 24px;                  /* Mais espaço nas laterais para respirar */
     border-radius: 50px;                 /* Arredondamento perfeito estilo pílula */
@@ -1059,7 +1059,7 @@
     display: inline-flex;                /* Alinha o ícone e o texto perfeitamente no centro */
     align-items: center;
     gap: 12px;                           /* Cria um espaço perfeito entre o diamante e o número */
-    box-shadow: 0 0 15px rgba(244, 63, 94, 0.2); /* Um leve brilho neon na borda */
+    box-shadow: 0 0 15px color-mix(in srgb, var(--accent-color) 20%, transparent); /* Um leve brilho neon na borda */
 }
         
 
@@ -5532,7 +5532,7 @@ function toggleLeftSidebar() {
 
 if (window.location.href.toLowerCase().includes ('file://') === 'false') {
  atualizarDataCommit();
-} else {
+} else if (window.location.href.toLowerCase().includes ('file://')) {
     document.getElementById('updateText').textContent = `Rodando localmente no protocólo file://`;
 }
 
