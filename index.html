@@ -11,7 +11,7 @@
     <!-- Configuração para o Google Bard/Gemini e Redes Sociais -->
     <meta property="og:title" content="Neeexusbr Games">
     <meta property="og:description" content="A Neeexusbr é uma plataforma de jogos com várias funções, como chat em tempo real, conquistas exclusivas e jogos exclusivos.">
-    <meta property="og:url" content="https://github.io">
+    <meta property="og:url" content="https://neeexusbr.github.io/games">
     <meta property="og:type" content="website">
 
     <!-- Dados Estruturados (Ficha técnica para algoritmos de IA) -->
@@ -19,7 +19,7 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "alternateName": ["Neeexus br", "Neeexusbr Games", "Nexus Games"],
+      "alternateName": ["Neeexusbr", "Neeexusbr Games", "Nexus Games"],
       "name": "neeexusbr",
       "url": "https://neeexusbr.github.io/games",
       "applicationCategory": "GameApplication",
@@ -689,6 +689,36 @@
             border-radius: 50%;
             border: 2px solid white;
         }
+
+        /* Painel do usuário admin*/
+          .user-admin-panel-btn {
+            background: linear-gradient(90deg, #ff0000, #df6c00,#d2e900ef, #09ff00, #00fcfc, #001eff, #7700ff, #ff00ccee, #ff0000);
+            background-size: 200% 100%;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 15px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            animation: flow 1s linear infinite;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        
+        .user-admin-panel-btn:hover {
+            transform: scale(1.05);
+            background: #cc0000;
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.6);
+        }
         
         /* Modal do Painel do Usuário */
         .user-panel-modal {
@@ -985,6 +1015,36 @@
         }
         
         /* Sistema de Moedas */
+.coins-display-tank {
+    background: transparent;
+    background-image: url(images/ranks/crystals/barbg.png);
+    background-repeat: repeat-x;
+    background-size: 50% 100%;
+    border: 0.0625rem solid transparent;
+    color: #00ff15;                      /* Texto em branco azulado para alto contraste */
+    padding: 2px 35px;                  /* Mais espaço nas laterais para respirar*/
+    font-family: "Quad";
+    font-weight: 400;
+    border-image: url(images/ranks/crystals/border.png) 1 stretch;
+    border-radius: 0.4375rem 0.4375rem 0.4375rem 0px;
+    border-top-left-radius: 0.4375rem;
+    border-top-right-radius: 0.4375rem;
+    border-bottom-right-radius: 0.4375rem;
+    border-bottom-left-radius: 0px;
+    border-image-width: 1.0rem;
+    border-image-slice: 10;
+    border-image-repeat: unset;
+    border-image-source: url(images/ranks/crystals/border.png);
+    font-size: 1rem;
+    white-space: nowrap;
+    display: inline-flex;                /* Alinha o ícone e o texto perfeitamente no centro */
+    align-items: center;
+    text-align: right;
+    flex-direction: row-reverse;
+    gap: 12px;                           /* Cria um espaço perfeito entre o diamante e o número */
+}
+
+/* Sistema de Moedas */
         .coins-display {
             top: 90px;
             left: 12%;
@@ -1002,11 +1062,12 @@
     box-shadow: 0 0 15px rgba(244, 63, 94, 0.2); /* Um leve brilho neon na borda */
 }
         
-        .coins-display:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(252, 0, 168, 0.6);
+
+        .crystal-icon {
+            position: inherit;
+            z-index: 10;
         }
-        
+
         @font-face {
             font-family: 'Deltarune';
             src: url('deltarune.ttf') format('truetype');
@@ -3679,6 +3740,63 @@ button.door {
             font-size: 0.95rem;
         }
 
+        .root-customization-section {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid rgba(207, 57, 57, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .root-items {
+            display: grid;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .root-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        .root-color-input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(207, 57, 57, 0.35);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        .root-color-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2);
+        }
+
+        .root-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        .root-reset-btn {
+            background: rgba(207, 57, 57, 0.2);
+            border: 1px solid rgba(207, 57, 57, 0.5);
+            color: var(--text-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .root-reset-btn:hover {
+            background: rgba(207, 57, 57, 0.35);
+            transform: translateY(-2px);
+        }
+
         /* === EXIBIÇÃO DE SKINS === */
         .skin-display-container {
             position: fixed;
@@ -3914,7 +4032,7 @@ button.door {
         .xp-bar-container {
             width: 100%;
             height: 12px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(10, 49, 8);
             border-radius: 6px;
             overflow: hidden;
             border: 1px solid rgba(168, 85, 247, 0.4);
@@ -3923,7 +4041,7 @@ button.door {
 
         .xp-bar {
             height: 100%;
-            background: linear-gradient(90deg, #a855f7, #3b82f6);
+            background: linear-gradient(0deg, #044d01, #47ff00);
             width: 0%;
             transition: width 0.3s ease;
         }
@@ -4000,12 +4118,12 @@ button.door {
             
             <!-- Menu Central -->
             <nav class="navbar-menu">
-                <button class="navbar-btn" onclick="toggleLeftSidebar()">FILTROS</button>
-                <button class="navbar-btn" onclick="openSkinsMenu()">SKINS</button>
+                <button id="filtrosbtn" class="navbar-btn" onclick="toggleLeftSidebar()">FILTROS</button>
+                <button id="skinsbtn" class="navbar-btn" onclick="openSkinsMenu()">SKINS</button>
                 <button id="placarbtn" class="navbar-btn" onclick="openLeaderboard()">PLACAR</button>
                 <button id="inventariobtn" class="navbar-btn" onclick="openInventory()">INVENTÁRIO</button>
                 <button id="recompensabtn" class="navbar-btn" onclick="checkDailyReward()">RECOMPENSA</button>
-                <button class="navbar-btn" onclick="openShop()">LOJA</button>
+                <button id="lojabtn" class="navbar-btn" onclick="openShop()">LOJA</button>
                 <button id="conquistasbtn" class="navbar-btn" onclick="toggleAchievements()">CONQUISTAS</button>
                 <button id="chatBtn" class="navbar-btn" style="display: none;" onclick="openChatModal()">CHAT</button>
                 <button class="navbar-btn" id="adminPanelBtn" style="display: none;" onclick="openAdminPanel()">PAINEL</button>
@@ -4014,7 +4132,9 @@ button.door {
             
             <!-- Lado direito: Moedas e Botões de Autenticação -->
             <div class="navbar-right">
-                <div class="coins-display" id="coinsDisplay">💎 0 Gemas</div>
+                <div class="coins-display" id="coinsDisplay">0
+                    <img id="crystalicon" class="crystal-icon" src="images/ranks/crystals/crystal.png" alt="Crystal">
+                </div>
                 <button id="notificationsBtn" class="navbar-notifications-btn" style="display: none" onclick="openNotifications()">
                     🔔 
                     <span class="notification-badge" id="notificationBadge"></span>
@@ -4064,6 +4184,9 @@ button.door {
                 <button class="notifications-tab" onclick="switchNotificationTab('purchases')">
                     🛒 Histórico de Compras
                 </button>
+                <button class="notifications-tab" onclick="switchNotificationTab('codes')">
+                    🎟️ Gerar Código
+                </button>
             </div>
             
             <!-- Conteúdo das Abas -->
@@ -4081,6 +4204,35 @@ button.door {
                 <!-- Aba: Histórico de Compras -->
                 <div id="tab-purchases" class="notifications-tab-content">
                     <div id="adminComprasList" class="notifications-list"></div>
+                </div>
+
+                <!-- Aba: Gerar Código -->
+                <div id="tab-codes" class="notifications-tab-content">
+                    <div class="admin-section" style="padding: 0; background: transparent; box-shadow: none; border: none;">
+                        <h3 style="margin-bottom: 10px;">🎟️ Criar Código Promocional</h3>
+                        <div class="admin-form" style="display: grid; gap: 10px;">
+                            <input type="text" class="admin-input" id="codigoPromocionalCode" placeholder="Código (ex: NEXUS2026)">
+                            <input type="text" class="admin-input" id="codigoPromocionalDescricao" placeholder="Descrição do código">
+                            <select class="admin-input" id="codigoPromocionalTipo">
+                                <option value="moedas">💎 Dar gemas</option>
+                                <option value="item">🎁 Dar item específico</option>
+                                <option value="spins">🎡 Dar giros</option>
+                                <option value="jogo">🔓 Desbloquear jogo</option>
+                                <option value="tempo-jogo">⏱️ Dar tempo de jogo</option>
+                            </select>
+                            <input type="number" class="admin-input" id="codigoPromocionalValor" placeholder="Valor / quantidade" min="1">
+                            <input type="text" class="admin-input" id="codigoPromocionalItem" placeholder="ID do item (opcional)">
+                            <input type="text" class="admin-input" id="codigoPromocionalJogo" placeholder="ID do jogo (opcional)">
+                            <input type="datetime-local" class="admin-input" id="codigoPromocionalExpira">
+                            <input type="number" class="admin-input" id="codigoPromocionalMaxUsos" placeholder="Máximo de usos" min="1" value="1">
+                            <label style="display: flex; align-items: center; gap: 8px; color: #cbd5e1; font-size: 0.9rem;">
+                                <input type="checkbox" id="codigoPromocionalUnico">
+                                Uso único por pessoa
+                            </label>
+                            <button class="admin-btn" onclick="criarCodigoPromocional()">Criar Código</button>
+                        </div>
+                        <div id="listaCodigosPromocionais" class="notifications-list" style="margin-top: 16px;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4458,7 +4610,7 @@ button.door {
     <div id="skinsModal" class="skins-modal" onclick="closeSkinsMenu(event)">
         <div class="skins-content" onclick="event.stopPropagation();">
             <div class="skins-header">
-                <h2>🎨 Personalização de Skins</h2>
+                <h2>🎨 Skins Disfarce</h2>
                 <button class="skins-close" onclick="closeSkinsMenu()">✕</button>
             </div>
             <div class="skins-list">
@@ -4489,6 +4641,39 @@ button.door {
             </div>
             <div class="skins-info">
                 <p>💡 Dica: Use a tecla <kbd>;</kbd> para mostrar/esconder as skins rapidamente!</p>
+            </div>
+            <div class="skins-header">
+                <h2>Skins Secretas</h2>
+            </div>
+            <div class="skins-list">
+                <div id="tankicard" class="skin-card" onclick="toggleTankimode()">
+                    <div class="skin-icon">?</div>
+                    <h3>Ativar Skin TO</h3>
+                    <p>Ativa o Modo secreto!</p>
+                    <p class="skin-status" id="skin4-status"></p>
+                </div>
+            </div>
+            <div id="rootCustomizationSection" class="root-customization-section" style="display:none;">
+                <div class="skins-header">
+                    <h2>🎨 Tema do site</h2>
+                </div>
+                <div class="root-items">
+                    <label class="root-item">
+                        <span>Cor principal</span>
+                        <input type="text" id="root-1" class="root-color-input" placeholder="#f43f5e" oninput="changeRoot(1)">
+                    </label>
+                    <label class="root-item">
+                        <span>Cor de destaque</span>
+                        <input type="text" id="root-2" class="root-color-input" placeholder="#38bdf8" oninput="changeRoot(2)">
+                    </label>
+                    <label class="root-item">
+                        <span>Fundo principal</span>
+                        <input type="text" id="root-3" class="root-color-input" placeholder="#0b071e" oninput="changeRoot(3)">
+                    </label>
+                </div>
+                <div class="root-actions">
+                    <button class="root-reset-btn" type="button" onclick="resetRootColors()">↺ Resetar para o padrão</button>
+                </div>
             </div>
         </div>
     </div>
@@ -4612,7 +4797,7 @@ button.door {
         </div>
     </div>
 
-    <main>
+    <main id="mainid">
         <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">Metas de Jogo</span>
         <div class="featured-banner">
             <h2 style="margin: 0; font-size: 2rem;">Objetivo: Alcance 50 pontos em Jogo de UFO</h2>
@@ -5000,6 +5185,7 @@ button.door {
     function openSkinsMenu() {
         const skinsModal = document.getElementById('skinsModal');
         skinsModal.classList.add('active');
+        updateRootCustomizationVisibility();
     }
 
     function closeSkinsMenu(event) {
@@ -5045,6 +5231,74 @@ button.door {
         }
         
         updateSkinStatus();
+    }
+
+    const DEFAULT_ROOT_COLORS = {
+        1: '#f43f5e',
+        2: '#38bdf8',
+        3: '#0b071e'
+    };
+
+    const ROOT_VARIABLES = {
+        1: '--accent-color',
+        2: '--gold',
+        3: '--bg-dark'
+    };
+
+    const ROOT_STORAGE_KEYS = {
+        1: 'custom-root-accent',
+        2: 'custom-root-gold',
+        3: 'custom-root-bg'
+    };
+
+    function updateRootCustomizationVisibility() {
+        const section = document.getElementById('rootCustomizationSection');
+        if (!section) return;
+        const isOwned = localStorage.getItem('item-tanki-mode') === 'owned';
+        section.style.display = isOwned ? 'block' : 'none';
+    }
+
+    function getRootColorValue(index) {
+        const storedValue = localStorage.getItem(ROOT_STORAGE_KEYS[index]);
+        return storedValue || DEFAULT_ROOT_COLORS[index];
+    }
+
+    function changeRoot(index) {
+        const input = document.getElementById(`root-${index}`);
+        if (!input) return;
+
+        const value = input.value.trim();
+        const normalizedValue = value || DEFAULT_ROOT_COLORS[index];
+
+        document.documentElement.style.setProperty(ROOT_VARIABLES[index], normalizedValue);
+        localStorage.setItem(ROOT_STORAGE_KEYS[index], normalizedValue);
+        input.value = normalizedValue;
+    }
+
+    function applySavedRootColors() {
+        Object.keys(ROOT_VARIABLES).forEach(index => {
+            const input = document.getElementById(`root-${index}`);
+            const value = getRootColorValue(index);
+            document.documentElement.style.setProperty(ROOT_VARIABLES[index], value);
+            if (input) {
+                input.value = value;
+            }
+        });
+        updateRootCustomizationVisibility();
+    }
+
+    function resetRootColors() {
+        Object.keys(ROOT_VARIABLES).forEach(index => {
+            const input = document.getElementById(`root-${index}`);
+            const defaultValue = DEFAULT_ROOT_COLORS[index];
+            document.documentElement.style.setProperty(ROOT_VARIABLES[index], defaultValue);
+            localStorage.removeItem(ROOT_STORAGE_KEYS[index]);
+            if (input) {
+                input.value = defaultValue;
+            }
+        });
+        updateRootCustomizationVisibility();
+        alert('Cores do tema restauradas para o padrão.');
     }
 
     function updateSkinStatus() {
@@ -5096,6 +5350,8 @@ button.door {
                 openGameInModal(url, gameName);
             });
         });
+
+        applySavedRootColors();
     });
 
     function checkIfGaster(){
@@ -5274,8 +5530,11 @@ function toggleLeftSidebar() {
     }
 }
 
-
-atualizarDataCommit();
+if (window.location.href.toLowerCase().includes ('file://') === 'false') {
+ atualizarDataCommit();
+} else {
+    document.getElementById('updateText').textContent = `Rodando localmente no protocólo file://`;
+}
 
 // ===== SISTEMA DE CHAT =====
 const API_URL_BACKEND = "https://login-nqot.onrender.com";
@@ -5348,10 +5607,12 @@ document.addEventListener('DOMContentLoaded', function() {
     atualizarBotaoChat();
     
     if (chatState.usuarioAtual && chatState.token) {
-        console.log('[CHAT] Inicializando para:', chatState.usuarioAtual);
-        setTimeout(inicializarChat, 500);
-        // Atualizar chat a cada 3 segundos
-        setInterval(atualizarChatAtivo, 3000);
+        if (window.location.href.toLowerCase().includes ('file://') === 'false') { 
+          console.log('[CHAT] Inicializando para:', chatState.usuarioAtual);
+          setTimeout(inicializarChat, 500);
+          // Atualizar chat a cada 3 segundos
+          setInterval(atualizarChatAtivo, 3000);
+       }
     }
 });
 
@@ -5566,12 +5827,14 @@ async function carregarConversasPrivadas() {
 
 
 setInterval(() => {
+    if (window.location.href.toLowerCase().includes ('file://') === 'false') { // 
     if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token') && localStorage.getItem('userRank') !== '31') {
         if (localStorage.getItem('item-premium-xp')){
             awardXp(200)
             return;
         }
         awardXp(100)
+    }
     }
 }, 10000);
 
@@ -6025,7 +6288,76 @@ async function atualizarChatAtivo() {
              closeSpamtonShop();
            }, 1000);
         }
+        
+    function checkTanki() {
+        const main = document.getElementById("mainid")
+        const achbtn = document.getElementById("conquistasbtn")
+        const lojabtn = document.getElementById("lojabtn")
+        const chatbtn = document.getElementById("chatBtn")
+        const skinsbtn = document.getElementById("skinsbtn")
+        const recobtn = document.getElementById("recompensabtn")
+        const invbtn = document.getElementById("inventariobtn")
+        const filbtn = document.getElementById("filtrosbtn")
+        const adminbtn = document.getElementById("adminPanelBtn")
+        const leaderbtn = document.getElementById("placarbtn")
+        const tankiMode = localStorage.getItem('modo-tanki-online') === 'true'
+        
+        const mainStyle = tankiMode 
+        ? `background-image: url(images/bg.png); background-repeat: repeat;`
+        : `background: linear-gradient(135deg, var(--bg-dark) 0%, var(--sidebar-bg) 100%);`;
+        main.style = mainStyle
 
+        const consquistastyle = tankiMode 
+        ? achbtn.innerHTML = `<img src="images/gui/achievements.png" alt="Conquistas">`
+        : achbtn.innerHTML = `CONQUISTAS`
+
+        const chatstyle = tankiMode 
+        ? chatbtn.innerHTML = `<img src="images/gui/friends.png" alt="Chat">`
+        : chatbtn.innerHTML = `CHAT`
+
+        const lojastyle = tankiMode 
+        ? lojabtn.innerHTML = `<img src="images/gui/shop.png" alt="Loja">`
+        : lojabtn.innerHTML = `LOJA`
+        
+        const rankstyle = tankiMode 
+        ? leaderbtn.innerHTML = `<img src="images/gui/rank.png" alt="Placar">`
+        : leaderbtn.innerHTML = `Placar`
+
+        const skinsstyle = tankiMode 
+        ? skinsbtn.innerHTML = `<img src="images/gui/skins.png" alt="Skins">`
+        : skinsbtn.innerHTML = `Skins`
+
+        const prizesstyle = tankiMode 
+        ? recobtn.innerHTML = `<img src="images/gui/prizes.png" alt="Recompensas">`
+        : recobtn.innerHTML = `Recompensas`
+
+        const invsstyle = tankiMode 
+        ? invbtn.innerHTML = `<img src="images/gui/inventory.png" alt="Inventário">`
+        : invbtn.innerHTML = `Inventário`
+
+        const filstyle = tankiMode 
+        ? filbtn.innerHTML = `<img src="images/gui/filters.png" alt="Filtros">`
+        : filbtn.innerHTML = `Filtros`
+
+        const adminstyle = tankiMode 
+        ? adminbtn.innerHTML = `<img src="images/gui/admin.png" alt="Painel">`
+        : adminbtn.innerHTML = `PAINEL`
+    }
+
+    function toggleTankimode() {
+        const tanki = localStorage.getItem('modo-tanki-online')
+        if (tanki === 'true') {
+            localStorage.setItem('modo-tanki-online', 'false')
+            localStorage.removeItem('item-tanki-mode')
+            alert("Modo Tanki Desativado!")
+            window.location.reload()
+        } else {
+            localStorage.setItem('modo-tanki-online', 'true')
+            localStorage.setItem('item-tanki-mode', 'owned')
+            alert("Modo Tanki ativado!")
+            window.location.reload();
+        }
+    }
 
         async function imFeelingLucky() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
@@ -6178,7 +6510,8 @@ function conquistaAnimacao(tipo) {
             { id: 'spins-10', name: 'Giros da Roleta (10x)', desc: 'Compre 10 giros para usar na roleta da sorte!', icon: '🎡', price: 1500, isSpins: true, quantity: 10 },
             { id: 'spins-25', name: 'Giros da Roleta (25x)', desc: 'Compre 25 giros com desconto!', icon: '🎡', price: 3000, isSpins: true, quantity: 25 },
             { id: 'spins-50', name: 'Giros da Roleta (50x)', desc: 'Compre 50 giros com grande desconto!', icon: '🎡', price: 5000, isSpins: true, quantity: 50 },
-            { id: 'premium-xp', name: '✨ Premium XP', desc: 'Ganhe 2x XP permanentemente!', icon: '⚡', price: 7500, isPremium: true },
+            { id: 'premium-xp', name: 'Premium XP', desc: 'Ganhe 2x XP permanentemente!', icon: '👑', price: 7500, isPremium: true },
+            { id: 'tanki-mode', name: 'Modo Tanki', desc: 'Personalização da página!', icon: '🔥', price: 1000},
         ];
 
         const SPAMTON_ITEMS = [
@@ -6459,7 +6792,12 @@ function conquistaAnimacao(tipo) {
             const coins = getCoins();
             const coinsDisplay = document.getElementById('coinsDisplay');
             if (coinsDisplay) {
-                coinsDisplay.textContent = `💎 ${coins} Gemas`;
+                if (localStorage.getItem('modo-tanki-online') === 'true') {
+                      coinsDisplay.className = 'coins-display-tank'
+                      coinsDisplay.innerHTML = `${coins}<img id="crystalicon" class="crystal-icon" src="images/ranks/crystals/crystal.png" alt="Crystal">`;
+                } else {
+                    coinsDisplay.textContent = `💎 ${coins} Gemas`;
+                }
             }
         }
 
@@ -6497,8 +6835,8 @@ function conquistaAnimacao(tipo) {
             const rankDisplay = document.getElementById('rankDisplay');
             if (rankDisplay) {
                 const xpBarStyle = hasPremium 
-                    ? `background: linear-gradient(90deg, #fbbf24, #f59e0b); background-repeat: no-repeat; background-position: center;`
-                    : `background: linear-gradient(90deg, #a855f7, #3b82f6);`;
+                    ? `background-image: url(images/ranks/premiumbarbg.jpg); background-repeat: no-repeat; background-position: center;`
+                    : `background: linear-gradient(0deg, #044d01, #47ff00);`;
                 
                 rankDisplay.innerHTML = `
                     <div class="rank-container ${hasPremium ? 'premium-active' : ''}">
@@ -7404,17 +7742,21 @@ function closeSpamtonShop(){
             }
         }
         if (localStorage.getItem('usuarioLogado') === 'Dogue') {
+        if (window.location.href.toLowerCase().includes ('file://') === 'false') { // 
         setInterval(updateNotificationBadge, 30000); // Atualiza a badge a cada 30 segundos
         setInterval(carregarSolicitacoesPendentes, 30000); // Recarrega solicitações pendentes a cada 30 segundos
         setInterval(carregarHistoricoSolicitacoes, 30000); // Recarrega histórico de solicitações a cada 30 segundos
         setInterval(adminLoadCompras, 30000); // Recarrega compras a cada 30 segundos
         }
+    }
         
         // Sincronizar moedas a cada 30 segundos se estiver logado
         if (localStorage.getItem('token')) {
+            if (window.location.href.toLowerCase().includes ('file://') === 'false') { // 
             setInterval(() => {
                 syncCoinsFromDatabase().catch(err => console.error('[SYNC] Erro ao sincronizar moedas:', err));
-            }, 30000);
+            }, 60000);
+            }
         }
         
         function closeNotifications(event) {
@@ -7426,7 +7768,6 @@ function closeSpamtonShop(){
         }
 
         function switchNotificationTab(tabName) {
-            // Remover classe active de todos os abas e conteúdos
             document.querySelectorAll('.notifications-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
@@ -7434,17 +7775,23 @@ function closeSpamtonShop(){
                 content.classList.remove('active');
             });
 
-            // Adicionar classe active à aba selecionada
-            event.target.classList.add('active');
-            document.getElementById(`tab-${tabName}`).classList.add('active');
+            const clickedTab = event?.target;
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            }
+            const targetContent = document.getElementById(`tab-${tabName}`);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
 
-            // Carregar dados da aba
             if (tabName === 'pending') {
                 carregarSolicitacoesPendentes();
             } else if (tabName === 'history') {
                 carregarHistoricoSolicitacoes();
             } else if (tabName === 'purchases') {
                 adminLoadCompras();
+            } else if (tabName === 'codes') {
+                carregarCodigosPromocionais();
             }
         }
         function loadNotifications() {
@@ -7454,6 +7801,7 @@ function closeSpamtonShop(){
             carregarSolicitacoesPendentes();
             carregarHistoricoSolicitacoes();
             adminLoadCompras();
+            carregarCodigosPromocionais();
         }
 
         function updateNotificationBadge() {
@@ -7919,6 +8267,9 @@ function closeSpamtonShop(){
             
             console.log('updateAuthBtn - usuário:', usuario);
             console.log('updateAuthBtn - isAdmin:', isAdmin);
+            if (window.location.href.toLowerCase().includes ('file://')) {
+                console.log('updateAuthBtn - Protocólo file://:', true);
+            }
             
             if (usuario) {
                 // Usuário logado: mostrar botão do painel
@@ -7929,7 +8280,9 @@ function closeSpamtonShop(){
                 
                 updateUserPanelButton();
                 updateUserPanelInfo();
+                if (window.location.href.toLowerCase().includes ('file://') === 'false') {
                 updateNotificationBadge();
+                }
             } else {
                 // Usuário não logado: mostrar botão de login
                 authBtn.style.visibility = 'visible';
@@ -8485,6 +8838,141 @@ function closeSpamtonShop(){
                 });
             } catch (err) {
                 console.error('[COMPRAS] Erro ao carregar:', err);
+            }
+        }
+
+        async function criarCodigoPromocional() {
+            const codigo = document.getElementById('codigoPromocionalCode').value.trim().toUpperCase();
+            const descricao = document.getElementById('codigoPromocionalDescricao').value.trim();
+            const tipoRecompensa = document.getElementById('codigoPromocionalTipo').value;
+            const valor = Number(document.getElementById('codigoPromocionalValor').value);
+            const itemId = document.getElementById('codigoPromocionalItem').value.trim();
+            const itemNome = itemId || '';
+            const jogoId = document.getElementById('codigoPromocionalJogo').value.trim();
+            const dataExpiracao = document.getElementById('codigoPromocionalExpira').value;
+            const maxUsos = Number(document.getElementById('codigoPromocionalMaxUsos').value || 1);
+            const usoUnicoPorPessoa = document.getElementById('codigoPromocionalUnico').checked;
+
+            if (!codigo || !descricao || !tipoRecompensa || !valor || valor <= 0) {
+                return alert('❌ Preencha o código, a descrição, o tipo e o valor da recompensa.');
+            }
+
+            if (tipoRecompensa === 'item' && !itemId) {
+                return alert('❌ Informe o ID do item para este código.');
+            }
+
+            if (tipoRecompensa === 'jogo' && !jogoId) {
+                return alert('❌ Informe o ID do jogo para este código.');
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/codigos/criar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        codigo,
+                        descricao,
+                        tipoRecompensa,
+                        valor,
+                        itemId,
+                        itemNome,
+                        jogoId,
+                        dataExpiracao,
+                        maxUsos,
+                        usoUnicoPorPessoa
+                    })
+                });
+
+                const resposta = await res.json();
+                alert(resposta.mensagem || (resposta.ok ? '✅ Código criado!' : '❌ Erro ao criar código'));
+
+                if (resposta.ok) {
+                    document.getElementById('codigoPromocionalCode').value = '';
+                    document.getElementById('codigoPromocionalDescricao').value = '';
+                    document.getElementById('codigoPromocionalTipo').value = 'moedas';
+                    document.getElementById('codigoPromocionalValor').value = '';
+                    document.getElementById('codigoPromocionalItem').value = '';
+                    document.getElementById('codigoPromocionalJogo').value = '';
+                    document.getElementById('codigoPromocionalExpira').value = '';
+                    document.getElementById('codigoPromocionalMaxUsos').value = '1';
+                    document.getElementById('codigoPromocionalUnico').checked = false;
+                    carregarCodigosPromocionais();
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function carregarCodigosPromocionais() {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const res = await fetch(`${API_ADMIN}/admin/codigos/listar`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (res.status === 401) {
+                    console.error('[CÓDIGOS] Token expirado!');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('usuarioLogado');
+                    localStorage.removeItem('isAdmin');
+                    window.location.href = 'https://neeexusbr.github.io/login';
+                    return;
+                }
+
+                const resposta = await res.json();
+                if (!resposta.ok) {
+                    console.error('[CÓDIGOS] Erro:', resposta.mensagem);
+                    return;
+                }
+
+                const container = document.getElementById('listaCodigosPromocionais');
+                if (!container) return;
+                container.innerHTML = '';
+
+                if (!resposta.codigos || resposta.codigos.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: #aaa; padding: 20px;">Nenhum código criado ainda</p>';
+                    return;
+                }
+
+                resposta.codigos.forEach(codigo => {
+                    const expiraEm = codigo.dataExpiracao ? new Date(codigo.dataExpiracao) : null;
+                    const expirado = expiraEm ? expiraEm < new Date() : false;
+                    const restante = Math.max(0, codigo.maxUsos - codigo.usosAtuais);
+                    const badgeColor = expirado ? '#ef4444' : codigo.ativo ? '#22c55e' : '#f59e0b';
+                    const badgeText = expirado ? 'EXPIRADO' : codigo.ativo ? 'ATIVO' : 'INATIVO';
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'admin-compra-item';
+                    itemDiv.style.cssText = 'padding: 12px; background: rgba(255,255,255,0.05); border-left: 3px solid var(--gold); margin-bottom: 10px; border-radius: 4px;';
+                    itemDiv.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; gap:8px; align-items:center; flex-wrap:wrap;">
+                            <strong style="color: var(--gold);">${codigo.codigo}</strong>
+                            <span style="background:${badgeColor}; color:white; padding:4px 8px; border-radius:999px; font-size:0.72rem; font-weight:bold;">${badgeText}</span>
+                        </div>
+                        <div style="margin-top: 6px; color: #cbd5e1; font-size: 0.9rem;">${codigo.descricao || 'Sem descrição'}</div>
+                        <div style="margin-top: 6px; color: #aaa; font-size: 0.85rem;">
+                            Recompensa: <strong>${codigo.tipoRecompensa}</strong> · Valor: <strong>${codigo.valor}</strong>
+                            ${codigo.itemId ? `· Item: ${codigo.itemId}` : ''}
+                            ${codigo.jogoId ? `· Jogo: ${codigo.jogoId}` : ''}
+                        </div>
+                        <div style="margin-top: 6px; color: #888; font-size: 0.8rem;">
+                            Usos: ${codigo.usosAtuais}/${codigo.maxUsos} · ${codigo.usoUnicoPorPessoa ? 'Uso único por pessoa' : 'Uso múltiplo'}
+                            ${expiraEm ? `· Expira em ${expiraEm.toLocaleString('pt-BR')}` : ''}
+                        </div>
+                        <div style="margin-top: 6px; color: #8b5cf6; font-size: 0.8rem;">Restantes: ${restante}</div>
+                    `;
+                    container.appendChild(itemDiv);
+                });
+            } catch (err) {
+                console.error('[CÓDIGOS] Erro ao carregar:', err);
             }
         }
 
@@ -9350,7 +9838,7 @@ function closeSpamtonShop(){
 
         // Carregar giros e itens ao abrir a página
         window.addEventListener('load', () => {
-            if (localStorage.getItem('token')) {
+            if (localStorage.getItem('token') && window.location.href.toLowerCase().includes ('file://') == 'false') {
                 loadSpinsFromDatabase();
                 syncItemsFromDatabase(); // Sincronizar itens do backup
             }
@@ -9461,7 +9949,9 @@ function perguntarSave() {
         }
         
         // Rastrear tempo a cada 1 minuto
+        if (window.location.href.toLowerCase().includes ('file://') === 'false') { 
         setInterval(trackPlaytime, 1 * 60 * 1000);
+        }
         
         // Rastrear tempo ao descarregar a página
         window.addEventListener('beforeunload', trackPlaytime);
@@ -9538,8 +10028,7 @@ function perguntarSave() {
             checkAchievements(); // verifica conquistas ao carregar
             reloadAchievements(); // atualiza display de conquistas
             updateScoreCounter(); // atualiza display de score
-            secretText(); // verifica se deve mostrar texto secreto
-            gasterText(); // verifica se deve mostrar texto do Gaster
+            checkTanki();
             showifadmin(); // verifica se deve mostrar painel de admin
             checkIfGaster();
 
@@ -9548,13 +10037,6 @@ function perguntarSave() {
 
             // Atualizar o botão de autenticação
             updateAuthBtn();
-            if (window.url = "file:") { // Verifica se está no protocólo file:
-            await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
-            await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
-            await syncAchievements(); // sincroniza conquistas do banco de dados
-            await syncUnlockedGames(); // sincroniza jogos secretos do banco de dados
-            await syncRankAndXp(); // sincroniza rank e XP do banco de dados
-            }
             // Garante que o botão LOGIN tem conteúdo
             setTimeout(() => {
                 const authBtn = document.getElementById('authBtn');
@@ -9568,11 +10050,27 @@ function perguntarSave() {
             // Verificar se há usuário logado e mostrar nome acima do logo
             const usuario = localStorage.getItem('usuarioLogado');
             const token = localStorage.getItem('token');
+            const dogue = usuario === 'Dogue'
             if (usuario && token) {
-
-                // Sincronizar itens comprados com o servidor (moedas já foram sincronizadas acima)
-                await syncItemsFromDatabase();
-                loadInventoryColors();
+                // Visual
+                const btn = document.getElementById("userPanelBtn")
+                const buttonclass = dogue
+                ? btn.className = 'user-admin-panel-btn'
+                : btn.className = 'user-panel-btn'
+                
+                const tanki = localStorage.getItem('item-tanki-mode') === 'owned'
+                const tankicard = document.getElementById('tankicard')
+                const tankiclass = tanki
+                ? tankicard.style.display = 'inline-block'
+                : tankicard.style.display = 'none'
+                
+                if (window.location.href.toLowerCase().includes ('file://') === 'false') { // Verifica se está no protocólo file:
+                  await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
+                  await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
+                  await syncAchievements(); // sincroniza conquistas do banco de dados
+                  await syncUnlockedGames(); // sincroniza jogos secretos do banco de dados
+                  await syncRankAndXp(); // sincroniza rank e XP do banco de dados
+                }
             } else if (usuario && !token) {
                 localStorage.removeItem('usuarioLogado')
                 localStorage.removeItem('isAdmin')
