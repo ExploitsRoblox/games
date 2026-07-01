@@ -6720,6 +6720,38 @@ function conquistaAnimacao(tipo) {
             }
         }
 
+        function getUnlockedSecretGamesFromStorage() {
+            return Object.values(DATABASE_CODES).filter(jogoId => localStorage.getItem(jogoId) === 'unlocked');
+        }
+
+        async function syncUnlockedGamesToDatabase() {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const API_URL = "https://login-nqot.onrender.com";
+                const jogosSecretos = getUnlockedSecretGamesFromStorage();
+
+                const res = await fetch(`${API_URL}/jogos-secretos`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ jogosSecretos })
+                });
+
+                const data = await res.json();
+                if (res.ok && data.ok) {
+                    console.log(`[SYNC] ${jogosSecretos.length} jogos secretos enviados ao servidor:`, jogosSecretos);
+                } else {
+                    console.error('[SYNC] Erro ao enviar jogos secretos:', data.mensagem || res.statusText);
+                }
+            } catch (err) {
+                console.error('Erro ao enviar jogos secretos para o servidor:', err);
+            }
+        }
+
         async function syncUnlockedGames() {
             const token = localStorage.getItem('token');
             if (!token) return; // Não sincroniza senão estiver logado
@@ -6737,7 +6769,8 @@ function conquistaAnimacao(tipo) {
                     if (data.ok && data.jogosSecretos) {
                         // Sincronizar jogos secretos do backend com localStorage
                         data.jogosSecretos.forEach(jogoId => {
-                            localStorage.setItem(`jogo-secreto-${jogoId}`, 'unlocked');
+                            localStorage.setItem(jogoId, 'unlocked');
+                            unlockGame(jogoId);
                         });
                         
                         console.log(`[SYNC] ${data.jogosSecretos.length} jogos secretos sincronizados do servidor:`, data.jogosSecretos);
@@ -10099,6 +10132,8 @@ function perguntarSave() {
                     unlockGame(gameId);
                 }
             });
+
+            await syncUnlockedGamesToDatabase();
 
             // Se o item "all-games" foi comprado, desbloquear todos os jogos secretos
             if (localStorage.getItem('item-all-games') === 'owned') {
