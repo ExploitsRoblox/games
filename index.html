@@ -75,6 +75,11 @@
             z-index: 1000;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
         }
+        /* Nova classe para o Modo Tanki */
+.navbar-tanki {
+    background-image: url(images/grey.jpg);
+    background-repeat: repeat;
+}
 
         .navbar-container {
             display: flex;
@@ -694,11 +699,13 @@
           .user-admin-panel-btn {
             background: linear-gradient(90deg, #ff0000, #df6c00,#d2e900ef, #09ff00, #00fcfc, #001eff, #7700ff, #ff00ccee, #ff0000);
             background-size: 200% 100%;
-            color: white;
+            color: rgb(255, 255, 255);
             border: none;
             border-radius: 4px;
             padding: 10px 15px;
             font-weight: 600;
+            font-family: "Quad";
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
             cursor: pointer;
             z-index: 999;
             display: flex;
@@ -710,14 +717,15 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             white-space: nowrap;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 2px 8px rgba(0, 0, 0);
             position: relative;
         }
         
         .user-admin-panel-btn:hover {
             transform: scale(1.05);
-            background: #cc0000;
-            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.6);
+            background-size: 50% 100%;
+            background-image: url(images/dog.gif);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.6);
         }
         
         /* Modal do Painel do Usuário */
@@ -4642,7 +4650,7 @@ button.door {
             <div class="skins-info">
                 <p>💡 Dica: Use a tecla <kbd>;</kbd> para mostrar/esconder as skins rapidamente!</p>
             </div>
-            <div class="skins-header">
+            <div id="secret-skins" class="skins-header">
                 <h2>Skins Secretas</h2>
             </div>
             <div class="skins-list">
@@ -4669,6 +4677,14 @@ button.door {
                     <label class="root-item">
                         <span>Fundo principal</span>
                         <input type="text" id="root-3" class="root-color-input" placeholder="#0b071e" oninput="changeRoot(3)">
+                    </label>
+                     <label class="root-item">
+                        <span>Background dos Cards</span>
+                        <input type="text" id="root-4" class="root-color-input" placeholder="#1e113c" oninput="changeRoot(4)">
+                    </label>
+                     <label class="root-item">
+                        <span>Fundo dos containers</span>
+                        <input type="text" id="root-5" class="root-color-input" placeholder="#130c2a" oninput="changeRoot(5)">
                     </label>
                 </div>
                 <div class="root-actions">
@@ -5236,19 +5252,25 @@ button.door {
     const DEFAULT_ROOT_COLORS = {
         1: '#f43f5e',
         2: '#38bdf8',
-        3: '#0b071e'
+        3: '#0b071e',
+        4: '#1e113c',
+        5: '#130c2a'
     };
 
     const ROOT_VARIABLES = {
         1: '--accent-color',
         2: '--gold',
-        3: '--bg-dark'
+        3: '--bg-dark',
+        4: '--card-bg',
+        5: '--sidebar-bg'
     };
 
     const ROOT_STORAGE_KEYS = {
         1: 'custom-root-accent',
         2: 'custom-root-gold',
-        3: 'custom-root-bg'
+        3: 'custom-root-bg',
+        4: 'custom-root-card',
+        5: 'custom-root-side'
     };
 
     function updateRootCustomizationVisibility() {
@@ -6385,10 +6407,12 @@ async function atualizarChatAtivo() {
         
     function checkTanki() {
         const main = document.getElementById("mainid")
+        const card = document.querySelectorAll(".game-card")
         const achbtn = document.getElementById("conquistasbtn")
         const lojabtn = document.getElementById("lojabtn")
         const chatbtn = document.getElementById("chatBtn")
         const skinsbtn = document.getElementById("skinsbtn")
+        const navbar = document.querySelectorAll(".navbar")
         const recobtn = document.getElementById("recompensabtn")
         const invbtn = document.getElementById("inventariobtn")
         const filbtn = document.getElementById("filtrosbtn")
@@ -6401,6 +6425,15 @@ async function atualizarChatAtivo() {
         : `background: linear-gradient(135deg, var(--bg-dark) 0%, var(--sidebar-bg) 100%);`;
         main.style = mainStyle
 
+      const cardStyle = tankiMode 
+  ? `background-image: url(images/grey.jpg); background-repeat: repeat;`
+  : `background: var(--card-bg);`;
+
+// Percorre cada card da lista e aplica o estilo
+       card.forEach(elemento => {
+              elemento.style = cardStyle;
+        });
+
         const consquistastyle = tankiMode 
         ? achbtn.innerHTML = `<img src="images/gui/achievements.png" alt="Conquistas">`
         : achbtn.innerHTML = `CONQUISTAS`
@@ -6412,6 +6445,16 @@ async function atualizarChatAtivo() {
         const lojastyle = tankiMode 
         ? lojabtn.innerHTML = `<img src="images/gui/shop.png" alt="Loja">`
         : lojabtn.innerHTML = `LOJA`
+
+        // O ternário apenas decide QUAL string de estilo usar
+const navbarStyle = tankiMode
+    ? `background-image: url(images/grey.jpg); background-repeat: repeat;` // Adicionado ; no final da string
+    : `background: linear-gradient(180deg, #1a1a1a 0%, rgba(26, 26, 26, 0.8) 100%);`;
+
+
+       navbar.forEach(elemento => {
+              elemento.style = navbarStyle;
+        });
         
         const rankstyle = tankiMode 
         ? leaderbtn.innerHTML = `<img src="images/gui/rank.png" alt="Placar">`
@@ -6442,12 +6485,10 @@ async function atualizarChatAtivo() {
         const tanki = localStorage.getItem('modo-tanki-online')
         if (tanki === 'true') {
             localStorage.setItem('modo-tanki-online', 'false')
-            localStorage.removeItem('item-tanki-mode')
             alert("Modo Tanki Desativado!")
             window.location.reload()
         } else {
             localStorage.setItem('modo-tanki-online', 'true')
-            localStorage.setItem('item-tanki-mode', 'owned')
             alert("Modo Tanki ativado!")
             window.location.reload();
         }
@@ -10187,9 +10228,14 @@ function perguntarSave() {
                 
                 const tanki = localStorage.getItem('item-tanki-mode') === 'owned'
                 const tankicard = document.getElementById('tankicard')
+                const secret = document.getElementById('secret-skins')
                 const tankiclass = tanki
                 ? tankicard.style.display = 'inline-block'
                 : tankicard.style.display = 'none'
+
+                const secretclass = tanki
+                ? secret.style.display = 'inline-block'
+                : secret.style.display = 'none'
                 
                 if (!window.location.href.toLowerCase().includes('file://')) { // Verifica se está no protocólo file:
                   await syncUnlockedGamesToDatabase();
