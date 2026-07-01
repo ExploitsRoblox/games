@@ -6105,12 +6105,106 @@ async function atualizarChatAtivo() {
     const feedback = document.getElementById('feedbackMessage');
     const code = input.value.trim().toUpperCase();
 
-    // 1. Verifica se o código existe no banco de dados
+    if (!code) {
+        feedback.textContent = "❌ Digite um código!";
+        feedback.className = "error";
+        feedback.style.display = "block";
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        try {
+            const res = await fetch(`${API_URL_BACKEND}/usar-codigo`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ codigo: code })
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.ok) {
+                const recompensa = data.recompensa || {};
+                const tipo = recompensa.tipo;
+                const valor = Number(recompensa.valor || 0);
+                const itemId = recompensa.itemId;
+                const jogoId = recompensa.jogoId;
+
+                if (tipo === 'moedas') {
+                    await addCoins(valor);
+                    await syncCoinsFromDatabase();
+                    feedback.textContent = `🎉 Código resgatado! +${valor} moedas.`;
+                } else if (tipo === 'item') {
+                    const user = JSON.parse(localStorage.getItem('user') || '{}');
+                    const itensComprados = Array.isArray(user.itensComprados) ? user.itensComprados : [];
+                    if (!itensComprados.includes(itemId)) {
+                        itensComprados.push(itemId);
+                        user.itensComprados = itensComprados;
+                        localStorage.setItem('user', JSON.stringify(user));
+                    }
+                    localStorage.setItem(`item-${itemId}`, 'owned');
+                    await syncItemsFromDatabase();
+                    feedback.textContent = `🎉 Código resgatado! Item desbloqueado: ${itemId}.`;
+                } else if (tipo === 'spins') {
+                    spinsRemaining += valor;
+                    updateSpinsDisplay();
+                    await saveSpinsToDatabase(spinsRemaining);
+                    feedback.textContent = `🎉 Código resgatado! +${valor} giros.`;
+                } else if (tipo === 'jogo') {
+                    unlockGame(jogoId);
+                    localStorage.setItem(jogoId, 'unlocked');
+                    feedback.textContent = `🎉 Código resgatado! Jogo desbloqueado.`;
+                } else if (tipo === 'tempo-jogo') {
+                    const atual = parseInt(localStorage.getItem('userPlaytime') || '0');
+                    localStorage.setItem('userPlaytime', atual + valor);
+                    updateUserPanelInfo();
+                    feedback.textContent = `🎉 Código resgatado! +${valor} minutos de tempo de jogo.`;
+                } else {
+                    feedback.textContent = `🎉 Código resgatado!`;
+                }
+
+                feedback.className = "success";
+                feedback.style.display = "block";
+                input.value = "";
+
+                if (localStorage.getItem('usuarioLogado') && localStorage.getItem('userRank') !== '31') {
+                    if (localStorage.getItem('item-premium-xp')) {
+                        awardXp(1000);
+                    } else {
+                        awardXp(500);
+                    }
+                }
+
+                return;
+            }
+
+            if (res.status === 404) {
+                // Fallback para códigos secretos locais
+            } else {
+                feedback.textContent = `❌ ${data.mensagem || 'Erro ao resgatar código.'}`;
+                feedback.className = "error";
+                feedback.style.display = "block";
+                return;
+            }
+        } catch (err) {
+            console.error('[REDEEM-CODE] Erro ao chamar API:', err);
+            feedback.textContent = '❌ Erro ao conectar ao servidor.';
+            feedback.className = "error";
+            feedback.style.display = "block";
+            return;
+        }
+    }
+
+    // 1. Verifica se o código existe no banco de dados local de códigos secretos
     if (!DATABASE_CODES[code]) {
         feedback.textContent = "❌ Código inválido!";
         feedback.className = "error";
         feedback.style.display = "block";
-        return; // Para a execução aqui se o código for inválido
+        return;
     }
 
     const gameId = DATABASE_CODES[code];
@@ -6120,7 +6214,7 @@ async function atualizarChatAtivo() {
         feedback.textContent = "❌ O jogo já foi desbloqueado";
         feedback.className = "error";
         feedback.style.display = "block";
-        return; // Para a execução aqui se já foi resgatado
+        return;
     }
 
     // 3. Se passou pelas validações, desbloqueia o jogo
