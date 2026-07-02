@@ -77,7 +77,7 @@
         }
         /* Nova classe para o Modo Tanki */
 .navbar-tanki {
-    background-image: url(images/grey.jpg);
+    background-image: url(images/backgrounds/grey.jpg);
     background-repeat: repeat;
 }
 
@@ -366,7 +366,7 @@
         #right-sidebar { right: calc(-1 * var(--sidebar-width)); }
         #right-sidebar.active { right: 0; }
 
-        .search-container { margin-top: 60px; margin-bottom: 20px; flex-shrink: 0; }
+        .search-container { margin-top: 60px; margin-bottom: 20px; margin-right: 20px; flex-shrink: 0; }
 
         #searchBox {
             width: 100%;
@@ -565,7 +565,7 @@
             width: 80%;
             max-width: 1200px;
             height: 300px;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('images/ufo.png');
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('images/games/ufo.png');
             background-size: cover;
             background-position: center;
             border-radius: 15px;
@@ -698,7 +698,7 @@
         /* Painel do usuário admin*/
           .user-admin-panel-btn {
             background: linear-gradient(90deg, #ff0000, #df6c00,#d2e900ef, #09ff00, #00fcfc, #001eff, #7700ff, #ff00ccee, #ff0000);
-            background-size: 200% 100%;
+            background-size: 10000% 100%;
             color: rgb(255, 255, 255);
             border: none;
             border-radius: 4px;
@@ -710,7 +710,7 @@
             z-index: 999;
             display: flex;
             align-items: center;
-            animation: flow 1s linear infinite;
+            animation: flow 5s linear infinite;
             gap: 8px;
             transition: all 0.3s ease;
             font-size: 0.85rem;
@@ -725,6 +725,7 @@
             transform: scale(1.05);
             background-size: 50% 100%;
             background-image: url(images/dog.gif);
+            animation: flow 1s linear infinite;
             box-shadow: 0 4px 12px rgba(255, 255, 255, 0.6);
         }
         
@@ -1235,10 +1236,10 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
-            color: #fff;
+            color: #ffffff;
             font-size: 12px;
-            font-family: 'Courier New', monospace;
         }
+
         
         .shop-item-undertale:hover {
             background: #ffffff;
@@ -1252,7 +1253,10 @@
         }
         
         .shop-item-undertale-name {
-            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 100;
+            outline-color: #000;
+            outline-width: 2px;
             margin-bottom: 5px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -1262,8 +1266,8 @@
         }
         
         .shop-item-undertale-price {
-            color: #ffff00;
-            font-size: 11px;
+            color: #67d4ff;
+            font-size: 14px;
             font-weight: bold;
         }
         
@@ -4037,6 +4041,24 @@ button.door {
             margin-bottom: 6px;
         }
 
+        .rank-title-admin {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg, #ff0000, #df6c00,#d2e900ef, #09ff00, #00fcfc, #001eff, #7700ff, #ff00ccee, #ff0000);
+            /* background: linear-gradient(90deg, rgb(255, 255, 255), rgb(0, 0, 0), rgb(255, 255, 255)); */
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200%;
+            font-family: "Quad", cursive;
+            font-weight: 100;
+            animation: flow 2s linear infinite;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
         .xp-bar-container {
             width: 100%;
             height: 12px;
@@ -4053,6 +4075,14 @@ button.door {
             width: 0%;
             transition: width 0.3s ease;
         }
+        .xp-bar-admin {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #df6c00,#d2e900ef, #09ff00, #00fcfc, #001eff, #7700ff, #ff00ccee, #ff0000);
+            background-size: 10000% 100%;
+            animation: flow 1s linear infinite;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
 
         .xp-text {
             font-size: 0.85rem;
@@ -4063,6 +4093,12 @@ button.door {
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2)) !important;
             border: 2px solid rgba(251, 191, 36, 0.7) !important;
             box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), inset 0 0 10px rgba(251, 191, 36, 0.2);
+        }
+
+        .rank-container.admin-premium-active {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.2)) !important;
+            border: 2px solid rgba(255, 255, 255, 0.7) !important;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(251, 191, 36, 0.2);
         }
 
 
@@ -4156,7 +4192,7 @@ button.door {
     <!-- Popup Primeira Visita -->
     <div id="firstVisitOverlay" class="first-visit-overlay">
         <div class="first-visit-popup">
-            <h1 style="font-size: 1.6rem;">UPDATE 1.93</h1>
+            <h1 style="font-size: 1.6rem;">UPDATE 1.94</h1>
             <p style="font-size: 0.8rem;">
   Confira as novidades da atualização!
 </p>
@@ -4165,7 +4201,7 @@ button.door {
   <li>Sistema de patentes, xp e Premium.</li>
   <li>Nova conquista: "Melhor que você"</li>
   <li>Rework no menu de conquistas</li>
-  <li>Novo Item: "Premium XP"</li>
+  <li>Novo Item: "Modo Tanki"</li>
 </ol>
 
 
@@ -4253,7 +4289,7 @@ button.door {
             
             <!-- Sans Character -->
             <div class="sans-character">
-                <img src="images/sprite.png" alt="Sans">
+                <img src="images/sprites/sprite.png" alt="Sans">
             </div>
             
             <!-- Shop Items Grid (Hidden by default) -->
@@ -4281,7 +4317,7 @@ button.door {
             
             <!-- Spamton Character -->
             <div class="spamton-character">
-                <img src="images/spamton.png" alt="Spamton">
+                <img src="images/sprites/spamton.png" alt="Spamton">
             </div>
             
             <!-- Shop Items Grid (Hidden by default) -->
@@ -4367,7 +4403,7 @@ button.door {
     <div id="wheelModal" class="wheel-modal" onclick="closeWheel(event)">
         <div class="wheel-content" onclick="event.stopPropagation();">
             <div class="wheel-container">
-                <img class="wheel-spinner" id="wheelSpinner" src="images/wheel.png" alt="Wheel Sprite" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                <img class="wheel-spinner" id="wheelSpinner" src="images/sprites/wheel.png" alt="Wheel Sprite" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
                 <div class="wheel-pointer"></div>
             </div>
             <div class="wheel-info" id="wheelRewardText">Clique em girar para começar!</div>
@@ -4381,8 +4417,8 @@ button.door {
             <button class="wheel-close" onclick="closeWheel()">Fechar</button>
            
         </div> 
-        <div class="jevil"><img src="images/jevil.png" alt="Jevil"></div>
-        <button class="door" onclick="opendoor()"><img src="images/door.jpg" alt="Door"></img></button>
+        <div class="jevil"><img src="images/sprites/jevil.png" alt="Jevil"></div>
+        <button class="door" onclick="opendoor()"><img src="images/sprites/door.jpg" alt="Door"></img></button>
     </div>
     
     <!-- Modal de Admin -->
@@ -4573,7 +4609,8 @@ button.door {
             
             <div class="user-profile-section">
                 <img id="userProfilePic" class="user-profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23a855f7'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='white'%3E👤%3C/text%3E%3C/svg%3E" alt="Perfil" onclick="openProfilePictureModal()">
-                <div class="user-profile-name" id="userNameDisplay">Usuário</div>
+                <div class="user-profile-name" id="userNameDisplay">Visitante</div>
+                <div class="user-profile-name" id="userTagDisplay" style="font-size: 12px;">Tag</div>
             </div>
             
             <div class="user-stats-section">
@@ -4650,6 +4687,7 @@ button.door {
             <div class="skins-info">
                 <p>💡 Dica: Use a tecla <kbd>;</kbd> para mostrar/esconder as skins rapidamente!</p>
             </div>
+            <div id="tankicardparent" style="display: none;">
             <div id="secret-skins" class="skins-header">
                 <h2>Skins Secretas</h2>
             </div>
@@ -4661,6 +4699,7 @@ button.door {
                     <p class="skin-status" id="skin4-status"></p>
                 </div>
             </div>
+        </div>
             <div id="rootCustomizationSection" class="root-customization-section" style="display:none;">
                 <div class="skins-header">
                     <h2>🎨 Tema do site</h2>
@@ -4696,20 +4735,20 @@ button.door {
     
     <!-- Containers das Skins (Imagens) -->
     <div id="skinContainer1" class="skin-display-container skin-hidden">
-        <img id="skinImage1" src="images/skin1.png" alt="Skin 1: Pixel" class="skin-image">
+        <img id="skinImage1" src="images/skins/skin1.png" alt="Skin 1: Pixel" class="skin-image">
     </div>
     
     <div id="skinContainer2" class="skin-display-container skin-hidden">
-        <img id="skinImage2" src="images/skin2.png" alt="Skin 2: Noturna" class="skin-image">
+        <img id="skinImage2" src="images/skins/skin2.png" alt="Skin 2: Noturna" class="skin-image">
     </div>
     
     <div id="skinContainer3" class="skin-display-container skin-hidden">
-        <img id="skinImage3" src="images/skin3.png" alt="Skin 3: Cósmica" class="skin-image">
+        <img id="skinImage3" src="images/skins/skin3.png" alt="Skin 3: Cósmica" class="skin-image">
     </div>
 
      
     <div id="skinContainer4" class="skin-display-container skin-hidden">
-        <img id="skinImage4" src="images/skin4.png" alt="Skin 4: Futurista" class="skin-image">
+        <img id="skinImage4" src="images/skins/skin4.png" alt="Skin 4: Futurista" class="skin-image">
     </div>
     
     <!-- Modal de Jogo com Iframe -->
@@ -4729,19 +4768,19 @@ button.door {
     </div>
     
     <div class="detetiveimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-        <img src="images/detetive.png" alt="Detetive" >
+        <img src="images/conquistas/detetive.png" alt="Detetive" >
     </div>
     <div class="sortudoimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-        <img src="images/sortudo.png" alt="Sortudo" >
+        <img src="images/conquistas/sortudo.png" alt="Sortudo" >
     </div>
     <div class="infinityimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-        <img src="images/infinity.png" alt="Infinity" >
+        <img src="images/conquistas/infinity.png" alt="Infinity" >
     </div>
     <div class="img50" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-    <img src="images/50goal.png" alt="50 Goal">
+    <img src="images/conquistas/50goal.png" alt="50 Goal">
 </div>
     <div class="gasterimg" style="position: fixed; bottom: -70px; left: 50%; transform: translateX(-50%); z-index: 1001; pointer-events: none;">
-        <img src="images/gaster.png" alt="Gaster" >
+        <img src="images/conquistas/gaster.png" alt="Gaster" >
     </div>
     <nav id="left-sidebar" class="sidebar">
         <div class="search-container">
@@ -4822,198 +4861,198 @@ button.door {
 
         <div class="grid-container" id="gameGrid">
             <a href="https://neeexusbr.github.io/apostilas" class="game-card" data-name="Apostilas" data-category="educativo">
-                <img src="images/apostila.png" alt="Apostilas">
+                <img src="images/games/apostila.png" alt="Apostilas">
                 <span>Apostilas</span>
             </a>
 
             <a href="https://neeexusbr.github.io/gdclicker" class="game-card" data-name="Geometry Dash Clicker" data-category="arcade">
-                <img src="images/gdclicker.png" alt="GD Clicker">
+                <img src="images/games/gdclicker.png" alt="GD Clicker">
                 <span>GD Clicker</span>
             </a>
 
             <a href="https://neeexusbr.github.io/undertale" class="game-card" data-name="Undertale Barato" data-category="aventura">
-                <img src="images/undertale.png" alt="Undertale">
+                <img src="images/games/undertale.png" alt="Undertale">
                 <span>Undertale Barato</span>
             </a>
             <a href="https://neeexusbr.github.io/ufo" class="game-card" data-name="Jogo de UFO" data-category="arcade">
-                <img src="images/ufo.png" alt="UFO">
+                <img src="images/games/ufo.png" alt="UFO">
                 <span>Jogo de UFO</span>
             </a>
 
             <a href="https://neeexusbr.github.io/wave" class="game-card" data-name="Wave Game" data-category="arcade">
-                <img src="images/wave.png" alt="Wave">
+                <img src="images/games/wave.png" alt="Wave">
                 <span>Wave Game</span>
             </a>
 
             <a href="https://neeexusbr.github.io/snake" class="game-card" data-name="Slither.io" data-category="multijogador">
-                <img src="images/snake.png" alt="Slither">
+                <img src="images/games/snake.png" alt="Slither">
                 <span>Slither.io</span>
             </a>
 
             <a href="https://neeexusbr.github.io/LevelDevil" class="game-card" data-name="Level Devil" data-category="acao">
-                <img src="images/leveldevil.png" alt="Level Devil">
+                <img src="images/games/leveldevil.png" alt="Level Devil">
                 <span>Level Devil</span>
             </a>
 
             <a href="https://neeexusbr.github.io/ultrakill" class="game-card" data-name="Ultrakill" data-category="acao">
-                <img src="images/ultrakill.jpg" alt="Ultrakill">
+                <img src="images/games/ultrakill.jpg" alt="Ultrakill">
                 <span>Ultrakill</span>
             </a>
 
             <a href="https://neeexusbr.github.io/sab" class="game-card" data-name="Roube um Brainrot" data-category="acao">
-                <img src="images/sab.jpg" alt="Roube um Brainrot">
+                <img src="images/games/sab.jpg" alt="Roube um Brainrot">
                 <span>Roube um Brainrot</span>
             </a>
 
             <a href="https://neeexusbr.github.io/koopa" class="game-card" data-name="A Koopa Revenge 2" data-category="aventura">
-                <img src="images/koopa.jpg" alt="A Koopa Revenge 2">
+                <img src="images/games/koopa.jpg" alt="A Koopa Revenge 2">
                 <span>A Koopa Revenge 2</span>
             </a>
 
             <a href="https://neeexusbr.github.io/totm" class="game-card" data-name="Tomb Of the Mask" data-category="aventura">
-                <img src="images/tomt.png" alt="Tomb Of the Mask">
+                <img src="images/games/tomt.png" alt="Tomb Of the Mask">
                 <span>Tomb Of the Mask</span>
             </a>
 
             <a href="https://neeexusbr.github.io/gdl" class="game-card" data-name="Geometry Dash Lite" data-category="arcade">
-                <img src="images/geometrydash.png" alt="Geometry Dash Lite">
+                <img src="images/games/geometrydash.png" alt="Geometry Dash Lite">
                 <span>Geometry Dash Lite</span>
             </a>
 
             <a href="https://neeexusbr.github.io/deltarune" class="game-card" data-name="Deltarune" data-category="arcade">
-                <img src="images/deltarune.jpg" alt="Deltarune">
+                <img src="images/games/deltarune.jpg" alt="Deltarune">
                 <span>Deltarune</span>
             </a>
 
             <a href="https://neeexusbr.github.io/amongus" class="game-card" data-name="Among Us" data-category="multijogador">
-                <img src="images/amongus.png" alt="Among Us">
+                <img src="images/games/amongus.png" alt="Among Us">
                 <span>Among Us</span>
             </a>
 
             <a href="https://neeexusbr.github.io/fnaf" class="game-card" data-name="FNAF 4" data-category="horror">
-                <img src="images/fnaf.png" alt="FNAF 4">
+                <img src="images/games/fnaf.png" alt="FNAF 4">
                 <span>FNAF 4</span>
             </a>
 
             <a href="https://neeexusbr.github.io/subway" class="game-card" data-name="Subway Surfers" data-category="arcade">
-                <img src="images/subway.png" alt="Subway Surfers">
+                <img src="images/games/subway.png" alt="Subway Surfers">
                 <span>Subway Surfers</span>
             </a>
 
             <a href="https://neeexusbr.github.io/granny" class="game-card" data-name="Granny" data-category="horror">
-                <img src="images/granny.png" alt="Granny">
+                <img src="images/games/granny.png" alt="Granny">
                 <span>Granny</span>
             </a>
 
              <a href="https://neeexusbr.github.io/granny2" class="game-card" data-name="Granny 2" data-category="horror">
-                <img src="images/granny2.png" alt="Granny2">
+                <img src="images/games/granny2.png" alt="Granny2">
                 <span>Granny 2</span>
             </a>
 
              <a href="https://neeexusbr.github.io/nm" class="game-card" data-name="Número Mágico" data-category="acao">
-                <img src="images/nm.jpg" alt="Número Mágico">
+                <img src="images/games/nm.jpg" alt="Número Mágico">
                 <span>Número Mágico</span>
             </a>
 
             <a href="https://neeexusbr.github.io/baldi" class="game-card" data-name="Baldi's Basics" data-category="horror">
-                <img src="images/baldi.png" alt="Baldi's Basics">
+                <img src="images/games/baldi.png" alt="Baldi's Basics">
                 <span>Baldi's Basics</span>
             </a>
 
             <a href="https://neeexusbr.github.io/sm64/sm64" class="game-card" data-name="Super Mario 64" data-category="aventura">
-                <img src="images/sm64.png" alt="Super Mario 64">
+                <img src="images/games/sm64.png" alt="Super Mario 64">
                 <span>Super Mario 64</span>
             </a>
 
             <a href="https://neeexusbr.github.io/snowrider" class="game-card" data-name="Snow Rider 3D" data-category="arcade">
-                <img src="images/snowrider.png" alt="Snow Rider 3D">
+                <img src="images/games/snowrider.png" alt="Snow Rider 3D">
                 <span>Snow Rider 3D</span>
             </a>
 
             <a href="https://neeexusbr.github.io/rocket" class="game-card" data-name="Rocket League" data-category="arcade">
-                <img src="images/rocket.png" alt="ROcket">
+                <img src="images/games/rocket.png" alt="ROcket">
                 <span>Rocket League</span>
             </a>
 
             <a href="https://neeexusbr.github.io/survival" class="game-card" data-name="Survival Race Drift" data-category="arcade">
-                <img src="images/survival.jpg" alt="Survival Race Drift">
+                <img src="images/games/survival.jpg" alt="Survival Race Drift">
                 <span>Survival Race Drift</span>
             </a>
 
             <a href="https://neeexusbr.github.io/cod" class="game-card" data-name="Call of Duty" data-category="acao">
-                <img src="images/cod.jpg" alt="Call of Duty">
+                <img src="images/games/cod.jpg" alt="Call of Duty">
                 <span>Call of Duty: Shopee Edition</span>
             </a>
             
             <a href="https://neeexusbr.github.io/racing" class="game-card" data-name="Racing" data-category="aventura">
-                <img src="images/racing.png" alt="Racing">
+                <img src="images/games/racing.png" alt="Racing">
                 <span>Ultimate Racing</span>
             </a>
 
             <a href="https://playtankisandbox.github.io/" class="game-card" data-name="TO" data-category="acao">
-                <img src="images/tanki.jpg" alt="TO">
+                <img src="images/games/tanki.jpg" alt="TO">
                 <span>Tanki Online</span>
             </a>
 
 
             <a href="http://neeexusbr.github.io/sf" class="game-card" data-name="Bad Time Simulator" data-category="horror">
-                <img src="images/badtime.png" alt="Bad Time Simulator">
+                <img src="images/games/badtime.png" alt="Bad Time Simulator">
                 <span>Bad Time Simulator</span>
             </a>
 
             <a href="http://neeexusbr.github.io/lb" class="game-card" data-name="Mad Time Simulator" data-category="horror">
-                <img src="images/lastbreath.png" alt="Mad Time Simulator">
+                <img src="images/games/lastbreath.png" alt="Mad Time Simulator">
                 <span>Mad Time Simulator</span>
             </a>
 
             <a href="https://freak-games-studio.github.io/talking-ben/" class="game-card" data-name="Talking Ben" data-category="arcade">
-                <img src="images/talkingben.png" alt="Talking Ben">
+                <img src="images/games/talkingben.png" alt="Talking Ben">
                 <span>Talking Ben</span>
             </a>
 
             
             <a href="https://neeexusbr.github.io/minecraft" class="game-card" data-name="Minecraft" data-category="aventura">
-                <img src="images/minecraft.png" alt="Minecraft">
+                <img src="images/games/minecraft.png" alt="Minecraft">
                 <span>Minecraft</span>
             </a>
 
             <a href="https://neeexusbr.github.io/fnf" class="game-card" data-name="Friday Night Funkin" data-category="ritmo">
-                <img src="images/fnf.png" alt="Friday Night Funkin">
+                <img src="images/games/fnf.png" alt="Friday Night Funkin">
                 <span>Friday Night Funkin</span>
             </a>
 
             <a href="https://neeexusbr.github.io/blockblast" class="game-card" data-name="Block Blast" data-category="arcade">
-                <img src="images/blockblast.png" alt="Block Blast">
+                <img src="images/games/blockblast.png" alt="Block Blast">
                 <span>Block Blast</span>
             </a>
 
             <a href="https://neeexusbr.github.io/1234players" class="game-card" data-name="2 3 4 Player Games" data-category="multijogador">
-                <img src="images/1234players.png" alt="2 3 4 Player Games">
+                <img src="images/games/1234players.png" alt="2 3 4 Player Games">
                 <span>2 3 4 Player Games</span>
             </a>
 
             <a href="https://neeexusbr.github.io/guloso" class="game-card secret-hidden" id="secret1" data-name="Guloso" data-category="secreto">
-                <img src="images/secret.jpg" alt="Guloso">
+                <img src="images/games/secret.jpg" alt="Guloso">
                 <span>Guloso (Secreto)</span>
             </a>
 
             <a href="https://neeexusbr.github.io/secret" class="game-card secret-hidden" id="secret3" data-name="Bruno" data-category="secreto">
-                <img src="images/secret.jpg" alt="Bruno">
+                <img src="images/games/secret.jpg" alt="Bruno">
                 <span>Bruno (Secreto)</span>
             </a>
             
             <a href="https://neeexusbr.github.io/flappydiv" class="game-card secret-hidden" id="secret2" data-name="Flappy Div" data-category="secreto">
-                <img src="images/secret.jpg" alt="Flappy Div">
+                <img src="images/games/secret.jpg" alt="Flappy Div">
                 <span>Flappy Div (Secreto)</span>
             </a>
 
             <a href="https://neeexusbr.github.io/indexgames" class="game-card secret-hidden" id="secret4" data-name="indgames" data-category="secreto">
-                <img src="images/secret.jpg" alt="Jogos Indexados">
+                <img src="images/games/secret.jpg" alt="Jogos Indexados">
                 <span>Jogos Indexados (Secreto)</span>
             </a>
 
             <a href="https://neeexusbr.github.io/flash" class="game-card secret-hidden" id="secret5" data-name="Flash Games" data-category="secreto">
-                <img src="images/flash.png" alt="Jogos Flash">
+                <img src="images/games/flash.png" alt="Jogos Flash">
                 <span>Jogos Flash (Secreto)</span>
             </a>
             
@@ -5275,9 +5314,13 @@ button.door {
 
     function updateRootCustomizationVisibility() {
         const section = document.getElementById('rootCustomizationSection');
+        const section2 = document.getElementById('tankicardparent');
         if (!section) return;
+        if (!section2) return;
         const isOwned = localStorage.getItem('item-tanki-mode') === 'owned';
         section.style.display = isOwned ? 'block' : 'none';
+         const isOwned2 = localStorage.getItem('item-tanki-mode') === 'owned';
+        section2.style.display = isOwned ? 'block' : 'none';
     }
 
     function getRootColorValue(index) {
@@ -6413,6 +6456,13 @@ async function atualizarChatAtivo() {
         const chatbtn = document.getElementById("chatBtn")
         const skinsbtn = document.getElementById("skinsbtn")
         const navbar = document.querySelectorAll(".navbar")
+        const body = document.querySelectorAll("body")
+        const achcont = document.querySelectorAll(".achievements-container")
+        const sidebar = document.querySelectorAll(".sidebar")
+        const skincont = document.querySelectorAll(".skins-content")
+        const invcont = document.querySelectorAll(".inventory-content")
+        const admincont = document.querySelectorAll(".admin-content")
+        const adminsec = document.querySelectorAll(".admin-section")
         const recobtn = document.getElementById("recompensabtn")
         const invbtn = document.getElementById("inventariobtn")
         const filbtn = document.getElementById("filtrosbtn")
@@ -6421,12 +6471,12 @@ async function atualizarChatAtivo() {
         const tankiMode = localStorage.getItem('modo-tanki-online') === 'true'
         
         const mainStyle = tankiMode 
-        ? `background-image: url(images/bg.png); background-repeat: repeat;`
+        ? `background-image: url(images/backgrounds/bg.png); background-repeat: repeat;`
         : `background: linear-gradient(135deg, var(--bg-dark) 0%, var(--sidebar-bg) 100%);`;
         main.style = mainStyle
 
       const cardStyle = tankiMode 
-  ? `background-image: url(images/grey.jpg); background-repeat: repeat;`
+  ? `background-image: url(images/backgrounds/grey.jpg); background-repeat: repeat;`
   : `background: var(--card-bg);`;
 
 // Percorre cada card da lista e aplica o estilo
@@ -6447,15 +6497,74 @@ async function atualizarChatAtivo() {
         : lojabtn.innerHTML = `LOJA`
 
         // O ternário apenas decide QUAL string de estilo usar
-const navbarStyle = tankiMode
-    ? `background-image: url(images/grey.jpg); background-repeat: repeat;` // Adicionado ; no final da string
+    const navbarStyle = tankiMode
+    ? `background-image: url(images/backgrounds/grey.jpg); background-repeat: repeat;` // Adicionado ; no final da string
     : `background: linear-gradient(180deg, #1a1a1a 0%, rgba(26, 26, 26, 0.8) 100%);`;
 
 
        navbar.forEach(elemento => {
               elemento.style = navbarStyle;
         });
-        
+
+         // O ternário apenas decide QUAL string de estilo usar
+    const sidebarStyle = tankiMode
+    ? `background-image: url(images/backgrounds/dark_grey.jpg); background-repeat: repeat;` // Adicionado ; no final da string
+    : `background: var(--sidebar-bg);`;
+
+
+       sidebar.forEach(elemento => {
+              elemento.style = sidebarStyle;
+        });
+
+          // O ternário apenas decide QUAL string de estilo usar
+    const bodyStyle = tankiMode
+    ? `background-image: url(images/backgrounds/bg.png); background-repeat: repeat;`
+    : `background-color: var(--bg-dark);`;
+     body.forEach(elemento => {
+              elemento.style = bodyStyle;
+        });
+
+
+          // O ternário apenas decide QUAL string de estilo usar
+    const achStyle = tankiMode
+    ? `background-image: url(images/backgrounds/bg.png); background-repeat: repeat;`
+    : `background-color: var(--sidebar-bg);`;
+     achcont.forEach(elemento => {
+              elemento.style = achStyle;
+        });
+
+         // O ternário apenas decide QUAL string de estilo usar
+    const admincStyle = tankiMode
+    ? `background-image: url(images/backgrounds/dark_grey.jpg); background-repeat: repeat;`
+    : `background-color: var(--sidebar-bg);`;
+     admincont.forEach(elemento => {
+              elemento.style = admincStyle;
+        });
+
+
+          // O ternário apenas decide QUAL string de estilo usar
+    const adminsecStyle = tankiMode
+    ? `background-image: url(images/backgrounds/bg.png); background-repeat: repeat;`
+    : `background-color: var(--card-bg);`;
+     adminsec.forEach(elemento => {
+              elemento.style = adminsecStyle;
+        });
+
+             // O ternário apenas decide QUAL string de estilo usar
+    const skinStyle = tankiMode
+    ? `background-image: url(images/backgrounds/bg.png); background-repeat: repeat;`
+    : `background-color: var(--sidebar-bg);`;
+     skincont.forEach(elemento => {
+              elemento.style = skinStyle;
+        });
+
+        const inveStyle = tankiMode
+    ? `background-image: url(images/backgrounds/bg.png); background-repeat: repeat;`
+    : `background-color: var(--sidebar-bg);`;
+     invcont.forEach(elemento => {
+              elemento.style = inveStyle;
+        });
+
         const rankstyle = tankiMode 
         ? leaderbtn.innerHTML = `<img src="images/gui/rank.png" alt="Placar">`
         : leaderbtn.innerHTML = `Placar`
@@ -6548,7 +6657,7 @@ function spamtonPopup() {
 
     popup.innerHTML = `
         <button onclick="this.parentElement.remove()">
-            <img src="images/popup.png" alt="[[BIG SHOT]]">
+            <img src="images/sprites/popup.png" alt="[[BIG SHOT]]">
         </button>
     `;
 
@@ -6636,17 +6745,17 @@ function conquistaAnimacao(tipo) {
 
         // === SISTEMA DE MOEDAS ===
         const SHOP_ITEMS = [
-            { id: 'all-games', name: 'Desbloquear Todos os Jogos', desc: 'Desbloqueie todos os jogos secretos', icon: '🔓', price: 300 },
-            { id: 'custom-tag', name: 'Tag Personalizada', desc: 'Uma tag única para o seu perfil', icon: '🏷️', price: 2500 },
-            { id: 'cor-comum', name: 'Cor da Tag (Comum)', desc: 'Customize a cor da sua tag com cores normais', icon: '🎨', price: 1500 },
-            { id: 'cor-especial', name: 'Cor da Tag (Especial)', desc: 'Cores especiais, gradientes animados e mais!', icon: '✨', price: 5000 },
-            { id: 'new-game', name: 'Escolher novo jogo', desc: 'Escolha um novo jogo para ser adicionado ao site!', icon: '🎮', price: 10000 },
-            { id: 'spins-5', name: 'Giros da Roleta (5x)', desc: 'Compre 5 giros para usar na roleta da sorte!', icon: '🎡', price: 500, isSpins: true, quantity: 5 },
-            { id: 'spins-10', name: 'Giros da Roleta (10x)', desc: 'Compre 10 giros para usar na roleta da sorte!', icon: '🎡', price: 1500, isSpins: true, quantity: 10 },
-            { id: 'spins-25', name: 'Giros da Roleta (25x)', desc: 'Compre 25 giros com desconto!', icon: '🎡', price: 3000, isSpins: true, quantity: 25 },
-            { id: 'spins-50', name: 'Giros da Roleta (50x)', desc: 'Compre 50 giros com grande desconto!', icon: '🎡', price: 5000, isSpins: true, quantity: 50 },
-            { id: 'premium-xp', name: 'Premium XP', desc: 'Ganhe 2x XP permanentemente!', icon: '👑', price: 7500, isPremium: true },
-            { id: 'tanki-mode', name: 'Modo Tanki', desc: 'Personalização da página!', icon: '🔥', price: 1000},
+            { id: 'all-games', name: 'Desbloquear Todos os Jogos', rarity: 'common', desc: 'Desbloqueie todos os jogos secretos', icon: '🔓', price: 300 },
+            { id: 'custom-tag', name: 'Tag Personalizada', rarity: 'rare', desc: 'Uma tag única para o seu perfil', icon: '🏷️', price: 2500 },
+            { id: 'cor-comum', name: 'Cor da Tag (Comum)', rarity: 'common', desc: 'Customize a cor da sua tag com cores normais', icon: '🎨', price: 1500 },
+            { id: 'cor-especial', name: 'Cor da Tag (Especial)', rarity: 'legendary', desc: 'Cores especiais, gradientes animados e mais!', icon: '✨', price: 5000 },
+            { id: 'new-game', name: 'Escolher novo jogo', rarity: 'special', desc: 'Escolha um novo jogo para ser adicionado ao site!', icon: '🎮', price: 10000 },
+            { id: 'spins-5', name: 'Giros da Roleta (5x)', rarity: 'epic', desc: 'Compre 5 giros para usar na roleta da sorte!', icon: '🎡', price: 500, isSpins: true, quantity: 5 },
+            { id: 'spins-10', name: 'Giros da Roleta (10x)', rarity: 'epic', desc: 'Compre 10 giros para usar na roleta da sorte!', icon: '🎡', price: 1500, isSpins: true, quantity: 10 },
+            { id: 'spins-25', name: 'Giros da Roleta (25x)', rarity: 'epic', desc: 'Compre 25 giros com desconto!', icon: '🎡', price: 3000, isSpins: true, quantity: 25 },
+            { id: 'spins-50', name: 'Giros da Roleta (50x)', rarity: 'epic', desc: 'Compre 50 giros com grande desconto!', icon: '🎡', price: 5000, isSpins: true, quantity: 50 },
+            { id: 'premium-xp', name: 'Conta Premium', rarity: 'special', desc: 'Ganhe 2x XP permanentemente!', icon: '<img src="images/ranks/premiumicon.png" alt="ContaPremium" style="width: 80px;">', price: 7500, isPremium: true },
+            { id: 'tanki-mode', name: 'Modo Tanki', rarity: 'legendary', desc: 'Personalização da página!', icon: '<img src="images/shop/tankimode.png" alt="ModoTanki" style="width: 50px;">', price: 1000},
         ];
 
         const SPAMTON_ITEMS = [
@@ -7003,9 +7112,29 @@ function conquistaAnimacao(tipo) {
             const rankDisplay = document.getElementById('rankDisplay');
             if (rankDisplay) {
                 const xpBarStyle = hasPremium 
-                    ? `background-image: url(images/ranks/premiumbarbg.jpg); background-repeat: no-repeat; background-position: center;`
+                    ? `background-image: url(images/ranks/premiumbarbg.jpg); background-repeat: repeat; background-position: center;`
                     : `background: linear-gradient(0deg, #044d01, #47ff00);`;
-                
+                    
+                if (localStorage.getItem('usuarioLogado') === 'Dogue') {
+                 rankDisplay.innerHTML = `
+                    <div class="rank-container ${hasPremium ? 'admin-premium-active' : ''}">
+                        <div class="rank-badge-wrapper">
+                            <img src="images/ranks/${rank}.png" alt="Rank ${rank}" class="rank-badge-profile">
+                            <img src="images/ranks/premium.png" alt="Premium" class="premium-crown ${hasPremium ? 'show' : ''}"></img>
+                        </div>
+                        <div class="rank-info">
+                            <div class="rank-title-admin">
+                                ${rankName} • Rank ${rank}/31
+                                ${hasPremium ? '• Dono' : ''}
+                            </div>
+                            <div class="xp-bar-container" style="background: rgb(49 8 47);">
+                                <div class="xp-bar" style="width: ${xpPercentage}%; background-image: url(images/ranks/ownerbarbg.jpg); background-repeat: repeat; background-position: center;"></div>
+                            </div>
+                            <div class="xp-text">${xpInCurrentRank}/${xpNeededForNextRank} XP ${hasPremium ? '(2x Multiplicador)' : ''}</div>
+                        </div>
+                    </div>
+                `;
+                } else {
                 rankDisplay.innerHTML = `
                     <div class="rank-container ${hasPremium ? 'premium-active' : ''}">
                         <div class="rank-badge-wrapper">
@@ -7017,13 +7146,14 @@ function conquistaAnimacao(tipo) {
                                 ${rankName} • Rank ${rank}/31
                                 ${hasPremium ? '👑 PREMIUM' : ''}
                             </div>
-                            <div class="xp-bar-container">
+                            <div class="xp-bar-container" style="background: rgb(46 35 8);">
                                 <div class="xp-bar" style="width: ${xpPercentage}%; ${xpBarStyle}"></div>
                             </div>
                             <div class="xp-text">${xpInCurrentRank}/${xpNeededForNextRank} XP ${hasPremium ? '(2x Multiplicador)' : ''}</div>
                         </div>
                     </div>
                 `;
+              }
             }
         }
 
@@ -7036,15 +7166,35 @@ function conquistaAnimacao(tipo) {
                 const isReusable = item.id === 'cor-comum' || item.id === 'cor-especial' || item.id === 'custom-tag';
                 const isSpins = item.isSpins === true;
                 const itemDiv = document.createElement('div');
+                const shopname = document.querySelectorAll('.shop-item-undertale-name')
+                const shopStyle =  'font-family: "Quad";'
                 itemDiv.className = 'shop-item-undertale';
+
+                if (localStorage.getItem('modo-tanki-online') === 'true') {
+                    shopname.forEach(elemento => {
+                        elemento.style = shopStyle;
+                    });
+                    itemDiv.style = `background-image: url("images/shop/${item.rarity}.png"); background-repeat: no-repeat; background-position: 55% center; font-family: "Quad";`
+                    if (item.isSpins === 'true') {
+                       console.log("asaseo")
+                    }
+                }
                 
                 let onclick = `undertaleSelectItem('${item.id}', ${item.price})`;
                 
+                if (localStorage.getItem('modo-tanki-online') === 'true') {
                 itemDiv.innerHTML = `
                     <div class="shop-item-undertale-icon">${item.icon}</div>
                     <div class="shop-item-undertale-name">${item.name}</div>
-                    <div class="shop-item-undertale-price">💰 ${item.price}</div>
+                    <div class="shop-item-undertale-price"><img src="images/ranks/crystals/crystal.png" alt="crystal" style="width: 12px;"> ${item.price}</div>
                 `;
+                } else {
+                itemDiv.innerHTML = `
+                    <div class="shop-item-undertale-icon">${item.icon}</div>
+                    <div class="shop-item-undertale-name">${item.name}</div>
+                    <div class="shop-item-undertale-price">💎 ${item.price}</div>
+                `;
+            }
                 itemDiv.onclick = () => eval(onclick);
                 shopItemsGrid.appendChild(itemDiv);
             });
@@ -7112,11 +7262,11 @@ function changeSansSprite(state) {
     if (!sansImg) return;
     
     if (state === 'normal') {
-        sansImg.src = 'images/sprite.png';
+        sansImg.src = 'images/sprites/sprite.png';
     } else if (state === 'idle') {
-        sansImg.src = 'images/sprite2.jpg';
+        sansImg.src = 'images/sprites/sprite2.jpg';
     } else if (state === 'joking') {
-        sansImg.src = 'images/spritejoking.png';
+        sansImg.src = 'images/sprites/spritejoking.png';
     }
 
 }
@@ -7165,7 +7315,7 @@ function typeWriter(text, elementId = 'dialogText') {
                 // LÓGICA DE DELAY/CADÊNCIA:
                 // Se for Spamton, toca o som apenas a cada 13 caracteres (par)
                 // Se for Sans (ou outro), toca em todos os caracteres
-                if (!isSpamton || charCounter % 13 === 0) {
+                if (!isSpamton || charCounter % 13 === 4) {
                     talkSound.cloneNode(true).play().catch(() => {});
                 }
                 charCounter++;
@@ -7380,7 +7530,7 @@ function typeWriter(text, elementId = 'dialogText') {
                         if (res.ok) {
                             const data = await res.json();
                             localStorage.setItem('premiumXp', 'true');
-                            alert('✨ Premium XP ativado! Você ganha 2x XP a partir de agora!');
+                            alert('👑 Conta Premium ativada! Você ganha 2x XP a partir de agora!');
                             updateRankDisplay();
                         }
                     } catch (err) {
@@ -8500,8 +8650,12 @@ function closeSpamtonShop(){
         }
         
         function updateUserPanelInfo() {
-            const usuario = localStorage.getItem('usuarioLogado') || 'Usuário';
+            const usuario = localStorage.getItem('usuarioLogado') || 'Visitante';
+            const userTag = localStorage.getItem('userTag') || '';
+            const userTagColor = localStorage.getItem('userTagColor') || '';
+            const userTagColorType = localStorage.getItem('userTagColorType') || 'comum';
             const profilePic = localStorage.getItem('userProfilePic');
+            const tagdis = document.getElementById('userTagDisplay')
             const playtime = parseInt(localStorage.getItem('userPlaytime') || '0');
             
             // Atualizar foto
@@ -8512,6 +8666,13 @@ function closeSpamtonShop(){
             
             // Atualizar nome
             document.getElementById('userNameDisplay').textContent = usuario;
+            document.getElementById('userTagDisplay').textContent = userTag;
+            if (userTagColorType === 'comum') {
+              tagdis.style = `font-size: 12px; color: ${userTagColor};`
+            } else {
+              tagdis.style = `font-size: 12px; color: ${userTagColor}; animation:`
+            }
+            
             
             // Calcular tempo de jogo em horas e minutos
             const horas = Math.floor(playtime / 60);
@@ -9491,7 +9652,7 @@ function closeSpamtonShop(){
 
         // === SISTEMA DE ROLETA ===
         const WHEEL_REWARDS = [
-            { emoji: '💰', text: ' 1 Moeda', coins: 1, type: 'coins', rarity: 'comum' },
+            { emoji: '💰', text: '+1 Moeda', coins: 1, type: 'coins', rarity: 'comum' },
             { emoji: '💰', text: '+100 Moedas', coins: 100, type: 'coins', rarity: 'comum' },
             { emoji: '💱', text: '+250 Moedas', coins: 250, type: 'coins', rarity: 'raro' },
             { emoji: '🎆', text: '+500 Moedas', coins: 500, type: 'coins', rarity: 'epico' },
@@ -9505,6 +9666,7 @@ function closeSpamtonShop(){
             { emoji: '🌈', text: 'Cor Da Tag Especial', itemId: 'cor-especial', type: 'item', rarity: 'lendario' },
             { emoji: '🔥', text: 'Cor Da Tag Comum', itemId: 'cor-comum', type: 'item', rarity: 'raro' },
             { emoji: '🗝️', text: 'Chave Misteriosa', itemId: 'key', type: 'item', rarity: 'mitico' },
+            { emoji: '👑', text: 'Conta Premium', itemId: 'premium-xp', type: 'item', rarity: 'mitico' },
             { emoji: '💎', text: '+10000 Moedas', coins: 10000, type: 'coins', rarity: 'mitico' }
         ];
 
@@ -9617,9 +9779,9 @@ function closeSpamtonShop(){
 
     if (jevilImg) {
         if (sprite === 'idle') {
-            jevilImg.src = 'images/jevil.png';
+            jevilImg.src = 'images/sprites/jevil.png';
         } else if (sprite === 'spinning') {
-            jevilImg.src = 'images/jevilgif.gif';
+            jevilImg.src = 'images/sprites/jevilgif.gif';
         }
     }
 }
@@ -10194,9 +10356,9 @@ function perguntarSave() {
 
             filterGames(); // aplica filtro inicial de categorias/pesquisa
             checkAchievements(); // verifica conquistas ao carregar
+            checkTanki();
             reloadAchievements(); // atualiza display de conquistas
             updateScoreCounter(); // atualiza display de score
-            checkTanki();
             showifadmin(); // verifica se deve mostrar painel de admin
             checkIfGaster();
 
@@ -10225,17 +10387,6 @@ function perguntarSave() {
                 const buttonclass = dogue
                 ? btn.className = 'user-admin-panel-btn'
                 : btn.className = 'user-panel-btn'
-                
-                const tanki = localStorage.getItem('item-tanki-mode') === 'owned'
-                const tankicard = document.getElementById('tankicard')
-                const secret = document.getElementById('secret-skins')
-                const tankiclass = tanki
-                ? tankicard.style.display = 'inline-block'
-                : tankicard.style.display = 'none'
-
-                const secretclass = tanki
-                ? secret.style.display = 'inline-block'
-                : secret.style.display = 'none'
                 
                 if (!window.location.href.toLowerCase().includes('file://')) { // Verifica se está no protocólo file:
                   await syncUnlockedGamesToDatabase();
