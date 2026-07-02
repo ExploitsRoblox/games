@@ -4587,6 +4587,16 @@ button.door {
                             <input type="text" class="admin-input" id="adminUserRemoveHeadAdmin" placeholder="Nome do Head Admin">
                             <button class="admin-btn" onclick="adminRemoveHeadAdmin()">Remover Head Admin</button>
                         </div>
+
+                        <div class="admin-section">
+                        <h3>🚨 Alertar Usuário (aparece na próxima visita)</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserAlertName" placeholder="Nome do usuário">
+                            <input type="text" class="admin-input" id="adminAlertTitle" placeholder="Título do alerta (ex: Aviso importante)">
+                            <textarea class="admin-input" id="adminAlertMessage" placeholder="Mensagem do alerta" style="min-height:80px; resize:vertical;"></textarea>
+                            <button class="admin-btn" onclick="adminSendUserAlert()">Enviar Alerta</button>
+                        </div>
+                    </div>
                     </div>
                 </div>
 
@@ -9489,6 +9499,43 @@ function closeSpamtonShop(){
             }
         }
 
+        async function adminSendUserAlert() {
+            const nomeUsuario = document.getElementById('adminUserAlertName').value.trim();
+            const title = document.getElementById('adminAlertTitle').value.trim();
+            const message = document.getElementById('adminAlertMessage').value.trim();
+
+            if (!nomeUsuario || (!title && !message)) {
+                alert('❌ Preencha o nome do usuário e o título ou a mensagem!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) { alert('❌ Você precisa estar logado!'); return; }
+
+                const res = await fetch(`${API_ADMIN}/admin/alertar-usuario`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, title, message })
+                });
+
+                const resposta = await res.json();
+                alert(resposta.mensagem || (resposta.ok ? '✅ Alerta enviado!' : '❌ Erro ao enviar alerta'));
+
+                if (resposta.ok) {
+                    document.getElementById('adminUserAlertName').value = '';
+                    document.getElementById('adminAlertTitle').value = '';
+                    document.getElementById('adminAlertMessage').value = '';
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+                console.error('Erro ao enviar alerta:', err);
+            }
+        }
+
         async function adminChangeBorderColor() {
             const nomeUsuario = document.getElementById('adminUserChangeBorder').value;
             const corId = document.getElementById('adminBorderColor').value;
@@ -10865,6 +10912,72 @@ achiList.forEach(achi => {
             }
         }
         
+            // === ALERTAS DO ADMIN (POPUP NA PRÓXIMA VISITA) ===
+            async function checkUserAlertOnLoad() {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                try {
+                    const res = await fetch(`${API_URL_BACKEND}/user/alerts`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + token,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    if (data && data.ok && data.alert) {
+                        const title = data.alert.title || 'Aviso';
+                        const message = data.alert.message || '';
+                        showUserAlertPopup(title, message);
+                    }
+                } catch (err) {
+                    console.error('[ALERT] Erro ao buscar alertas:', err);
+                }
+            }
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            function showUserAlertPopup(title, message) {
+                // Reusar estilos da classe .first-visit-overlay / .first-visit-popup
+                const existing = document.getElementById('userAlertOverlay');
+                if (existing) existing.remove();
+
+                const overlay = document.createElement('div');
+                overlay.id = 'userAlertOverlay';
+                overlay.className = 'first-visit-overlay show';
+
+                overlay.innerHTML = `
+                    <div class="first-visit-popup">
+                        <h1 style="font-size:1.4rem">${escapeHtml(title)}</h1>
+                        <p style="font-size:0.95rem; white-space:pre-wrap;">${escapeHtml(message)}</p>
+                        <button onclick="closeUserAlertPopup()">Fechar</button>
+                    </div>
+                `;
+
+                document.body.appendChild(overlay);
+            }
+
+            function closeUserAlertPopup() {
+                const overlay = document.getElementById('userAlertOverlay');
+                if (overlay) overlay.remove();
+            }
+
+            // Verifica alertas do admin assim que a página carregar
+            document.addEventListener('DOMContentLoaded', function() {
+                checkUserAlertOnLoad();
+            });
+
     </script>
 </body>
 </html>
