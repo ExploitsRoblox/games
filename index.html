@@ -5903,7 +5903,7 @@ async function carregarConversasPrivadas() {
 
 setInterval(() => {
     if (!window.location.href.toLowerCase().includes('file://')) { // 
-    if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token') && localStorage.getItem('userRank') !== '31') {
+    if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token') && localStorage.getItem('userRank') !== '32') {
         if (localStorage.getItem('item-premium-xp')){
             awardXp(200)
             return;
@@ -6172,7 +6172,8 @@ async function atualizarChatAtivo() {
             { rank: 28, name: "Marechal de Campo", xpRequired: 1122000 },
             { rank: 29, name: "Comandante", xpRequired: 1255000 },
             { rank: 30, name: "Generalissimo", xpRequired: 1400000 },
-            { rank: 31, name: "Lenda", xpRequired: 2000000 }
+            { rank: 31, name: "Lenda", xpRequired: 2000000 },
+            { rank: 32, name: "Mestre de Honra", xpRequired: 10000000 }
         ];
 
         async function redeemCode() {
@@ -6246,7 +6247,7 @@ async function atualizarChatAtivo() {
                 feedback.style.display = "block";
                 input.value = "";
 
-                if (localStorage.getItem('usuarioLogado') && localStorage.getItem('userRank') !== '31') {
+                if (localStorage.getItem('usuarioLogado') && localStorage.getItem('userRank') !== '32') {
                     if (localStorage.getItem('item-premium-xp')) {
                         awardXp(1000);
                     } else {
@@ -6298,7 +6299,7 @@ async function atualizarChatAtivo() {
     // Ganhar gemas ao desbloquear um jogo secreto
     await addCoins(100);
 
-    if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token') && localStorage.getItem('userRank') !== '31') {
+    if (localStorage.getItem('usuarioLogado') && localStorage.getItem('token') && localStorage.getItem('userRank') !== '32') {
         if (localStorage.getItem('item-premium-xp')) {
             awardXp(1000);
         } else {
@@ -6989,7 +6990,7 @@ function conquistaAnimacao(tipo) {
                         localStorage.setItem('userXp', data.xp || 0);
                         localStorage.setItem('premiumXp', data.premium ? 'true' : 'false');
                         
-                        console.log(`[SYNC] Rank: ${data.rank}/31, XP: ${data.xp}, Premium: ${data.premium}`);
+                        console.log(`[SYNC] Rank: ${data.rank}/32, XP: ${data.xp}, Premium: ${data.premium}`);
                         updateRankDisplay();
                     }
                 }
@@ -7055,7 +7056,7 @@ function conquistaAnimacao(tipo) {
                 const data = await res.json();
                 
                 if (res.ok && data.ok) {
-                    console.log(`[XP] ✅ ${amount} XP adicionado! Rank: ${data.rank}/31`);
+                    console.log(`[XP] ✅ ${amount} XP adicionado! Rank: ${data.rank}/32`);
                     // Atualizar localStorage com a resposta do servidor
                     if (data.rank !== undefined) {
                         localStorage.setItem('userRank', data.rank);
@@ -7095,7 +7096,7 @@ function conquistaAnimacao(tipo) {
             
             // Verificar e promover automaticamente se XP >= necessário
             let currentRankInfo = RANKS_TABLE.find(r => r.rank === rank);
-            while (rank < 31 && currentRankInfo) {
+            while (rank < 32 && currentRankInfo) {
                 const nextRankInfo = RANKS_TABLE.find(r => r.rank === rank + 1);
                 if (nextRankInfo && xp >= nextRankInfo.xpRequired) {
                     rank++;
@@ -7134,7 +7135,7 @@ function conquistaAnimacao(tipo) {
                         </div>
                         <div class="rank-info">
                             <div class="rank-title-admin">
-                                ${rankName} • Rank ${rank}/31
+                                ${rankName} • Rank ${rank}/32
                                 ${hasPremium ? '• Dono' : ''}
                             </div>
                             <div class="xp-bar-container" style="background: rgb(49 8 47);">
@@ -7153,7 +7154,7 @@ function conquistaAnimacao(tipo) {
                         </div>
                         <div class="rank-info">
                             <div class="rank-title">
-                                ${rankName} • Rank ${rank}/31
+                                ${rankName} • Rank ${rank}/32
                                 ${hasPremium ? '👑 PREMIUM' : ''}
                             </div>
                             <div class="xp-bar-container" style="background: rgb(46 35 8);">
