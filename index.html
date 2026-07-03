@@ -4597,6 +4597,23 @@ button.door {
                             <button class="admin-btn" onclick="adminSendUserAlert()">Enviar Alerta</button>
                         </div>
                     </div>
+
+                    <div class="admin-section">
+                        <h3>💾 Migração de XP (Corrigir Negativo)</h3>
+                        <p style="color: #38bdf8; font-size: 0.9rem; margin: 10px 0; line-height: 1.5;">⚠️ Recalcula e corrige o XP de TODOS os usuários. Execute uma única vez para corrigir o bug de XP negativo.</p>
+                        <button class="admin-btn" onclick="adminMigrateXpFix()" style="background: linear-gradient(90deg, #2563eb, #7c3aed); border: 1px solid #38bdf8;">🔧 Executar Migração de XP</button>
+                        <div id="migrationStatus" style="margin-top: 10px; padding: 10px; border-radius: 5px; display: none; background: rgba(38, 99, 235, 0.2); border: 1px solid #2563eb; font-size: 0.9rem;"></div>
+                    </div>
+
+                    <div class="admin-section">
+                        <h3>⭐ Mudar XP e Rank de Usuário</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminUserXpRank" placeholder="Nome do usuário">
+                            <input type="number" class="admin-input" id="adminNewRank" placeholder="Novo rank (1-30)" min="1" max="30">
+                            <input type="number" class="admin-input" id="adminNewXp" placeholder="Novo XP" min="0">
+                            <button class="admin-btn" onclick="adminChangeXpRank()" style="background: linear-gradient(90deg, #f43f5e, #a855f7);">✏️ Alterar XP/Rank</button>
+                        </div>
+                    </div>
                     </div>
                 </div>
 
@@ -9564,6 +9581,86 @@ function closeSpamtonShop(){
                 }
             } catch (err) {
                 alert('❌ Erro: ' + err.message);
+            }
+        }
+
+        async function adminMigrateXpFix() {
+            const statusDiv = document.getElementById('migrationStatus');
+            const confirmacao = confirm('⚠️ MIGRAÇÃO DE XP\n\nVocê tem certeza? Isso recalculará o XP de TODOS os usuários.\nExecute apenas uma vez!\n\nClique OK para confirmar.');
+            
+            if (!confirmacao) return;
+
+            try {
+                statusDiv.style.display = 'block';
+                statusDiv.textContent = '⏳ Processando migração...';
+                statusDiv.style.background = 'rgba(38, 99, 235, 0.2)';
+
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/migrar-xp-fix`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const resposta = await res.json();
+
+                if (resposta.ok) {
+                    statusDiv.style.background = 'rgba(34, 197, 94, 0.2)';
+                    statusDiv.style.borderColor = '#22c55e';
+                    statusDiv.textContent = `✅ ${resposta.mensagem}\n\n📊 Resultado:\n✓ Corrigidos: ${resposta.corrigidos}\n✗ Erros: ${resposta.erros}\n📈 Total: ${resposta.total}`;
+                } else {
+                    statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
+                    statusDiv.style.borderColor = '#ef4444';
+                    statusDiv.textContent = `❌ ${resposta.mensagem}`;
+                }
+
+                alert(resposta.mensagem || 'Migração concluída');
+            } catch (err) {
+                statusDiv.style.display = 'block';
+                statusDiv.style.background = 'rgba(239, 68, 68, 0.2)';
+                statusDiv.style.borderColor = '#ef4444';
+                statusDiv.textContent = `❌ Erro: ${err.message}`;
+                alert('❌ Erro na migração: ' + err.message);
+            }
+        }
+
+        async function adminChangeXpRank() {
+            const nomeUsuario = document.getElementById('adminUserXpRank').value.trim();
+            const novoRank = document.getElementById('adminNewRank').value;
+            const novoXp = document.getElementById('adminNewXp').value;
+
+            if (!nomeUsuario || !novoRank || novoXp === '') {
+                alert('❌ Preencha todos os campos!');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const res = await fetch(`${API_ADMIN}/admin/mudar-xp-rank`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ nomeUsuario, novoRank: parseInt(novoRank), novoXp: parseInt(novoXp) })
+                });
+
+                const resposta = await res.json();
+                
+                if (resposta.ok) {
+                    const usuario = resposta.usuarioAtualizado;
+                    alert(`✅ ${resposta.mensagem}\n\n📊 Alterações:\nRank: ${usuario.rankAnterior} → ${usuario.rankNovo}\nXP: ${usuario.xpAnterior} → ${usuario.xpNovo}`);
+                    document.getElementById('adminUserXpRank').value = '';
+                    document.getElementById('adminNewRank').value = '';
+                    document.getElementById('adminNewXp').value = '';
+                } else {
+                    alert(`❌ ${resposta.mensagem}`);
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+                console.error('Erro ao alterar XP/Rank:', err);
             }
         }
 
