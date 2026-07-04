@@ -3905,11 +3905,26 @@ button.door {
             animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
         }
+/* 
+        .custom-alert-popup {
+            background: var(--bg-dark);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 10px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(244, 63, 94, 0.4);
+            position: absolute;
+            top: 0%;
+            left: 90%;
+            z-index: 9999;
+        } */
 
         .first-visit-popup h1 {
             color: var(--accent-color);
-            font-size: 2rem;
+            font-size: 2.4rem;
             margin: 0 0 15px 0;
+            font-family: 'Quad';
             text-transform: uppercase;
             letter-spacing: 2px;
             text-shadow: 0 0 10px rgba(244, 63, 94, 0.5);
@@ -3920,6 +3935,12 @@ button.door {
             font-size: 1.1rem;
             line-height: 1.6;
             margin: 15px 0;
+    text-wrap-mode: wrap;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: clip;
+    max-width: 500px;
+    line-break: auto;
         }
 
         .first-visit-popup .emoji-large {
@@ -7343,7 +7364,7 @@ function typeWriter(text, elementId = 'dialogText') {
                 // LÓGICA DE DELAY/CADÊNCIA:
                 // Se for Spamton, toca o som apenas a cada 13 caracteres (par)
                 // Se for Sans (ou outro), toca em todos os caracteres
-                if (!isSpamton || charCounter % 13 === 4) {
+                if (!isSpamton || charCounter % 13 === 10) {
                     talkSound.cloneNode(true).play().catch(() => {});
                 }
                 charCounter++;
@@ -7406,7 +7427,7 @@ function typeWriter(text, elementId = 'dialogText') {
             }
             
             // Confirmar compra
-            const confirmText = `* então tu quer comprar\n* "${item.name}"?\n* isso vai custar uns ${price} ouros.\n* ok?`;
+            const confirmText = `* então tu quer comprar\n* "${item.name}"?\n* isso vai custar umas ${price} gemas.\n* ok?`;
             typeWriter(confirmText);
             
             const shopItemsGrid = document.getElementById('shopItemsGrid');
@@ -7419,6 +7440,8 @@ function typeWriter(text, elementId = 'dialogText') {
         
         async function undertaleConfirmBuy(itemId, price) {
             await buyItem(itemId, price);
+            const thankyou = `* valeu pela compra.`;
+            typeWriter(thankyou)
             const optionsDiv = document.querySelector('.dialog-options');
             optionsDiv.innerHTML = `
                 <button class="dialog-btn" onclick="undertaleShopAction('comprar')">Comprar</button>
@@ -7489,18 +7512,20 @@ function typeWriter(text, elementId = 'dialogText') {
                     }
                 }
                 
-                alert(`✅ ${item.quantity} giro(s) adicionado(s)! Vamos girar?`);
-                if (origem === 'spamton') {
-                    closeSpamtonShop();
-                } else {
-                    closeShop();
-                }
-                openWheelFromShop();
+                customalert(`✅ ${item.quantity} giro(s) comprados(s) com sucesso!`);
+                // if (origem === 'spamton') {
+                //     closeSpamtonShop();
+                //     stopWheelMusic();
+                // } else {
+                //     closeShop();
+                //     stopShopMusic();
+                // }
+                // openWheelFromShop();
                 return;
             }
             
             if (localStorage.getItem(`item-${itemId}`) === 'owned') {
-                alert('✓ Você já possui este item!');
+                customalert('✓ Você já possui este item!');
                 return;
             }
             
@@ -7540,7 +7565,7 @@ function typeWriter(text, elementId = 'dialogText') {
                     localStorage.setItem(gameId, 'unlocked');
                     unlockGame(gameId);
                 });
-                alert('🔓 Todos os jogos secretos foram desbloqueados!');
+                customalert('🔓 Todos os jogos secretos foram desbloqueados!');
             } 
             // Se for Premium XP
             else if (itemId === 'premium-xp') {
@@ -7558,7 +7583,7 @@ function typeWriter(text, elementId = 'dialogText') {
                         if (res.ok) {
                             const data = await res.json();
                             localStorage.setItem('premiumXp', 'true');
-                            alert('👑 Conta Premium ativada! Você ganha 2x XP a partir de agora!');
+                            customalert('👑 Conta Premium ativada! Você ganha 2x XP a partir de agora!');
                             updateRankDisplay();
                         }
                     } catch (err) {
@@ -7569,19 +7594,19 @@ function typeWriter(text, elementId = 'dialogText') {
             // Se for cor comum, abrir seletor de cores
             else if (itemId === 'cor-comum') {
                 promptTagColor('comum');
-                alert('🎨 Você agora pode customizar a cor da sua tag!');
+                customalert('🎨 Você agora pode customizar a cor da sua tag!');
             }
             // Se for cor especial, abrir seletor de cores especiais
             else if (itemId === 'cor-especial') {
                 promptTagColor('especial');
-                alert('✨ Você agora tem acesso a cores especiais!');
+                customalert('✨ Você agora tem acesso a cores especiais!');
             }
             // Se for tag personalizada, abrir modal para escolher a tag
             else if (itemId === 'custom-tag') {
                 promptCustomTag();
-                alert('🎉 Item comprado com sucesso!');
+                customalert('🎉 Item comprado com sucesso!');
             } else {
-                alert('🎉 Item comprado com sucesso!');
+                customalert('🎉 Item comprado com sucesso!');
             }
             
             if (origem === 'spamton') {
@@ -7596,20 +7621,20 @@ function typeWriter(text, elementId = 'dialogText') {
             // Validar se o usuário possui o item e tem moedas suficientes
             const customTagPrice = 2500;
             if (localStorage.getItem(`item-custom-tag`) !== 'owned') {
-                alert(`❌ Você não possui a "Tag Personalizada"! Compre na loja primeiro.`);
+                customalert(`❌ Você não possui a "Tag Personalizada"! Compre na loja primeiro.`);
                 return;
             }
             
             const coins = getCoins();
             if (coins < customTagPrice) {
-                alert(`❌ Você não tem gemas suficientes! Precisa de ${customTagPrice} gemas para usar a Tag Personalizada.`);
+                customalert(`❌ Você não tem gemas suficientes! Precisa de ${customTagPrice} gemas para usar a Tag Personalizada.`);
                 return;
             }
             
             const tag = prompt('Escolha sua tag personalizada (1-10 caracteres):', '');
             if (tag !== null) {
                 if (tag.length < 1 || tag.length > 10) {
-                    alert('❌ A tag deve ter entre 1 e 10 caracteres!');
+                    customalert('❌ A tag deve ter entre 1 e 10 caracteres!');
                     return;
                 }
                 
@@ -7626,7 +7651,7 @@ function typeWriter(text, elementId = 'dialogText') {
                     })
                     .then(res => res.json())
                     .then(data => {
-                        alert(data.mensagem);
+                        customalert(data.mensagem);
                         localStorage.setItem('userTag', tag);
                         updateUserPanelInfo();
                     })
@@ -7641,14 +7666,14 @@ function typeWriter(text, elementId = 'dialogText') {
             const colorPrice = tipo === 'especial' ? 5000 : 1500;
             
             if (localStorage.getItem(`item-${itemId}`) !== 'owned') {
-                alert(`❌ Você não possui o item "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"! Compre na loja primeiro.`);
+                customalert(`❌ Você não possui o item "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"! Compre na loja primeiro.`);
                 return;
             }
             
             // Validar se o usuário tem moedas suficientes para usar a cor
             const coins = getCoins();
             if (coins < colorPrice) {
-                alert(`❌ Você não tem gemas suficientes! Precisa de ${colorPrice} gemas para usar a "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"!`);
+                customalert(`❌ Você não tem gemas suficientes! Precisa de ${colorPrice} gemas para usar a "Cor da Tag (${tipo === 'especial' ? 'Especial' : 'Comum'})"!`);
                 return;
             }
 
@@ -7720,7 +7745,7 @@ function typeWriter(text, elementId = 'dialogText') {
             
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('❌ Você precisa estar logado!');
+                customalert('❌ Você precisa estar logado!');
                 return;
             }
 
@@ -7787,15 +7812,15 @@ function typeWriter(text, elementId = 'dialogText') {
                             localStorage.setItem('userTagColor', cor.hex);
                             localStorage.setItem('userTagColorType', tipo);
                             localStorage.setItem('userTagColorIsAdmin', isAdminColor.toString());
-                            alert(`✅ Cor da tag atualizada para ${cor.nome}!`);
+                            customalert(`✅ Cor da tag atualizada para ${cor.nome}!`);
                             document.body.removeChild(modal);
                             updateUserPanelInfo();
                         } else {
-                            alert('❌ ' + data.mensagem);
+                            customalert('❌ ' + data.mensagem);
                         }
                     } catch (err) {
                         console.error('Erro:', err);
-                        alert('❌ Erro ao atualizar cor da tag');
+                        customalert('❌ Erro ao atualizar cor da tag');
                     }
                 };
                 
@@ -7997,7 +8022,7 @@ async function spamtonConfirmBuy(itemId, price) {
     if (!item) return;
     
     if (coins < price) {
-        alert('❌ Gemas insuficientes!');
+        customalert('❌ Gemas insuficientes!');
         return;
     }
     
@@ -8042,7 +8067,7 @@ async function spamtonConfirmBuy(itemId, price) {
             }
         }
         
-        alert(`✅ ${item.quantity} giro(s) adicionado(s)! Vamos girar?`);
+        customalert(`✅ ${item.quantity} giro(s) adicionado(s)! Vamos girar?`);
         closeSpamtonShop();
         openWheelFromShop();
         return;
@@ -8217,34 +8242,34 @@ function closeSpamtonShop(){
             const rewards = {
                 1: { coins: 100, item: null, description: 'Bem-vindo! Comece sua jornada!', icon: '🎯' },
                 2: { coins: 120, item: null, description: 'Continue assim!', icon: '💰' },
-                3: { coins: 100, item: 'spin-5', description: 'Moedas + 5 Giros!', icon: '📦' },
+                3: { coins: 100, item: 'spin-5', description: 'Moedas + 5 Giros!', icon: '🎡' },
                 4: { coins: 150, item: null, description: 'Você está indo bem!', icon: '⭐' },
                 5: { coins: 120, item: null, description: 'Metade da primeira semana!', icon: '🔥' },
-                6: { coins: 150, item: 'lootbox-comum', description: 'Moedas + Lootbox Comum!', icon: '📦' },
+                6: { coins: 150, item: 'spin-10', description: 'Moedas + 10 Giros!', icon: '🎡' },
                 7: { coins: 200, item: null, description: '🎉 Parabéns! Primeira semana completa!', icon: '🎊' },
                 8: { coins: 150, item: null, description: 'Segunda semana começa!', icon: '💪' },
-                9: { coins: 130, item: 'lootbox-comum', description: 'Moedas + Lootbox Comum!', icon: '📦' },
+                9: { coins: 130, item: 'spin-10', description: 'Moedas + 10 Giros!', icon: '🎡' },
                 10: { coins: 170, item: null, description: 'Dez dias de dedicação!', icon: '🚀' },
                 11: { coins: 200, item: null, description: 'Nível intermediário alcançado!', icon: '📈' },
-                12: { coins: 180, item: 'lootbox-rara', description: 'Moedas + Lootbox Rara! 🟦', icon: '🟦' },
+                12: { coins: 180, item: 'spin-20', description: 'Moedas + 20 Giros!', icon: '🎯' },
                 13: { coins: 220, item: null, description: 'Quase na metade!', icon: '⚡' },
                 14: { coins: 200, item: null, description: 'Prepare-se para o grande dia!', icon: '🎁' },
                 15: { coins: 300, item: 'custom-tag', description: 'Moedas + Tag Personalizada! 🏷️', icon: '🏷️' },
-                16: { coins: 200, item: 'lootbox-rara', description: 'Moedas + Lootbox Rara! 🟦', icon: '🟦' },
+                16: { coins: 200, item: 'spin-20', description: 'Moedas + 20 Giros!', icon: '🎯' },
                 17: { coins: 220, item: null, description: 'Na reta final da segunda semana!', icon: '🏁' },
                 18: { coins: 250, item: null, description: 'Você é persistente!', icon: '💎' },
-                19: { coins: 200, item: 'lootbox-rara', description: 'Moedas + Lootbox Rara! 🟦', icon: '🟦' },
+                19: { coins: 200, item: 'spin-20', description: 'Moedas + 20 Giros!', icon: '🎯' },
                 20: { coins: 350, item: 'cor-comum', description: 'Moedas + Cor da Tag (Comum)! 🎨', icon: '🎨' },
                 21: { coins: 300, item: null, description: 'Terceira semana! Você é incrível!', icon: '👏' },
-                22: { coins: 280, item: 'lootbox-epica', description: 'Moedas + Lootbox Épica! 🟪', icon: '🟪' },
+                22: { coins: 280, item: 'spin-30', description: 'Moedas + 30 Giros!', icon: '🎊' },
                 23: { coins: 320, item: null, description: 'Cada dia mais perto da glória!', icon: '✨' },
                 24: { coins: 300, item: null, description: 'Quase lá!', icon: '🎯' },
-                25: { coins: 350, item: 'lootbox-epica', description: 'Moedas + Lootbox Épica! 🟪', icon: '🟪' },
+                25: { coins: 350, item: 'spin-30', description: 'Moedas + 30 Giros!', icon: '🎊' },
                 26: { coins: 400, item: null, description: 'Você está muito próximo!', icon: '🔜' },
-                27: { coins: 380, item: 'lootbox-epica', description: 'Moedas + Lootbox Épica! 🟪', icon: '🟪' },
-                28: { coins: 420, item: null, description: 'Penúltimo dia! Resista!', icon: '💪' },
+                27: { coins: 380, item: 'spin-30', description: 'Moedas + 30 Giros!', icon: '🎊' },
+                28: { coins: 420, item: 'premium-xp', description: 'Resista! Conta Premium Para você continuar!', icon: '💪' },
                 29: { coins: 450, item: 'cor-especial', description: 'Moedas + Cor da Tag (Especial)! ✨', icon: '✨' },
-                30: { coins: 1000, item: 'spin-50', description: '🎉 MEGA RECOMPENSA! 1000 moedas + Lootbox Lendária! 👑', icon: '👑' }
+                30: { coins: 1000, item: 'spin-50', description: '🎉 MEGA RECOMPENSA! 1000 moedas + 50 Giros! ⭐', icon: '⭐' }
             };
 
             return rewards[day] || { coins: 100, item: null, description: 'Moedas ganhas!', icon: '💰' };
@@ -8313,10 +8338,11 @@ function closeSpamtonShop(){
                     'custom-tag': '🏷️ Tag Personalizada',
                     'cor-comum': '🎨 Cor da Tag (Comum)',
                     'cor-especial': '✨ Cor da Tag (Especial)',
-                    'lootbox-comum': '📦 Lootbox Comum',
-                    'lootbox-rara': '🟦 Lootbox Rara',
-                    'lootbox-epica': '🟪 Lootbox Épica',
-                    'lootbox-lendaria': '👑 Lootbox Lendária'
+                    'spin-5': '🎡 5 Giros',
+                    'spin-10': '🎡 10 Giros',
+                    'spin-20': '🎯 20 Giros',
+                    'spin-30': '🎊 30 Giros',
+                    'spin-50': '⭐ 50 Giros'
                 };
                 bonusDesc.textContent = `✨ Bônus: ${itemNames[reward.item]}`;
                 bonusDesc.style.display = 'block';
@@ -8350,14 +8376,14 @@ function closeSpamtonShop(){
         
         function checkDailyReward() {
             if (!localStorage.getItem('usuarioLogado') && !localStorage.getItem('token')) {
-              alert("Você precisa estar logado!")
+              customalert("Você precisa estar logado!")
               return;
             }
             const lastClaimDate = localStorage.getItem('lastDailyRewardDate');
             const today = new Date().toDateString();
             
             if (lastClaimDate === today) {
-                alert('⏰ Você já coletou sua recompensa hoje! Volte amanhã.');
+                customalert('⏰ Você já coletou sua recompensa hoje! Volte amanhã.');
                 return;
             }
             
@@ -8370,7 +8396,7 @@ function closeSpamtonShop(){
             const today = new Date().toDateString();
             
             if (lastClaimDate === today) {
-                alert('⏰ Você já coletou sua recompensa hoje! Volte amanhã.');
+                customalert('⏰ Você já coletou sua recompensa hoje! Volte amanhã.');
                 return;
             }
             
@@ -8382,18 +8408,17 @@ function closeSpamtonShop(){
             
             // Adicionar item bônus se aplicável
             if (reward.item) {
-                // Se for lootbox, incrementar contador
-                if (reward.item.startsWith('lootbox-')) {
-                    const type = reward.item.replace('lootbox-', '');
-                    const key = `userLootbox${type.charAt(0).toUpperCase() + type.slice(1)}`;
-                    const current = parseInt(localStorage.getItem(key) || '0');
-                    localStorage.setItem(key, current + 1);
+                // Se for giro, incrementar contador
+                if (reward.item.startsWith('spin-')) {
+                    const spins = parseInt(reward.item.replace('spin-', ''));
+                    const currentSpins = parseInt(localStorage.getItem('userSpins') || '0');
+                    localStorage.setItem('userSpins', currentSpins + spins);
                     
                     // Sincronizar com servidor se logado
                     const token = localStorage.getItem('token');
                     if (token) {
                         try {
-                            fetch('https://login-nqot.onrender.com/admin/adicionar-lootbox', {
+                            fetch('https://login-nqot.onrender.com/user/spins', {
                                 method: 'POST',
                                 headers: { 
                                     'Content-Type': 'application/json',
@@ -8401,12 +8426,11 @@ function closeSpamtonShop(){
                                 },
                                 body: JSON.stringify({
                                     nomeUsuario: localStorage.getItem('usuarioLogado'),
-                                    tipo: type,
-                                    quantidade: 1
+                                    spins: spins
                                 })
-                            }).catch(err => console.error('[LOOTBOX] Erro ao sincronizar:', err));
+                            }).catch(err => console.error('[SPINS] Erro ao sincronizar:', err));
                         } catch (e) {
-                            console.error('[LOOTBOX] Erro:', e);
+                            console.error('[SPINS] Erro:', e);
                         }
                     }
                 } else {
@@ -8425,15 +8449,17 @@ function closeSpamtonShop(){
                     'custom-tag': '🏷️ Tag Personalizada',
                     'cor-comum': '🎨 Cor da Tag (Comum)',
                     'cor-especial': '✨ Cor da Tag (Especial)',
-                    'lootbox-comum': '📦 Lootbox Comum',
-                    'lootbox-rara': '🟦 Lootbox Rara',
-                    'lootbox-epica': '🟪 Lootbox Épica',
-                    'lootbox-lendaria': '👑 Lootbox Lendária'
+                    'premium-xp': '👑 Conta Premium',
+                    'spin-5': '🎡 5 Giros',
+                    'spin-10': '🎡 10 Giros',
+                    'spin-20': '🎯 20 Giros',
+                    'spin-30': '🎊 30 Giros',
+                    'spin-50': '⭐ 50 Giros'
                 };
                 mensagem += `\n✨ Bônus: ${itemNames[reward.item]}`;
             }
             
-            alert(mensagem);
+            customalert(mensagem);
             updateUserPanelInfo();
             initializeShop();
         }
@@ -8448,7 +8474,7 @@ function closeSpamtonShop(){
         // === SISTEMA DE LEADERBOARD ===
         async function openLeaderboard() {
             if (!localStorage.getItem('usuarioLogado') && !localStorage.getItem('token')) {
-              alert("Você precisa estar logado!")
+              customalert("Você precisa estar logado!")
               return;
             }
             document.getElementById('leaderboardModal').classList.add('active');
@@ -8492,11 +8518,11 @@ function closeSpamtonShop(){
                 if (res.ok) {
                     renderLeaderboardByType(res.usuarios, tipo);
                 } else {
-                    alert('Erro ao carregar leaderboard');
+                    customalert('Erro ao carregar leaderboard');
                 }
             } catch (err) {
                 console.error('Erro:', err);
-                alert('Erro ao conectar ao servidor');
+                customalert('Erro ao conectar ao servidor');
             }
         }
 
@@ -8759,7 +8785,7 @@ function closeSpamtonShop(){
             const url = document.getElementById('profilePicUrl').value.trim();
             
             if (!url) {
-                alert('⚠️ Por favor, insira um link da imagem!');
+                customalert('⚠️ Por favor, insira um link da imagem!');
                 return;
             }
             
@@ -8800,10 +8826,10 @@ function closeSpamtonShop(){
                     }
                 }
                 
-                alert('✓ Foto de perfil alterada com sucesso!');
+                customalert('✓ Foto de perfil alterada com sucesso!');
                 closeProfilePictureModal();
             } catch (err) {
-                alert('❌ URL inválida! Por favor, insira um link válido.');
+                customalert('❌ URL inválida! Por favor, insira um link válido.');
                 console.error('Erro:', err);
             }
         }
@@ -8847,7 +8873,7 @@ function closeSpamtonShop(){
                         }
                     }
                     
-                    alert('📄 Foto de perfil alterada com sucesso!');
+                    customalert('📄 Foto de perfil alterada com sucesso!');
                 };
                 reader.readAsDataURL(file);
             }
@@ -8886,6 +8912,94 @@ function closeSpamtonShop(){
             updateAdminCoinsSection();
             updateAdminTabs();
         }
+
+        function customalert(texto, tempo) {
+    // 1. Define o tempo padrão (3 segundos) se não for passado nenhum valor
+    const vanishtime = tempo || 3; 
+
+    // 2. Garante que o CSS das animações exista na página
+    if (!document.getElementById('custom-alert-styles')) {
+        const style = document.createElement('style');
+        style.id = 'custom-alert-styles';
+        style.innerHTML = `
+            #custom-alert-container {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .custom-alert-popup {
+                background-color: #333;
+                color: #fff;
+                padding: 15px 25px;
+                border: 2px solid var(--accent-color);
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                font-family: sans-serif;
+                font-size: 14px;
+                min-width: 200px;
+                max-width: 350px;
+                
+                /* Animação de entrada (deslizando da direita) */
+                animation: slideIn 0.4s ease forwards;
+                
+                /* Transição suave para propriedades manipuladas pelo JS */
+                transition: all 0.5s ease;
+            }
+            @keyframes slideIn {
+                from { transform: translateX(120%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            .slide-out-left {
+                transform: translateX(150%) !important;
+                opacity: 0 !important;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // 3. Cria ou reaproveita o container principal dos alertas
+    let container = document.getElementById('custom-alert-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'custom-alert-container';
+        document.body.appendChild(container);
+    }
+     
+    // 3.5 Carrega o áudio de notificação
+    const notify = new Audio('audios/notify.mp3');
+    notify.load();
+
+    // 4. Cria o elemento do alerta individual
+    const alertbox = document.createElement('div');
+    alertbox.className = 'custom-alert-popup';
+    alertbox.innerText = texto;
+
+    // Adiciona o alerta dentro do container 
+    container.appendChild(alertbox);
+    notify.play();
+    console.log(texto, `Surgindo... Sumirá em ${vanishtime}s`);
+
+    // 5. Cronômetro para iniciar a animação de sumir (deslizar para a esquerda)
+    setTimeout(() => {
+        alertbox.classList.add('slide-out-left');
+        
+        // 6. Espera a animação de 0.5s terminar para remover o elemento do HTML
+        setTimeout(() => {
+            alertbox.remove();
+            console.log(`Escondido e removido com sucesso.`);
+            
+            // Se não houver mais nenhum alerta, limpa o container da tela
+            if (container.childElementCount === 0) {
+                container.remove();
+            }
+        }, 500); // Tempo batendo com o 'transition: all 0.5s' do CSS
+
+    }, vanishtime * 1000);
+}
 
         function updateAdminTabs() {
             const usuario = localStorage.getItem('usuarioLogado');
@@ -8951,7 +9065,7 @@ function closeSpamtonShop(){
             const quantidade = parseInt(document.getElementById('adminCoinsAmount').value);
 
             if (!nomeUsuario || !quantidade) {
-                alert('❌ Preencha todos os campos!');
+                customalert('❌ Preencha todos os campos!');
                 return;
             }
 
@@ -8966,13 +9080,13 @@ function closeSpamtonShop(){
                     body: JSON.stringify({ nomeUsuario, quantidade })
                 });
                 const resposta = await res.json();
-                alert(resposta.mensagem);
+                customalert(resposta.mensagem);
                 if (resposta.ok) {
                     document.getElementById('adminUserCoins').value = '';
                     document.getElementById('adminCoinsAmount').value = '';
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
             }
         }
 
@@ -8982,7 +9096,7 @@ function closeSpamtonShop(){
             const motivo = document.getElementById('requestCoinsMotive').value;
 
             if (!nomeUsuario || !quantidade) {
-                alert('❌ Preencha todos os campos!');
+                customalert('❌ Preencha todos os campos!');
                 return;
             }
 
@@ -8997,14 +9111,14 @@ function closeSpamtonShop(){
                     body: JSON.stringify({ nomeUsuario, quantidade, motivo })
                 });
                 const resposta = await res.json();
-                alert(resposta.mensagem);
+                customalert(resposta.mensagem);
                 if (resposta.ok) {
                     document.getElementById('requestUserCoins').value = '';
                     document.getElementById('requestCoinsAmount').value = '';
                     document.getElementById('requestCoinsMotive').value = '';
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
             }
         }
 
@@ -9013,7 +9127,7 @@ function closeSpamtonShop(){
             const jogoId = document.getElementById('adminGameId').value;
 
             if (!nomeUsuario || !jogoId) {
-                alert('❌ Preencha todos os campos!');
+                customalert('❌ Preencha todos os campos!');
                 return;
             }
 
@@ -9028,13 +9142,13 @@ function closeSpamtonShop(){
                     body: JSON.stringify({ nomeUsuario, jogoId })
                 });
                 const resposta = await res.json();
-                alert(resposta.mensagem);
+                customalert(resposta.mensagem);
                 if (resposta.ok) {
                     document.getElementById('adminUserGame').value = '';
                     document.getElementById('adminGameId').value = '';
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
             }
         }
 
@@ -9043,7 +9157,7 @@ function closeSpamtonShop(){
             const itemId = document.getElementById('adminItemId').value;
 
             if (!nomeUsuario || !itemId) {
-                alert('❌ Preencha todos os campos!');
+                customalert('❌ Preencha todos os campos!');
                 return;
             }
 
@@ -9058,13 +9172,13 @@ function closeSpamtonShop(){
                     body: JSON.stringify({ nomeUsuario, itemId })
                 });
                 const resposta = await res.json();
-                alert(resposta.mensagem);
+                customalert(resposta.mensagem);
                 if (resposta.ok) {
                     document.getElementById('adminUserItem').value = '';
                     document.getElementById('adminItemId').value = '';
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
             }
         }
 
@@ -9072,7 +9186,7 @@ function closeSpamtonShop(){
             const nomeUsuario = document.getElementById('adminUserPromote').value;
 
             if (!nomeUsuario) {
-                alert('❌ Digite o nome do usuário!');
+                customalert('❌ Digite o nome do usuário!');
                 return;
             }
 
@@ -9087,12 +9201,12 @@ function closeSpamtonShop(){
                     body: JSON.stringify({ nomeUsuario })
                 });
                 const resposta = await res.json();
-                alert(resposta.mensagem);
+                customalert(resposta.mensagem);
                 if (resposta.ok) {
                     document.getElementById('adminUserPromote').value = '';
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
             }
         }
 
@@ -9107,7 +9221,7 @@ function closeSpamtonShop(){
                 const resposta = await res.json();
 
                 if (!resposta.ok) {
-                    alert('❌ Erro ao carregar usuários');
+                    customalert('❌ Erro ao carregar usuários');
                     return;
                 }
 
@@ -9129,7 +9243,7 @@ function closeSpamtonShop(){
                     usersList.appendChild(userDiv);
                 });
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
             }
         }
 
@@ -10054,8 +10168,8 @@ function closeSpamtonShop(){
     let quantidade = parseInt(quantidadeStr);
     
     // Validações básicas
-    if (isNaN(quantidade) || quantidade < 1) { alert('❌ Digite um número válido!'); return; }
-    if (quantidade > spinsRemaining) { alert(`❌ Você só tem ${spinsRemaining} giro(s) disponível(is)!`); return; }
+    if (isNaN(quantidade) || quantidade < 1) { customalert('❌ Digite um número válido!'); return; }
+    if (quantidade > spinsRemaining) { customalert(`❌ Você só tem ${spinsRemaining} giro(s) disponível(is)!`); return; }
     
     isSpinning = true;
     document.getElementById('spinBtn').disabled = true;
@@ -10214,14 +10328,14 @@ function closeSpamtonShop(){
         async function adminAddSpins() {
             const usuario = localStorage.getItem('usuarioLogado');
             if (usuario !== 'Dogue') {
-                return alert('❌ Apenas EU posso adicionar giros!');
+                return customalert('❌ Apenas EU posso adicionar giros!');
             }
 
             const nomeUsuario = document.getElementById('adminUserSpins').value;
             const quantidade = parseInt(document.getElementById('adminSpinsAmount').value);
 
             if (!nomeUsuario || !quantidade) {
-                alert('❌ Preencha todos os campos!');
+                customalert('❌ Preencha todos os campos!');
                 return;
             }
 
@@ -10238,28 +10352,28 @@ function closeSpamtonShop(){
                 const resposta = await res.json();
 
                 if (resposta.ok) {
-                    alert(`✅ ${quantidade} giros adicionados para ${nomeUsuario}!`);
+                    customalert(`✅ ${quantidade} giros adicionados para ${nomeUsuario}!`);
                     document.getElementById('adminUserSpins').value = '';
                     document.getElementById('adminSpinsAmount').value = '';
                 } else {
-                    alert('❌ ' + resposta.mensagem);
+                    customalert('❌ ' + resposta.mensagem);
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
             }
         }
 
         async function adminAddPlaytime() {
             const usuario = localStorage.getItem('usuarioLogado');
             if (usuario !== 'Dogue') {
-                return alert('❌ Apenas EU posso adicionar tempo de jogo!');
+                return customalert('❌ Apenas EU posso adicionar tempo de jogo!');
             }
 
             const nomeUsuario = document.getElementById('adminUserPlaytime').value;
             const minutos = parseInt(document.getElementById('adminPlaytimeMinutes').value);
 
             if (!nomeUsuario || !minutos) {
-                alert('❌ Preencha todos os campos!');
+                customalert('❌ Preencha todos os campos!');
                 return;
             }
 
@@ -10276,14 +10390,14 @@ function closeSpamtonShop(){
                 const resposta = await res.json();
 
                 if (resposta.ok) {
-                    alert(`✅ ${minutos} minutos de tempo de jogo adicionados para ${nomeUsuario}!`);
+                    customalert(`✅ ${minutos} minutos de tempo de jogo adicionados para ${nomeUsuario}!`);
                     document.getElementById('adminUserPlaytime').value = '';
                     document.getElementById('adminPlaytimeMinutes').value = '';
                 } else {
-                    alert('❌ ' + resposta.mensagem);
+                    customalert('❌ ' + resposta.mensagem);
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
             }
         }
         
@@ -10380,7 +10494,7 @@ function perguntarBackup() {
     if (resposta) {
         carregarBackup();
     } else {
-       alert("Tudo certo! Não esqueça de salvar seu progresso para manter suas conquistas.");
+       customalert("Tudo certo! Não esqueça de salvar seu progresso para manter suas conquistas.");
     }
 }
 function perguntarSave() {
@@ -10388,7 +10502,7 @@ function perguntarSave() {
     if (resposta) {
         salvarBackup();
     } else {
-       alert("Tudo certo! Lembre-se de salvar seu progresso para não perder suas conquistas.");
+       customalert("Tudo certo! Lembre-se de salvar seu progresso para não perder suas conquistas.");
     }
 }
         // Rastrear tempo de jogo
@@ -10556,7 +10670,7 @@ function perguntarSave() {
 
         async function carregarBackup() {
   const tokenAnterior = localStorage.getItem("token");
-  if (!tokenAnterior) return alert("Você precisa estar logado!");
+  if (!tokenAnterior) return customalert("Você precisa estar logado!");
 
   try {
     const token = localStorage.getItem("token");
@@ -10624,7 +10738,7 @@ function perguntarSave() {
   await syncAchievements();
   await syncUnlockedGames();
   
-  alert("✅ Backup restaurado com sucesso!");
+  customalert("✅ Backup restaurado com sucesso!");
   window.location.reload();
 } else {
       console.log("Nenhum backup encontrado.");
@@ -10632,7 +10746,7 @@ function perguntarSave() {
     }
   } catch (err) {
     console.error("Erro ao carregar backup:", err);
-    alert(`❌ Erro ao carregar backup: ${err.message}`);
+    customalert(`❌ Erro ao carregar backup: ${err.message}`);
   }
 }
 async function salvarBackup() {
@@ -10736,13 +10850,13 @@ achiList.forEach(achi => {
     const resposta = await res.json();
     if (resposta.ok) {
       console.log("✅ " + resposta.mensagem);
-      alert("✅ " + resposta.mensagem + ` (${tamanhoKB}KB)`);
+      customalert("✅ " + resposta.mensagem + ` (${tamanhoKB}KB)`);
     } else {
-      alert("❌ " + (resposta.mensagem || "Erro ao salvar backup"));
+      customalert("❌ " + (resposta.mensagem || "Erro ao salvar backup"));
     }
   } catch (err) {
     console.error("Erro ao salvar backup:", err);
-    alert(`❌ Erro ao salvar backup: ${err.message}`);
+    customalert(`❌ Erro ao salvar backup: ${err.message}`);
   }
 }
 
@@ -10754,14 +10868,14 @@ achiList.forEach(achi => {
             const motivo = document.getElementById('solicitacaoMotivo').value.trim();
             
             if (!nomeUsuario || !quantidade || quantidade <= 0) {
-                alert('❌ Preencha os campos obrigatórios corretamente!');
+                customalert('❌ Preencha os campos obrigatórios corretamente!');
                 return;
             }
             
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    alert('❌ Você precisa estar logado!');
+                    customalert('❌ Você precisa estar logado!');
                     return;
                 }
                 
@@ -10779,7 +10893,7 @@ achiList.forEach(achi => {
                 });
                 
                 const resposta = await res.json();
-                alert(resposta.mensagem || (resposta.ok ? '✅ Solicitação criada com sucesso!' : '❌ Erro ao criar solicitação'));
+                customalert(resposta.mensagem || (resposta.ok ? '✅ Solicitação criada com sucesso!' : '❌ Erro ao criar solicitação'));
                 
                 if (resposta.ok) {
                     document.getElementById('solicitacaoUserCoins').value = '';
@@ -10787,7 +10901,7 @@ achiList.forEach(achi => {
                     document.getElementById('solicitacaoMotivo').value = '';
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
                 console.error('Erro ao criar solicitação:', err);
             }
         }
@@ -10950,7 +11064,7 @@ achiList.forEach(achi => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    alert('❌ Você precisa estar logado!');
+                    customalert('❌ Você precisa estar logado!');
                     return;
                 }
                 
@@ -10964,13 +11078,13 @@ achiList.forEach(achi => {
                 });
                 
                 const resposta = await res.json();
-                alert(resposta.mensagem || (resposta.ok ? '✅ Solicitação aprovada!' : '❌ Erro ao aprovar'));
+                customalert(resposta.mensagem || (resposta.ok ? '✅ Solicitação aprovada!' : '❌ Erro ao aprovar'));
                 
                 if (resposta.ok) {
                     carregarSolicitacoesPendentes();
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
                 console.error('Erro ao aprovar solicitação:', err);
             }
         }
@@ -10982,7 +11096,7 @@ achiList.forEach(achi => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    alert('❌ Você precisa estar logado!');
+                    customalert('❌ Você precisa estar logado!');
                     return;
                 }
                 
@@ -10999,13 +11113,13 @@ achiList.forEach(achi => {
                 });
                 
                 const resposta = await res.json();
-                alert(resposta.mensagem || (resposta.ok ? '✕ Solicitação rejeitada!' : '❌ Erro ao rejeitar'));
+                customalert(resposta.mensagem || (resposta.ok ? '✕ Solicitação rejeitada!' : '❌ Erro ao rejeitar'));
                 
                 if (resposta.ok) {
                     carregarSolicitacoesPendentes();
                 }
             } catch (err) {
-                alert('❌ Erro: ' + err.message);
+                customalert('❌ Erro: ' + err.message);
                 console.error('Erro ao rejeitar solicitação:', err);
             }
         }
@@ -11057,8 +11171,9 @@ achiList.forEach(achi => {
 
                 overlay.innerHTML = `
                     <div class="first-visit-popup">
-                        <h1 style="font-size:1.4rem">${escapeHtml(title)}</h1>
-                        <p style="font-size:0.95rem; white-space:pre-wrap;">${escapeHtml(message)}</p>
+                        <h1 style="font-size:2.4rem">${escapeHtml(title)}</h1>
+                        <p style="font-size:1.5rem; white-space:pre-wrap;">${escapeHtml(message)}</p>
+                        <h2 style="font-size:0.9rem">De: Dono (Dogue)</h2>
                         <button onclick="closeUserAlertPopup()">Fechar</button>
                     </div>
                 `;
