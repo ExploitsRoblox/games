@@ -1127,10 +1127,16 @@
             user-select: none;
             pointer-events: none;
         }
-        .sans-character img {
-            width: 300px;
-            height: 360px;
-        }
+      .sans-character img[src="images/sprites/spritedog.png"] {
+  width: 220px;
+  height: 300px;
+}
+
+/* Estilo para a imagem spritedog.png */
+.sans-character img[src="images/sprites/spritedogjoking.png"] {
+  width: 400px;
+  height: 390px;
+}
         .spamton-character img {
             width: 300px;
             height: 360px;
@@ -4218,14 +4224,12 @@ button.door {
   Confira as novidades da atualização!
 </p>
 <ol style="font-size: 0.8rem;">
-  <li>Conquistas e Jogos secretos sincronizados sem precisar de backup.</li>
-  <li>Sistema de patentes, xp e Premium.</li>
-  <li>Nova conquista: "Melhor que você"</li>
-  <li>Rework no menu de conquistas</li>
+  <li>Novo Sistema de códigos personalizados</li>
+  <li>Sistema de backup oficialmente obsoleto, pois sincroniza automaticamente</li>
+  <li>Correção de bugs no sistema de patentes</li>
+  <li>Loja atualizada</li>
   <li>Novo Item: "Modo Tanki"</li>
 </ol>
-
-
             <button onclick="closeFirstVisitPopup()">Fechar</button>
         </div>
     </div>
@@ -4310,7 +4314,7 @@ button.door {
             
             <!-- Sans Character -->
             <div class="sans-character">
-                <img src="images/sprites/sprite.png" alt="Sans">
+                <img src="images/sprites/spritedog.png" alt="Sans">
             </div>
             
             <!-- Shop Items Grid (Hidden by default) -->
@@ -4319,9 +4323,9 @@ button.door {
             <!-- Dialog Box -->
             <div class="undertale-dialogbox">
                 <div class="dialog-text" id="dialogText">
-                * eai pivete...
-                * quer comprar algo? ou conversar um pouco?
-                * sei lá, to meio entediado aqui...
+                * Au Au
+                * Sou dogue
+                * quer ração?
                 </div>
                 <div class="dialog-options">
                     <button class="dialog-btn" id="comprar" onclick="undertaleShopAction('comprar')">Comprar</button>
@@ -4679,8 +4683,6 @@ button.door {
             </div>
             
             <div class="user-actions-section">
-                <button class="panel-btn panel-btn-secondary" onclick="perguntarBackup()">📥 Carregar Backup</button>
-                <button class="panel-btn panel-btn-secondary" onclick="perguntarSave()">💾 Salvar Backup</button>
                 <button class="panel-btn panel-btn-danger" onclick="logoutUser()">🚪 SAIR</button>
             </div>
         </div>
@@ -6831,6 +6833,8 @@ function conquistaAnimacao(tipo) {
             const token = localStorage.getItem('token');
             if (token) {
                 await syncCoinsToDatabase(amount);
+                // ✅ Sincronizar dados simples após mudança
+                await syncSimpleDataToServer();
             }
         }
 
@@ -7258,7 +7262,7 @@ function undertaleShopAction(action) {
     
     if (action === 'comprar') {
         changeSansSprite('joking'); // Muda para o sprite de idle como exemplo
-        typeWriter('* heh... então tu quer\n* fazer uma compra?\n* da uma olhada\n* nessas tralhas.');
+        typeWriter('* Au Au \n* humano quer comprar?\n* da uma olhada\n* nessas coisas.');
         shopItemsGrid.classList.add('show');
     } 
     else if (action === 'conversar') {
@@ -7266,22 +7270,19 @@ function undertaleShopAction(action) {
         shopItemsGrid.classList.remove('show');
 
        const dialogs = [
-    '* há muito tempo...\n* humanos e monstros\n* viviam em harmonia.',
-    '* um dia...\n* uma guerra estourou\n* entre as duas raças.',
-    '* após uma longa batalha,\n* os humanos saíram vitoriosos.',
-    '* eles nos selaram aqui\n* no subsolo com um\n* feitiço mágico.',
-    '* às vezes eu olho para o teto\n* da caverna e tento imaginar\n* o brilho das estrelas.',
-    '* dizem que lá em cima\n* a água cai do céu...\n* acho que chamam de chuva.',
-    '* e sobre aquele humano\n* que mencionaram antes...\n* bem, ele não era de falar.',
-    '* ele tinha um olhar...\n* vazio. como se já soubesse\n* tudo o que eu ia dizer.',
-    '* mas ei, não vamos falar\n* de coisas deprimentes.\n* estraga o clima da loja.',
-    '* você já notou como\n* as flores aqui embaixo\n* parecem estar ouvindo?',
-    '* enfim...\n* é bom ver um rosto novo.\n* as coisas por aqui\n* andam meio paradas.',
-    '* você ainda está aqui?\n* heh... você realmente gosta\n* de ouvir um velho falar.',
-    '* bem, se quiser ouvir mais histórias\n* ou comprar algo, é só falar.\n* estou sempre por aqui.',
-    '* ah, e se você conseguir\n* chegar ao fim da minha história...\n* talvez eu tenha uma surpresa para você.',
-    '* mas cuidado, às vezes eu me perco\n* em minhas próprias histórias\n* e acabo falando coisas sem sentido...',
-    '* mas isso é parte do charme, não é? heh.'
+    '* oi...\n* sou dogue\n* e você?.',
+    `* hmm...\n* legal\n* então seu nome é ${localStorage.getItem('usuarioLogado')}.`,
+    '* gostei do seu nome,\n* me da ração?.',
+    '* quê?\n* você não tem ração?\n* num acredito.',
+    '* todo mundo tem que ter ração\n* não é?',
+    '* dizem que lá fora\n* tem uma coisa verde...\n* acho que chamam de grama.',
+    '* dogue não curte grama...\n* prefere ração\n* da melhor qualidade.',
+    '* posso te contar um segredo?\n* mas você promete que não vai contar pra ninguém\n* né?',
+    '* eu meio que sou o dono da loja....\n* legal né?\n* eu sei.',
+    '* eu sei que você vai espalhar\n* então vou te dar um presente\n* isso fica só entre nós ok?',
+    '* shhh...\n* não conta pra ninguém, tá?\n* enfim, é sempre bom ter um cliente novo',
+    '* você ainda está aqui?\n* au au... você realmente gosta\n* de me ouvir, hein?',
+    '* bem, se quiser comprar algo\n* eu tou aqui, é só falar.\n* ou me chamar.'
 ];
 
         // Define o texto baseado no índice atual
@@ -7292,16 +7293,28 @@ function undertaleShopAction(action) {
 
         // Se chegar ao fim da lista, volta para o primeiro ou mantém o último
         if (currentDialogIndex >= dialogs.length) {
-            currentDialogIndex = 0; // Reinicia a lore
+            currentDialogIndex = dialogs.length - 1;
+            // currentDialogIndex = 0; // Reinicia a lore
             // Se preferir que ele pare de falar coisas novas, 
             // você pode travar no último índice: currentDialogIndex = dialogs.length - 1;
         }
-        if (currentDialogIndex === 0) {
+        if (currentDialogIndex === 4) {
             // Se a história reiniciou, você pode adicionar uma animação ou efeito especial aqui
             changeSansSprite('joking'); // Muda para o sprite de piada como exemplo
-            setTimeout(() => {
-                changeSansSprite('normal'); // Volta para o sprite normal se tiver 
-            }, 6000);
+        }
+        if (currentDialogIndex === 7) {
+            const allgames = localStorage.getItem('item-all-games')
+            if (allgames === 'owned') 
+            { 
+                currentDialogIndex = 12 
+            }
+        }
+        if (currentDialogIndex === 11) {
+            const allgames = localStorage.getItem('item-all-games')
+            if (allgames !== 'owned') {
+            customalert("Você recebeu o item 1x Desbloquear Todos os jogos de Dogue", 10)
+            localStorage.setItem('item-all-games', 'owned')
+            }
         }
     }
 }
@@ -7311,11 +7324,11 @@ function changeSansSprite(state) {
     if (!sansImg) return;
     
     if (state === 'normal') {
-        sansImg.src = 'images/sprites/sprite.png';
+        sansImg.src = 'images/sprites/spritedog.png';
     } else if (state === 'idle') {
         sansImg.src = 'images/sprites/sprite2.jpg';
     } else if (state === 'joking') {
-        sansImg.src = 'images/sprites/spritejoking.png';
+        sansImg.src = 'images/sprites/spritedogjoking.png';
     }
 
 }
@@ -7351,7 +7364,7 @@ function typeWriter(text, elementId = 'dialogText') {
 
     // Escolher som de acordo com o elemento
     const isSpamton = elementId === 'dialogTextS';
-    const audioFile = isSpamton ? 'audios/spamtontalking.mp3' : 'audios/sans.mp3';
+    const audioFile = isSpamton ? 'audios/spamtontalking.mp3' : 'audios/nobodytalking.mp3';
     const talkSound = new Audio(audioFile); 
     talkSound.volume = isSpamton ? 0.1 : 0.1; // Ajusta o volume para diferenciar os sons
 
@@ -7386,8 +7399,7 @@ function typeWriter(text, elementId = 'dialogText') {
             const coins = getCoins();
             
             if (coins < price) {
-                typeWriter('* heh.\n* você não tem\n* ouro o suficiente.\n* mais sorte na próxima vez.');
-                return;
+                typeWriter('* au au.\n* num tem \n* gemas o suficiente.\n* vai resgatar uns códigos ai.');
             }
             
             // Verificar se já possui
@@ -7397,19 +7409,14 @@ function typeWriter(text, elementId = 'dialogText') {
             const itemName = itemId === 'cor-especial' ? 'especial' : itemId === 'cor-comum' ? 'comum' : '';
             
             if (!isSpins && owned && !isReusable) {
-                typeWriter('* tu já\n* tem esse item.\n* não posso te vender\n* algo em dobro.');
+                typeWriter('* AU AU!\n* já tem esse item.\n* não posso te vender algo em dobro\n* apenas giros ou quem sabe, ração');
                 return;
             }
             
             // Reusarr itens de cores para customização
             if (isReusable && owned) {
-                // Validar se o usuário tem moedas suficientes para usar o item
-                if (coins < price) {
-                    typeWriter('* heh.\n* você não tem\n* ouro o suficiente.\n* mais sorte na próxima vez.');
-                    return;
-                }
-                
-                typeWriter(`* ah, vejo que você já tem\n* ${item.name}.\n* quer usar\n* para customizar sua tag?`);
+            
+                typeWriter(`* Au Au, vejo tu tem\n* ${item.name}.\n* quer usar\n* para customizar sua tag?`);
                 
                 const optionsDiv = document.querySelector('.dialog-options');
                 if (itemId === 'custom-tag') {
@@ -7440,7 +7447,7 @@ function typeWriter(text, elementId = 'dialogText') {
         
         async function undertaleConfirmBuy(itemId, price) {
             await buyItem(itemId, price);
-            const thankyou = `* valeu pela compra.`;
+            const thankyou = `* valeu pela compra, au au!.`;
             typeWriter(thankyou)
             const optionsDiv = document.querySelector('.dialog-options');
             optionsDiv.innerHTML = `
@@ -7654,6 +7661,8 @@ function typeWriter(text, elementId = 'dialogText') {
                         customalert(data.mensagem);
                         localStorage.setItem('userTag', tag);
                         updateUserPanelInfo();
+                        // ✅ Sincronizar dados simples após mudança
+                        syncSimpleDataToServer();
                     })
                     .catch(err => console.error('Erro:', err));
                 }
@@ -7815,6 +7824,8 @@ function typeWriter(text, elementId = 'dialogText') {
                             customalert(`✅ Cor da tag atualizada para ${cor.nome}!`);
                             document.body.removeChild(modal);
                             updateUserPanelInfo();
+                            // ✅ Sincronizar dados simples após mudança
+                            syncSimpleDataToServer();
                         } else {
                             customalert('❌ ' + data.mensagem);
                         }
@@ -7848,10 +7859,6 @@ function typeWriter(text, elementId = 'dialogText') {
             const modal = document.getElementById('shopModal');
             modal.classList.add('active');
             initializeShop();
-            await syncItemsFromDatabase(); // Sincronizar itens do backend
-            await syncAchievements(); // Sincronizar conquistas do backend
-            await syncUnlockedGames(); // Sincronizar jogos secretos do backend
-            await syncRankAndXp(); // Sincronizar rank e XP do backend
             loadSpinsFromDatabase(); // Carregar giros quando abrir a loja
             playShopMusic();
             const optionsDiv = document.querySelector('.dialog-options');
@@ -7859,16 +7866,16 @@ function typeWriter(text, elementId = 'dialogText') {
                 <button class="dialog-btn" onclick="undertaleShopAction('comprar')">Comprar</button>
                 <button class="dialog-btn" onclick="undertaleShopAction('conversar')">Conversar</button>
             `;
-            typeWriter('* bem-vindo à minha loja!\n* o que você quer?\n* comprar ou conversar?');
+            typeWriter('* AU AU!\n* Quer comprar ração?\n* ou conversar?');
         }
         let shopAudio = null;
 
 function playShopMusic() {
     // Se já estiver tocando, não criamos outro para não sobrepor
     if (!shopAudio) {
-        shopAudio = new Audio('audios/shoptheme.mp3');
+        shopAudio = new Audio('audios/shoptheme2.mp3');
         shopAudio.loop = true;
-        shopAudio.volume = 0.5;
+        shopAudio.volume = 0.3;
     }
     
     shopAudio.play().catch(e => {
@@ -7972,11 +7979,6 @@ function spamtonSelectItem(itemId, price) {
     
     // Reusarr itens de cores para customização
     if (isReusable && owned) {
-        // Validar se o usuário tem moedas suficientes para usar o item
-        if (coins < price) {
-            typeWriter('* [[VOCÊ NÃO TEM GEMAS SUFICIENTES]]\n* [[PARA CUSTOMIZAR]]\n* [[VOLTE DEPOIS]]', 'dialogTextS');
-            return;
-        }
         
         typeWriter(`* [[AH, VOCÊ JÁ TEM ISSO]]\n* [[QUER USAR PARA CUSTOMIZAR]]\n* [[SUA TAG]]?`, 'dialogTextS');
         
@@ -8815,6 +8817,8 @@ function closeSpamtonShop(){
                         
                         if (res.ok) {
                             console.log('[PHOTO] Foto de perfil sincronizada com o servidor');
+                            // ✅ Sincronizar dados simples após mudança
+                            await syncSimpleDataToServer();
                             // Recarregar leaderboard para mostrar a foto atualizada
                             const leaderboardModal = document.getElementById('leaderboardModal');
                             if (leaderboardModal && leaderboardModal.classList.contains('active')) {
@@ -8862,6 +8866,8 @@ function closeSpamtonShop(){
                             
                             if (res.ok) {
                                 console.log('[PHOTO] Foto de perfil sincronizada com o servidor');
+                                // ✅ Sincronizar dados simples após mudança
+                                await syncSimpleDataToServer();
                                 // Recarregar leaderboard para mostrar a foto atualizada
                                 const leaderboardModal = document.getElementById('leaderboardModal');
                                 if (leaderboardModal && leaderboardModal.classList.contains('active')) {
@@ -10488,23 +10494,6 @@ function ToggleFastSpin() {
         statusText.textContent = 'FAST SPIN: OFF';
     }
 }
-
-function perguntarBackup() {
-    const resposta = confirm("Deseja carregar o backup?");
-    if (resposta) {
-        carregarBackup();
-    } else {
-       customalert("Tudo certo! Não esqueça de salvar seu progresso para manter suas conquistas.");
-    }
-}
-function perguntarSave() {
-    const resposta = confirm("Deseja salvar um backup?");
-    if (resposta) {
-        salvarBackup();
-    } else {
-       customalert("Tudo certo! Lembre-se de salvar seu progresso para não perder suas conquistas.");
-    }
-}
         // Rastrear tempo de jogo
         let sessionStartTime = Date.now();
         
@@ -10530,6 +10519,9 @@ function perguntarSave() {
                             },
                             body: JSON.stringify({ minutos: elapsedMinutes })
                         }).catch(err => console.error('Erro ao atualizar tempo:', err));
+                        
+                        // ✅ Sincronizar dados simples também
+                        syncSimpleDataToServer().catch(err => console.error('Erro ao sincronizar dados:', err));
                     }
                     
                     sessionStartTime = Date.now();
@@ -10648,12 +10640,18 @@ function perguntarSave() {
                 : btn.className = 'user-panel-btn'
                 
                 if (!window.location.href.toLowerCase().includes('file://')) { // Verifica se está no protocólo file:
+                  // ✅ Carregar dados simples do servidor
+                  await loadSimpleDataFromServer();
+                  
                   await syncUnlockedGamesToDatabase();
                   await syncCoinsFromDatabase(); // sincroniza moedas do banco de dados
                   await syncItemsFromDatabase(); // sincroniza itens (incluindo Spamton) do banco de dados
                   await syncAchievements(); // sincroniza conquistas do banco de dados
                   await syncUnlockedGames(); // sincroniza jogos secretos do banco de dados
                   await syncRankAndXp(); // sincroniza rank e XP do banco de dados
+                  
+                  // ✅ Sincronizar dados automaticamente a cada 30 segundos
+                  setInterval(syncSimpleDataToServer, 30 * 1000);
                 }
             } else if (usuario && !token) {
                 localStorage.removeItem('usuarioLogado')
@@ -10667,197 +10665,78 @@ function perguntarSave() {
        
         const API_URL = "https://login-nqot.onrender.com";
 
+// === SINCRONIZAÇÃO AUTOMÁTICA DE DADOS SIMPLES ===
+async function syncSimpleDataToServer() {
+    const token = localStorage.getItem('token');
+    const usuario = localStorage.getItem('usuarioLogado');
+    
+    if (!token || !usuario) return; // Não sincronizar se não logado
 
-        async function carregarBackup() {
-  const tokenAnterior = localStorage.getItem("token");
-  if (!tokenAnterior) return customalert("Você precisa estar logado!");
+    try {
+        const payload = {
+            moedas: parseInt(localStorage.getItem('userCoins') || '0'),
+            playtime: parseInt(localStorage.getItem('userPlaytime') || '0'),
+            tag: localStorage.getItem('userTag') || '',
+            tagColor: localStorage.getItem('userTagColor') || '#a855f7',
+            tagColorType: localStorage.getItem('userTagColorType') || 'comum',
+            fotoPerfil: localStorage.getItem('userProfilePic') || ''
+        };
 
-  try {
-    const token = localStorage.getItem("token");
+        const res = await fetch(`${API_URL}/sincronizar-dados-simples`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
 
-    const res = await fetch(`${API_URL}/carregarBackup`, {
-      method: "GET",
-      credentials: "include",
-      headers: { 
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
-    });
-
-    if (!res.ok) {
-      throw new Error(`Erro HTTP: ${res.status} ${res.statusText}`);
+        if (res.ok) {
+            const resposta = await res.json();
+            console.log('[AUTO-SYNC] ✅ Dados sincronizados:', resposta.usuario);
+        } else {
+            console.error('[AUTO-SYNC] ❌ Erro na resposta:', res.status);
+        }
+    } catch (err) {
+        console.error('[AUTO-SYNC] Erro ao sincronizar dados:', err);
     }
-
-    const resposta = await res.json();
-    if (resposta.ok && resposta.dados) {
-  // Se o back-end enviou o documento bruto do banco, pegamos a propriedade interna .dados
-  // Caso contrário, usamos o próprio objeto retornado.
-  const dadosBackup = resposta.dados.dados ? resposta.dados.dados : resposta.dados;
-  console.log("CONQUISTAS DO BACKEND:", dadosBackup.achievements);
-  console.log("JOGOS DO BACKEND:", dadosBackup.unlockedGames);
-  
-  console.log("Estrutura do Backup recebido:", dadosBackup);
-
-  // 1. Restaurar dados simples (moedas, playtime, etc)
-  if (dadosBackup.dados) {
-    for (const chave in dadosBackup.dados) {
-      localStorage.setItem(chave, dadosBackup.dados[chave]);
-    }
-  }
-
-  // 2. Restaurar itens comprados
-  if (dadosBackup.purchasedItems && Array.isArray(dadosBackup.purchasedItems)) {
-    dadosBackup.purchasedItems.forEach(itemId => {
-      localStorage.setItem(`item-${itemId}`, 'owned');
-    });
-  }
-
-  // 3. Restaurar itens comprados do Spamton
-  if (dadosBackup.purchasedItemsSpamton && Array.isArray(dadosBackup.purchasedItemsSpamton)) {
-    dadosBackup.purchasedItemsSpamton.forEach(itemId => {
-      localStorage.setItem(`item-${itemId}`, 'owned');
-    });
-  }
-
-  // 4. Restaurar preferências
-  if (dadosBackup.preferences) {
-    localStorage.setItem('userPreferences', JSON.stringify(dadosBackup.preferences));
-  }
-
-  // 5. Se "all-games" foi comprado, desbloquear todos os jogos secretos
-  if (dadosBackup.purchasedItems && dadosBackup.purchasedItems.includes('all-games')) {
-    const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
-    allSecretGames.forEach(gameId => {
-      localStorage.setItem(gameId, 'unlocked');
-    });
-  }
-
-  console.log("✅ Backup restaurado!");
-  
-  // Sincronizar achievements e jogos secretos do backend
-  await syncAchievements();
-  await syncUnlockedGames();
-  
-  customalert("✅ Backup restaurado com sucesso!");
-  window.location.reload();
-} else {
-      console.log("Nenhum backup encontrado.");
-      alert("⚠️ Nenhum backup encontrado.");
-    }
-  } catch (err) {
-    console.error("Erro ao carregar backup:", err);
-    customalert(`❌ Erro ao carregar backup: ${err.message}`);
-  }
 }
-async function salvarBackup() {
-  const tokenAnterior = localStorage.getItem("token");
-  if (!tokenAnterior) return alert("Você precisa estar logado!");
 
-  try {
-    const token = localStorage.getItem("token");
+async function loadSimpleDataFromServer() {
+    const token = localStorage.getItem('token');
+    const usuario = localStorage.getItem('usuarioLogado');
+    
+    if (!token || !usuario) return; // Não carregar se não logado
 
-    // 1. DADOS PRINCIPAIS (simples)
-    const dadosSimples = {
-      userCoins: localStorage.getItem('userCoins'),
-      userPlaytime: localStorage.getItem('userPlaytime'),
-      userTag: localStorage.getItem('userTag'),
-      userTagColor: localStorage.getItem('userTagColor'),
-      userTagColorType: localStorage.getItem('userTagColorType'),
-      userProfilePic: localStorage.getItem('userProfilePic'),
-      lastDailyRewardDate: localStorage.getItem('lastDailyRewardDate')
-    };
+    try {
+        const res = await fetch(`${API_URL}/carregar-dados-simples`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-    // 2. ITENS COMPRADOS
-    const itensComprados = [];
-    const SHOP_ITEMS = ['all-games', 'custom-tag', 'cor-comum', 'cor-especial', 'new-game'];
-    SHOP_ITEMS.forEach(itemId => {
-      const key = `item-${itemId}`;
-      if (localStorage.getItem(key) === 'owned') {
-        itensComprados.push(itemId);
-      }
-    });
-    // Loja do Spamton
-    // 2. ITENS COMPRADOS
-    const itensCompradosSpamton = [];
-    const SPAMTON_ITEMS = ['cor-comum', 'cor-especial', '404-notfound', 'fast-spin'];
-    SPAMTON_ITEMS.forEach(itemId => {
-      const key = `item-${itemId}`;
-      if (localStorage.getItem(key) === 'owned') {
-        itensCompradosSpamton.push(itemId);
-      }
-    });
+        if (res.ok) {
+            const resposta = await res.json();
+            if (resposta.ok && resposta.dados) {
+                // Carregar dados do servidor se forem mais recentes
+                const dadosServidor = resposta.dados;
+                
+                localStorage.setItem('userCoins', dadosServidor.moedas || 0);
+                localStorage.setItem('userPlaytime', dadosServidor.playtime || 0);
+                localStorage.setItem('userTag', dadosServidor.tag || '');
+                localStorage.setItem('userTagColor', dadosServidor.tagColor || '#a855f7');
+                localStorage.setItem('userTagColorType', dadosServidor.tagColorType || 'comum');
+                localStorage.setItem('userProfilePic', dadosServidor.fotoPerfil || '');
 
-    // 3. JOGOS SECRETOS DESBLOQUEADOS
-    const jogosDesbloqueados = [];
-    ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'].forEach(gameId => {
-      if (localStorage.getItem(gameId) === 'unlocked') {
-        jogosDesbloqueados.push(gameId);
-      }
-    });
-
-    // 4. CONQUISTAS DESBLOQUEADAS
-const conquistas = [];
-const achiList = [
-  'detetive', 
-  'sortudo', // CORRIGIDO: mudado de 'lucky' para 'sortudo' para bater com o resto do sistema
-  'infinity', 
-  'gaster', 
-  '50goal'
-];
-
-achiList.forEach(achi => {
-  // Ajuste para validar tanto se for 'unlocked' quanto se for 'true'
-  const valor = localStorage.getItem(`ach-${achi}`);
-  if (valor === 'unlocked' || valor === 'true') {
-    conquistas.push(achi);
-  }
-});
-    // 5. PREFERÊNCIAS (filtros de categorias)
-    const preferences = {
-      darkMode: localStorage.getItem('darkMode'),
-      soundEnabled: localStorage.getItem('soundEnabled'),
-      selectedCategories: localStorage.getItem('selectedCategories')
-    };
-
-    // Montar o payload otimizado
-    const backupData = {
-      dados: dadosSimples,
-      achievements: conquistas,
-      unlockedGames: jogosDesbloqueados,
-      purchasedItems: itensComprados,
-      purchasedItemsSpamton: itensCompradosSpamton,
-      preferences: preferences,
-      timestamp: new Date().toISOString()
-    };
-
-    const tamanhoKB = (JSON.stringify(backupData).length / 1024).toFixed(2);
-    console.log(`📦 Backup: ${tamanhoKB}KB com ${Object.keys(dadosSimples).length + conquistas.length + jogosDesbloqueados.length} itens`);
-
-    const res = await fetch(`${API_URL}/salvarBackup`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({ dados: backupData })
-    });
-
-    if (!res.ok) {
-      throw new Error(`Erro HTTP: ${res.status} ${res.statusText}`);
+                console.log('[AUTO-LOAD] ✅ Dados carregados do servidor');
+            }
+        } else {
+            console.error('[AUTO-LOAD] ❌ Erro na resposta:', res.status);
+        }
+    } catch (err) {
+        console.error('[AUTO-LOAD] Erro ao carregar dados:', err);
     }
-
-    const resposta = await res.json();
-    if (resposta.ok) {
-      console.log("✅ " + resposta.mensagem);
-      customalert("✅ " + resposta.mensagem + ` (${tamanhoKB}KB)`);
-    } else {
-      customalert("❌ " + (resposta.mensagem || "Erro ao salvar backup"));
-    }
-  } catch (err) {
-    console.error("Erro ao salvar backup:", err);
-    customalert(`❌ Erro ao salvar backup: ${err.message}`);
-  }
 }
 
         // === SISTEMA DE AUTORIZAÇÃO/SOLICITAÇÕES ===
