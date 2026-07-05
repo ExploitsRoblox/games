@@ -75,6 +75,19 @@
             z-index: 1000;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
         }
+
+        /* --- Mobile --- */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 12px 16px; /* menos espaço nas laterais */
+        backdrop-filter: blur(6px); /* blur menor = melhor performance */
+        -webkit-backdrop-filter: blur(6px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* sombra menor */
+    }
+    .navbar-menu.active {
+        display: flex;
+    }
+}
         /* Nova classe para o Modo Tanki */
 .navbar-tanki {
     background-image: url(images/backgrounds/grey.jpg);
@@ -101,6 +114,12 @@
             min-width: 150px;
         }
 
+        @media (max-width: 768px) {.navbar-logo {
+            display: none;
+        }
+            
+        }
+
         .logo-text {
             font-size: 2rem;
             font-weight: 900;
@@ -119,6 +138,19 @@
             justify-content: center;
             flex-direction: row;
             overflow: hidden;
+        }
+ #expandbtn {
+            display: none;
+ }
+        @media (max-width: 768px) { .navbar-menu {
+            display: none;
+        }
+        .navbar-menu.active {
+            display: flex;
+        }
+        #expandbtn {
+            display: flex;
+        }
         }
 
         .navbar-btn {
@@ -281,14 +313,19 @@
             }
 
             .navbar-menu {
-                width: 50%;
-                order: 3;
+                width: 100%;
+                order: 0;
                 gap: 0px;
                 justify-content: flex-start;
             }
 
             .navbar-right {
                 gap: 10px;
+               align-items: flex-start;
+        justify-content: center;
+        flex-wrap: nowrap;
+        width: 100%;
+        display: flex;
             }
 
             .navbar-btn {
@@ -639,6 +676,7 @@
         main {
             flex: 1;
             padding: 40px;
+            min-height: calc(100vh - 60px); /* evita que fique pequeno se tiver header */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -646,7 +684,15 @@
             background: linear-gradient(135deg, var(--bg-dark) 0%, var(--sidebar-bg) 100%);
             width: 100%;
             margin-top: 0;
+            box-sizing: border-box; /* padding não estoura a largura */
         }
+       /* Mobile */
+@media (max-width: 768px) {
+    main {
+        padding: 20px 16px; /* menos padding no mobile */
+        margin: 0;
+    }
+}
 
         /* Botões de Toggle */
         .toggle-btn {
@@ -2588,10 +2634,10 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 25px;
+    width: 100%;
+    max-width: 2400px;
         }
 
         .game-card {
@@ -2607,6 +2653,40 @@
             align-items: center;
             padding-bottom: 5px;
         }
+        @media (max-width: 768px) {.grid-container {
+            display: grid;
+           grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+        }}
+
+        @media (max-width: 768px) {.game-card img {
+    width: 100%;
+    height: 90px;
+    object-fit: cover;
+}}
+
+@media (max-width: 400px) {.navbar-right {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto;
+        gap: 8px;
+    }
+}
+
+/* Laptop médio: 1024px até 1440px */
+@media (max-width: 1024px) and (min-width: 600px) {
+    .navbar-menu {
+        gap: 0px
+    }
+    .navbar-right {
+        justify-content: space-between; /* Logo | Gemas | Sino | DOGUE | ☰ */
+    }
+    .game-grid {
+        grid-template-columns: repeat(5, 1fr); /* 5 por linha fica perfeito */
+    }
+}
 
         .game-card:hover {
             transform: translateY(-10px);
@@ -2615,9 +2695,9 @@
         }
 
         .game-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
+           width: 100%;
+    height: 130px;
+    object-fit: cover;
         }
 
         .game-card span {
@@ -3911,6 +3991,94 @@ button.door {
             animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
         }
+        /* ESTILO GLOBAL - neon caótico */
+.global-alert-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999; animation: fadeIn 0.3s;
+}
+
+.global-alert-popup {
+    background-image: url("images/backgrounds/bg.png");
+    background-repeat: repeat;
+    border: 3px solid #fff;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    text-align: center;
+    color: white;
+    /* box-shadow: 0 0 40px #ff00ff, 0 0 80px #9900ff; */
+    animation: pulse 2s infinite;
+}
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.global-alert-popup h1 {
+    font-size: 2.8rem;
+    background: linear-gradient(90deg, #ff0000, #ff3d02);
+    text-shadow: 0 0 10px #fff;
+    margin-bottom: 15px;
+    font-family: 'Quad';
+    background-clip: text;
+             -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+     animation: gradientMove 0.2s linear infinite;
+            background-size: 200%;
+            font-weight: normal;
+            padding: 10px 20px;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.global-alert-popup p {
+    font-size: 1.6rem;
+}
+
+.global-alert-popup .alert-codigo-box {
+    background: #000;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 2px dashed #00ff88;
+}
+
+.global-alert-popup .alert-codigo {
+    color: #00ff88;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+ .global-alert-popup button[onclick="closeUserAlertPopup()"] {
+            background: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+        }
+
+        .global-alert-popup button:hover {
+            background: #ff5a7e;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6);
+        }
+
+        .global-alert-popup button:active {
+            transform: scale(0.95);
+        }
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
 /* 
         .custom-alert-popup {
             background: var(--bg-dark);
@@ -3947,14 +4115,26 @@ button.door {
     overflow-x: clip;
     max-width: 500px;
     line-break: auto;
-        }
+}
+.first-visit-popup .alert-codigo-box {
+    background: #000;
+    padding: 12px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 2px dashed #00ff88;
+}
 
+.first-visit-popup .alert-codigo {
+    color: #00ff88;
+    font-weight: bold;
+    font-size: 1.3rem;
+}
         .first-visit-popup .emoji-large {
             font-size: 4rem;
             margin: 20px 0;
         }
 
-        .first-visit-popup button {
+        .first-visit-popup button[onclick="closeUserAlertPopup()"] {
             background: var(--accent-color);
             color: #ffffff;
             border: none;
@@ -3970,13 +4150,13 @@ button.door {
             box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
         }
 
-        .first-visit-popup button:hover {
+        .first-visit-popup button[onclick="closeUserAlertPopup()"]:hover {
             background: #ff5a7e;
             transform: scale(1.05);
             box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6);
         }
 
-        .first-visit-popup button:active {
+        .first-visit-popup button[onclick="closeUserAlertPopup()"]:active {
             transform: scale(0.95);
         }
 
@@ -4211,6 +4391,7 @@ button.door {
                     <span class="notification-badge" id="notificationBadge"></span>
                 </button>
                 <button id="userPanelBtn" class="user-panel-btn" style="display: none;" onclick="toggleUserPanel()"></button>
+                <button id="expandbtn" class="navbar-btn" onclick="toggleButtons()" style="border: 2px solid white">☰</button>
                 <button id="authBtn" class="navbar-auth-btn" onclick="">🔐 LOGIN</button>
             </div>
         </div>
@@ -4503,14 +4684,7 @@ button.door {
                         <h3>🎁 Adicionar Item</h3>
                         <div class="admin-form">
                             <input type="text" class="admin-input" id="adminUserItem" placeholder="Nome do usuário">
-                            <select class="admin-input" id="adminItemId">
-                                <option value="">Selecione um item</option>
-                                <option value="all-games">Desbloquear Todos os Jogos</option>
-                                <option value="custom-tag">Tag Personalizada</option>
-                                <option value="premium-xp">Premium</option>
-                                <option value="key">Chave Misteriosa</option>
-                                <option value="fast-spin">Giro Rápido</option>
-                            </select>
+                            <input type="text" class="admin-input" id="adminItemId" placeholder="ID do item">
                             <button class="admin-btn" onclick="adminAddItem()">Adicionar Item</button>
                         </div>
                     </div>
@@ -4619,7 +4793,15 @@ button.door {
                             <input type="text" class="admin-input" id="adminUserAlertName" placeholder="Nome do usuário">
                             <input type="text" class="admin-input" id="adminAlertTitle" placeholder="Título do alerta (ex: Aviso importante)">
                             <textarea class="admin-input" id="adminAlertMessage" placeholder="Mensagem do alerta" style="min-height:80px; resize:vertical;"></textarea>
+                            <input type="text" class="admin-input" id="adminAlertCodigo" placeholder="Código Promocional (opcional)">
                             <button class="admin-btn" onclick="adminSendUserAlert()">Enviar Alerta</button>
+                        </div>
+                        <h3>🚨 Alertar todos</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminGlobalAlertTitle" placeholder="Título do alerta (ex: Aviso importante)">
+                            <textarea class="admin-input" id="adminGlobalAlertMessage" placeholder="Mensagem do alerta" style="min-height:80px; resize:vertical;"></textarea>
+                            <input type="text" class="admin-input" id="adminGlobalAlertCodigo" placeholder="Código Promocional (opcional)">
+                            <button class="admin-btn" onclick="adminSendGlobalAlert()">Enviar Alerta</button>
                         </div>
                     </div>
 
@@ -4903,11 +5085,12 @@ button.door {
     </div>
 
     <main id="mainid">
-        <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">Metas de Jogo</span>
+        <!-- <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">Metas de Jogo</span>
         <div class="featured-banner">
             <h2 style="margin: 0; font-size: 2rem;">Objetivo: Alcance 50 pontos em Jogo de UFO</h2>
             <p id="50goaltext" style="margin: 5px 0 0 0;">0/50</p>
-        </div>
+        </div> -->
+        <p id="welcomeP" style="font-size: 2.4rem; font-family: 'Quad';">Bem-vindo(a),</p>
 
         <div class="grid-container" id="gameGrid">
             <a href="https://neeexusbr.github.io/apostilas" class="game-card" data-name="Apostilas" data-category="educativo">
@@ -5568,6 +5751,11 @@ function toggleLeftSidebar() {
             if(document.body.classList.contains('left-active')) {
                 toggleLeftSidebar();
             }
+        }
+
+        function toggleButtons() {
+           const menu = document.querySelector('.navbar-menu');
+    menu.classList.toggle('active');
         }
         
         function filterGames() {
@@ -6511,8 +6699,6 @@ async function atualizarChatAtivo() {
         const sidebar = document.querySelectorAll(".sidebar")
         const skincont = document.querySelectorAll(".skins-content")
         const invcont = document.querySelectorAll(".inventory-content")
-        const admincont = document.querySelectorAll(".admin-content")
-        const adminsec = document.querySelectorAll(".admin-section")
         const recobtn = document.getElementById("recompensabtn")
         const invbtn = document.getElementById("inventariobtn")
         const filbtn = document.getElementById("filtrosbtn")
@@ -6581,23 +6767,6 @@ async function atualizarChatAtivo() {
     : `background-color: var(--sidebar-bg);`;
      achcont.forEach(elemento => {
               elemento.style = achStyle;
-        });
-
-         // O ternário apenas decide QUAL string de estilo usar
-    const admincStyle = tankiMode
-    ? `background-image: url(images/backgrounds/dark_grey.jpg); background-repeat: repeat;`
-    : `background-color: var(--sidebar-bg);`;
-     admincont.forEach(elemento => {
-              elemento.style = admincStyle;
-        });
-
-
-          // O ternário apenas decide QUAL string de estilo usar
-    const adminsecStyle = tankiMode
-    ? `background-image: url(images/backgrounds/bg.png); background-repeat: repeat;`
-    : `background-color: var(--card-bg);`;
-     adminsec.forEach(elemento => {
-              elemento.style = adminsecStyle;
         });
 
              // O ternário apenas decide QUAL string de estilo usar
@@ -7415,6 +7584,10 @@ function typeWriter(text, elementId = 'dialogText') {
             
             // Reusarr itens de cores para customização
             if (isReusable && owned) {
+             if (coins < price) {
+                typeWriter('* au au.\n* num tem \n* gemas o suficiente\n* pra usar o item..');
+                return;
+            }
             
                 typeWriter(`* Au Au, vejo tu tem\n* ${item.name}.\n* quer usar\n* para customizar sua tag?`);
                 
@@ -7487,7 +7660,7 @@ function typeWriter(text, elementId = 'dialogText') {
                 updateSpinsDisplay();
                 
                 // Sincronizar com o backend se logado
-                if (token) {
+                if (token && !window.location.href.toLowerCase().includes('file://')) {
                     const API_URL = "https://login-nqot.onrender.com";
                     try {
                         // Registrar compra com origem
@@ -9641,6 +9814,7 @@ function closeSpamtonShop(){
             const nomeUsuario = document.getElementById('adminUserAlertName').value.trim();
             const title = document.getElementById('adminAlertTitle').value.trim();
             const message = document.getElementById('adminAlertMessage').value.trim();
+            const codigo = document.getElementById('adminAlertCodigo')?.value.trim(); // opcional
 
             if (!nomeUsuario || (!title && !message)) {
                 alert('❌ Preencha o nome do usuário e o título ou a mensagem!');
@@ -9657,7 +9831,7 @@ function closeSpamtonShop(){
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ nomeUsuario, title, message })
+                    body: JSON.stringify({ nomeUsuario, title, message, codigo })
                 });
 
                 const resposta = await res.json();
@@ -9667,12 +9841,57 @@ function closeSpamtonShop(){
                     document.getElementById('adminUserAlertName').value = '';
                     document.getElementById('adminAlertTitle').value = '';
                     document.getElementById('adminAlertMessage').value = '';
+                     if(document.getElementById('adminAlertCodigo')) 
+                document.getElementById('adminAlertCodigo').value = '';
                 }
             } catch (err) {
                 alert('❌ Erro: ' + err.message);
                 console.error('Erro ao enviar alerta:', err);
             }
         }
+
+        async function adminSendGlobalAlert() {
+    const title = document.getElementById('adminGlobalAlertTitle').value.trim();
+    const message = document.getElementById('adminGlobalAlertMessage').value.trim();
+    const codigo = document.getElementById('adminGlobalAlertCodigo')?.value.trim(); // opcional
+
+    if (!title && !message) {
+        alert('❌ Preencha o título ou a mensagem!');
+        return;
+    }
+
+    // Confirmação pq isso vai pra TODO MUNDO
+    if (!confirm(`⚠️ Tem certeza que quer enviar esse alerta global para TODOS os usuários?`)) {
+        return;
+    }
+
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) { alert('❌ Você precisa estar logado!'); return; }
+
+        const res = await fetch(`${API_ADMIN}/admin/alertar-todos`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ title, message, codigo}) // sem nomeUsuario
+        });
+
+        const resposta = await res.json();
+        alert(resposta.mensagem || (resposta.ok ? '✅ Alerta global enviado!' : '❌ Erro ao enviar alerta'));
+
+        if (resposta.ok) {
+            document.getElementById('adminAlertTitle').value = '';
+            document.getElementById('adminAlertMessage').value = '';
+            if(document.getElementById('adminAlertCodigo')) 
+                document.getElementById('adminAlertCodigo').value = '';
+        }
+    } catch (err) {
+        alert('❌ Erro: ' + err.message);
+        console.error('Erro ao enviar alerta global:', err);
+    }
+}
 
         async function adminChangeBorderColor() {
             const nomeUsuario = document.getElementById('adminUserChangeBorder').value;
@@ -10595,7 +10814,11 @@ function ToggleFastSpin() {
                     unlockGame(gameId);
                 });
             }
-
+            if (localStorage.getItem('usuarioLogado') !== 'null') {
+            document.getElementById('welcomeP').textContent = `Bem-Vindo(a), ${localStorage.getItem('usuarioLogado')}`
+            } else {
+                document.getElementById('welcomeP').textContent = `Bem-Vindo(a), visitante!'`
+            }
              // Se o item "fast-spin" foi comprado, mostrar o botão de giro rápido
             if (localStorage.getItem('item-fast-spin') === 'owned') {
                localStorage.setItem('fast-spin', 'on');
@@ -11003,31 +11226,35 @@ async function loadSimpleDataFromServer() {
             }
         }
         
-            // === ALERTAS DO ADMIN (POPUP NA PRÓXIMA VISITA) ===
-            async function checkUserAlertOnLoad() {
-                const token = localStorage.getItem('token');
-                if (!token) return;
+            /// === ALERTAS DO ADMIN (POPUP NA PRÓXIMA VISITA) ===
+async function checkUserAlertOnLoad() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
 
-                try {
-                    const res = await fetch(`${API_URL_BACKEND}/user/alerts`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': 'Bearer ' + token,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (!res.ok) return;
-                    const data = await res.json();
-                    if (data && data.ok && data.alert) {
-                        const title = data.alert.title || 'Aviso';
-                        const message = data.alert.message || '';
-                        showUserAlertPopup(title, message);
-                    }
-                } catch (err) {
-                    console.error('[ALERT] Erro ao buscar alertas:', err);
-                }
+    try {
+        const res = await fetch(`${API_URL_BACKEND}/user/alerts`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
             }
+        });
+
+        if (!res.ok) return;
+        const data = await res.json();
+        
+      if (data?.ok && data.alert) {
+            showUserAlertPopup(
+                data.alert.title, 
+                data.alert.message, 
+                data.alert.codigo, 
+                data.alert.tipo
+            );
+        }
+    } catch (err) {
+        console.error('[ALERT] Erro ao buscar alertas:', err);
+    }
+}
 
             function escapeHtml(str) {
                 if (!str) return '';
@@ -11039,26 +11266,51 @@ async function loadSimpleDataFromServer() {
                     .replace(/'/g, '&#039;');
             }
 
-            function showUserAlertPopup(title, message) {
-                // Reusar estilos da classe .first-visit-overlay / .first-visit-popup
-                const existing = document.getElementById('userAlertOverlay');
-                if (existing) existing.remove();
+            function showUserAlertPopup(title, message, codigo = null, tipo = 'normal') {
+    // Remove se já existir
+    const existing = document.getElementById('userAlertOverlay');
+    if (existing) existing.remove();
 
-                const overlay = document.createElement('div');
-                overlay.id = 'userAlertOverlay';
-                overlay.className = 'first-visit-overlay show';
+    const isGlobal = tipo === 'global';
 
-                overlay.innerHTML = `
-                    <div class="first-visit-popup">
-                        <h1 style="font-size:2.4rem">${escapeHtml(title)}</h1>
-                        <p style="font-size:1.5rem; white-space:pre-wrap;">${escapeHtml(message)}</p>
-                        <h2 style="font-size:0.9rem">De: Dono (Dogue)</h2>
-                        <button onclick="closeUserAlertPopup()">Fechar</button>
-                    </div>
-                `;
+    const overlay = document.createElement('div');
+    overlay.id = 'userAlertOverlay';
+    
+    // Se for global usa classe diferente pra estilizar
+    overlay.className = isGlobal ? 'global-alert-overlay show' : 'first-visit-overlay show';
 
-                document.body.appendChild(overlay);
-            }
+    let codigoHTML = '';
+    if(codigo) {
+        codigoHTML = `
+            <div class="alert-codigo-box">
+                <b>Código:</b> <span class="alert-codigo">${escapeHtml(codigo)}</span>
+                <button onclick="navigator.clipboard.writeText('${escapeHtml(codigo)}')">Copiar</button>
+            </div>
+        `;
+    }
+
+    overlay.innerHTML = `
+        <div class="${isGlobal ? 'global-alert-popup' : 'first-visit-popup'}">
+            <h1>${escapeHtml(title)}</h1>
+            <p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
+            ${codigoHTML}
+            <h2>De: Dono (Dogue)</h2>
+            <button onclick="closeUserAlertPopup()">Fechar</button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+}
+
+function closeUserAlertPopup() {
+    document.getElementById('userAlertOverlay')?.remove();
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 
             function closeUserAlertPopup() {
                 const overlay = document.getElementById('userAlertOverlay');
