@@ -4794,6 +4794,10 @@ button.door {
                             <input type="text" class="admin-input" id="adminAlertTitle" placeholder="Título do alerta (ex: Aviso importante)">
                             <textarea class="admin-input" id="adminAlertMessage" placeholder="Mensagem do alerta" style="min-height:80px; resize:vertical;"></textarea>
                             <input type="text" class="admin-input" id="adminAlertCodigo" placeholder="Código Promocional (opcional)">
+                            <label style="display:flex; align-items:center; gap:8px; color:#38bdf8; font-size:0.9rem; margin-top:8px;">
+                                <input type="checkbox" id="adminUserAlertOnlineOnly">
+                                <span>Enviar somente para usuários online</span>
+                            </label>
                             <button class="admin-btn" onclick="adminSendUserAlert()">Enviar Alerta</button>
                         </div>
                         <h3>🚨 Alertar todos</h3>
@@ -4801,6 +4805,10 @@ button.door {
                             <input type="text" class="admin-input" id="adminGlobalAlertTitle" placeholder="Título do alerta (ex: Aviso importante)">
                             <textarea class="admin-input" id="adminGlobalAlertMessage" placeholder="Mensagem do alerta" style="min-height:80px; resize:vertical;"></textarea>
                             <input type="text" class="admin-input" id="adminGlobalAlertCodigo" placeholder="Código Promocional (opcional)">
+                            <label style="display:flex; align-items:center; gap:8px; color:#38bdf8; font-size:0.9rem; margin-top:8px;">
+                                <input type="checkbox" id="adminGlobalAlertOnlineOnly">
+                                <span>Enviar somente para usuários online</span>
+                            </label>
                             <button class="admin-btn" onclick="adminSendGlobalAlert()">Enviar Alerta</button>
                         </div>
                     </div>
@@ -9410,12 +9418,15 @@ function closeSpamtonShop(){
                 resposta.usuarios.forEach(user => {
                     const userDiv = document.createElement('div');
                     userDiv.className = 'admin-user-item';
+                    const statusText = user.online ? '🟢 Online' : '🔴 Offline';
+                    const statusColor = user.online ? '#22c55e' : '#ef4444';
                     userDiv.innerHTML = `
                         <div>
                             <span class="admin-user-name">${user.nome}</span>
                             <span style="margin-left: 15px;" class="admin-user-coins">💰 ${user.moedas || 0}</span>
                         </div>
-                        <div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="color:${statusColor}; font-size:0.9rem; font-weight:600;">${statusText}</span>
                             ${user.isAdmin ? '<span class="admin-user-badge">ADMIN</span>' : ''}
                         </div>
                     `;
@@ -9814,7 +9825,8 @@ function closeSpamtonShop(){
             const nomeUsuario = document.getElementById('adminUserAlertName').value.trim();
             const title = document.getElementById('adminAlertTitle').value.trim();
             const message = document.getElementById('adminAlertMessage').value.trim();
-            const codigo = document.getElementById('adminAlertCodigo')?.value.trim(); // opcional
+            const codigo = document.getElementById('adminAlertCodigo')?.value.trim();
+            const onlineOnly = document.getElementById('adminUserAlertOnlineOnly')?.checked || false;
 
             if (!nomeUsuario || (!title && !message)) {
                 alert('❌ Preencha o nome do usuário e o título ou a mensagem!');
@@ -9831,7 +9843,7 @@ function closeSpamtonShop(){
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ nomeUsuario, title, message, codigo })
+                    body: JSON.stringify({ nomeUsuario, title, message, codigo, onlineOnly })
                 });
 
                 const resposta = await res.json();
@@ -9841,8 +9853,12 @@ function closeSpamtonShop(){
                     document.getElementById('adminUserAlertName').value = '';
                     document.getElementById('adminAlertTitle').value = '';
                     document.getElementById('adminAlertMessage').value = '';
-                     if(document.getElementById('adminAlertCodigo')) 
-                document.getElementById('adminAlertCodigo').value = '';
+                    if (document.getElementById('adminAlertCodigo')) {
+                        document.getElementById('adminAlertCodigo').value = '';
+                    }
+                    if (document.getElementById('adminUserAlertOnlineOnly')) {
+                        document.getElementById('adminUserAlertOnlineOnly').checked = false;
+                    }
                 }
             } catch (err) {
                 alert('❌ Erro: ' + err.message);
@@ -9851,47 +9867,55 @@ function closeSpamtonShop(){
         }
 
         async function adminSendGlobalAlert() {
-    const title = document.getElementById('adminGlobalAlertTitle').value.trim();
-    const message = document.getElementById('adminGlobalAlertMessage').value.trim();
-    const codigo = document.getElementById('adminGlobalAlertCodigo')?.value.trim(); // opcional
+            const title = document.getElementById('adminGlobalAlertTitle').value.trim();
+            const message = document.getElementById('adminGlobalAlertMessage').value.trim();
+            const codigo = document.getElementById('adminGlobalAlertCodigo')?.value.trim();
+            const onlineOnly = document.getElementById('adminGlobalAlertOnlineOnly')?.checked || false;
 
-    if (!title && !message) {
-        alert('❌ Preencha o título ou a mensagem!');
-        return;
-    }
+            if (!title && !message) {
+                alert('❌ Preencha o título ou a mensagem!');
+                return;
+            }
 
-    // Confirmação pq isso vai pra TODO MUNDO
-    if (!confirm(`⚠️ Tem certeza que quer enviar esse alerta global para TODOS os usuários?`)) {
-        return;
-    }
+            const confirmMessage = onlineOnly
+                ? '⚠️ Tem certeza que quer enviar esse alerta global somente para usuários online?'
+                : '⚠️ Tem certeza que quer enviar esse alerta global para TODOS os usuários?';
 
-    try {
-        const token = localStorage.getItem('token');
-        if (!token) { alert('❌ Você precisa estar logado!'); return; }
+            if (!confirm(confirmMessage)) {
+                return;
+            }
 
-        const res = await fetch(`${API_ADMIN}/admin/alertar-todos`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ title, message, codigo}) // sem nomeUsuario
-        });
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) { alert('❌ Você precisa estar logado!'); return; }
 
-        const resposta = await res.json();
-        alert(resposta.mensagem || (resposta.ok ? '✅ Alerta global enviado!' : '❌ Erro ao enviar alerta'));
+                const res = await fetch(`${API_ADMIN}/admin/alertar-todos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, message, codigo, onlineOnly })
+                });
 
-        if (resposta.ok) {
-            document.getElementById('adminAlertTitle').value = '';
-            document.getElementById('adminAlertMessage').value = '';
-            if(document.getElementById('adminAlertCodigo')) 
-                document.getElementById('adminAlertCodigo').value = '';
+                const resposta = await res.json();
+                alert(resposta.mensagem || (resposta.ok ? '✅ Alerta global enviado!' : '❌ Erro ao enviar alerta'));
+
+                if (resposta.ok) {
+                    document.getElementById('adminGlobalAlertTitle').value = '';
+                    document.getElementById('adminGlobalAlertMessage').value = '';
+                    if (document.getElementById('adminGlobalAlertCodigo')) {
+                        document.getElementById('adminGlobalAlertCodigo').value = '';
+                    }
+                    if (document.getElementById('adminGlobalAlertOnlineOnly')) {
+                        document.getElementById('adminGlobalAlertOnlineOnly').checked = false;
+                    }
+                }
+            } catch (err) {
+                alert('❌ Erro: ' + err.message);
+                console.error('Erro ao enviar alerta global:', err);
+            }
         }
-    } catch (err) {
-        alert('❌ Erro: ' + err.message);
-        console.error('Erro ao enviar alerta global:', err);
-    }
-}
 
         async function adminChangeBorderColor() {
             const nomeUsuario = document.getElementById('adminUserChangeBorder').value;
@@ -11227,6 +11251,23 @@ async function loadSimpleDataFromServer() {
         }
         
             /// === ALERTAS DO ADMIN (POPUP NA PRÓXIMA VISITA) ===
+async function sendPresenceHeartbeat() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+        await fetch(`${API_URL_BACKEND}/user/heartbeat`, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (err) {
+        console.warn('[PRESENCE] Erro ao atualizar presença:', err);
+    }
+}
+
 async function checkUserAlertOnLoad() {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -11319,7 +11360,9 @@ function escapeHtml(text) {
 
             // Verifica alertas do admin assim que a página carregar
             document.addEventListener('DOMContentLoaded', function() {
+                sendPresenceHeartbeat();
                 checkUserAlertOnLoad();
+                setInterval(sendPresenceHeartbeat, 30000);
             });
 
     </script>
