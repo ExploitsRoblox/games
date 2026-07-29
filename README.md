@@ -1,6 +1,6 @@
 <img width="1039" height="291" alt="logo" src="https://github.com/user-attachments/assets/2df376e3-fc1a-425f-baa0-68be6532079b" />
 ## 📋 Resumo Geral
-**Neeexusbr Games** é uma plataforma web completa de jogos online com sistema de progressão, comunidade interativa, loja, achievements e múltiplas funcionalidades gamificadas. Criada por Floatzz, é uma aplicação rica e bem estruturada para entretenimento e aprendizado.
+**Neeexusbr Games** é uma plataforma web completa de jogos online com sistema de progressão, comunidade interativa, loja, achievements e múltiplas funcionalidades gamificadas. Criada por Dogue, é uma aplicação rica e bem estruturada para entretenimento e aprendizado.
 
 ---
 
