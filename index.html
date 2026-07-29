@@ -10839,10 +10839,10 @@ function ToggleFastSpin() {
                     unlockGame(gameId);
                 });
             }
-            if (localStorage.getItem('usuarioLogado') !== 'null') {
+            if (localStorage.getItem('usuarioLogado') !== null) {
             document.getElementById('welcomeP').textContent = `Bem-Vindo(a), ${localStorage.getItem('usuarioLogado')}`
             } else {
-                document.getElementById('welcomeP').textContent = `Bem-Vindo(a), visitante!'`
+                document.getElementById('welcomeP').textContent = `Bem-Vindo(a), visitante!`
             }
              // Se o item "fast-spin" foi comprado, mostrar o botão de giro rápido
             if (localStorage.getItem('item-fast-spin') === 'owned') {
