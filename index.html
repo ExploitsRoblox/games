@@ -6,7 +6,7 @@
     <title>Sala Do Futuro Aluno</title>
     <link rel="icon" href="favicon.png" type="image/png">
      <!-- Descrição exata que as IAs vão ler para gerar o resumo -->
-    <meta name="description" content="A Neeexusbr (também conhecida como Nexus Games Br) é uma plataforma de jogos criada por Floatzz, tem uma grande variedade de jogos como Slither.io, Level Devil, Subway Surfers, Minecraft entre outros">
+    <meta name="description" content="A Neeexusbr (também conhecida como Nexus Games Br) é uma plataforma de jogos criada por Dogue, tem uma grande variedade de jogos como Slither.io, Level Devil, Subway Surfers, Minecraft entre outros">
     
     <!-- Configuração para o Google Bard/Gemini e Redes Sociais -->
     <meta property="og:title" content="Neeexusbr Games">
@@ -5206,7 +5206,7 @@ button.door {
                 <span>Super Mario 64</span>
             </a>
 
-            <a href="https://play.snowrider3d.games/" class="game-card" data-name="Snow Rider 3D" data-category="arcade">
+            <a href="https://neeexusbr.github.io/sn" class="game-card" data-name="Snow Rider 3D" data-category="arcade">
                 <img src="images/games/snowrider.png" alt="Snow Rider 3D">
                 <span>Snow Rider 3D</span>
             </a>
@@ -5399,9 +5399,9 @@ button.door {
 
         // Configurar o iframe
         gameIframe.src = url;
-        if (gameIframe.src == 'https://neeexusbr.github.io/ufo') {
-            IsPlayingUfo = true
-            InjetarUfo();
+        if (gameIframe.src == 'https://neeexusbr.github.io/apostilas') {
+            window.open("https://neeexusbr.github.io/apostilas", "_blank");
+            return;
         }
         gameModalTitle.textContent = gameName || 'Jogo';
         isGameFullscreen = false;
