@@ -512,7 +512,24 @@
 
                 <!-- TAB 3: Emergência -->
                 <div class="admin-tab-content">
-                    <div class="admin-section">
+                                        <div class="admin-section" id="adminBanAccountSection" style="display: none;">
+                        <h3>🔨 Banir Usuário</h3>
+                        <p style="color: #ffcc80; font-size: 0.9rem; margin: 10px 0;">A duração é informada em horas. O usuário será desconectado na próxima verificação da sessão.</p>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminBanUserName" placeholder="Nome do usuário">
+                            <input type="number" class="admin-input" id="adminBanDurationHours" placeholder="Duração em horas" min="1" step="1">
+                            <textarea class="admin-input" id="adminBanReason" placeholder="Motivo do banimento" maxlength="500" style="min-height:80px; resize:vertical;"></textarea>
+                            <button class="admin-btn admin-btn-emergency" onclick="adminBanUser()">🔨 Banir Usuário</button>
+                        </div>
+                    </div>
+                    <div class="admin-section" id="adminDeleteAccountSection" style="display: none;">
+                        <h3>🗑️ Excluir Conta</h3>
+                        <p style="color: #ff8a8a; font-size: 0.9rem; margin: 10px 0;">Esta ação exclui a conta e os dados salvos dela permanentemente.</p>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminDeleteAccountName" placeholder="Nome do usuário">
+                            <button class="admin-btn admin-btn-emergency" onclick="adminDeleteAccount()">🗑️ Excluir Conta</button>
+                        </div>
+                    </div><div class="admin-section">
                         <h3>🚨 BOTÃO DE EMERGÊNCIA</h3>
                         <p style="color: #ff8a8a; font-size: 0.95rem; margin: 15px 0; line-height: 1.6;">⚠️ Reseta todos os admins. Apenas O dono permanecerá como admin. Use com cuidado!</p>
                         <button class="admin-btn admin-btn-emergency" onclick="adminEmergencyReset()">⚠️ ACIONADOR DE EMERGÊNCIA</button>
