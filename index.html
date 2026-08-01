@@ -1771,6 +1771,43 @@
             color: var(--accent-color);
             font-size: 0.8rem;
             margin-bottom: 3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 7px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.2s ease, background 0.2s ease;
+            cursor: default;
+        }
+
+        .role-badge:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .role-badge.moderador {
+            background: rgba(56, 189, 248, 0.18);
+            border-color: rgba(56, 189, 248, 0.35);
+            color: #dbeafe;
+        }
+
+        .role-badge.dono {
+            background: rgba(251, 191, 36, 0.18);
+            border-color: rgba(251, 191, 36, 0.35);
+            color: #fef3c7;
         }
 
         .chat-message-time {
@@ -2983,6 +3020,13 @@
 .leaderboard-name {
     font-weight: bold;
     color: var(--text-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.leaderboard-name .role-badge {
+    margin-left: 0;
 }
 
 .leaderboard-stats {
@@ -5868,6 +5912,14 @@ let chatState = {
     atualizandoChat: false
 };
 
+function getRoleBadgeHtml(nome, isAdmin = false) {
+    const role = nome === 'Dogue' ? 'Dono' : (isAdmin ? 'Moderador' : null);
+    if (!role) return '';
+    const badgeClass = role === 'Dono' ? 'dono' : 'moderador';
+    const emoji = role === 'Dono' ? '👑' : '🛡️';
+    return `<span class="role-badge ${badgeClass}" title="${role}">${emoji}</span>`;
+}
+
 // Funções para abrir e fechar o modal do chat
 function openChatModal() {
     const chatModal = document.getElementById('chatModal');
@@ -6056,7 +6108,7 @@ function exibirMensagensGlobais(mensagens) {
             });
             
             div.innerHTML = `
-                <div class="chat-message-user">${msg.usuario}</div>
+                <div class="chat-message-user">${getRoleBadgeHtml(msg.usuario, msg.isAdmin)}<span>${msg.usuario}</span></div>
                 <div>${msg.mensagem}</div>
                 <div class="chat-message-time">${timestamp}</div>
             `;
@@ -6300,7 +6352,7 @@ function exibirMensagensPrivadas(mensagens) {
         });
         
         div.innerHTML = `
-            <div class="chat-message-user">${msg.remetente}</div>
+            <div class="chat-message-user">${getRoleBadgeHtml(msg.remetente, msg.remetenteIsAdmin)}<span>${msg.remetente}</span></div>
             <div>${msg.mensagem}</div>
             <div class="chat-message-time">${timestamp}</div>
         `;
@@ -8807,6 +8859,7 @@ function closeSpamtonShop(){
                     <div class="leaderboard-profile">
                         <div class="leaderboard-pic" style="${borderStyle}">${user.foto_perfil ? `<img src="${user.foto_perfil}?t=${Date.now()}" alt="${nome}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">` : '👤'}</div>
                         <div class="leaderboard-name" style="display: flex; align-items: center; gap: 8px;">
+                            ${getRoleBadgeHtml(nome, user.isAdmin)}
                             <div class="${rankContainerClass}">
                 <img src="images/ranks/${rankNumero}.png" alt="Rank ${rankNumero}" class="rank-icon">
             </div>
