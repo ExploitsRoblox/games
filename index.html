@@ -6027,8 +6027,7 @@ function updateScoreCounter() {
     
     // 1. Verifica e libera a conquista (apenas uma vez)
     if (score >= 50 && !localStorage.getItem("ach-50goal")) {
-        localStorage.setItem("ach-50goal", "true");
-        conquistaAnimacao('50goal');
+        unlockAchievement('50goal', { showAnimation: true });
     }
     
     // 2. Atualiza a interface visual do contador de forma correta
@@ -6512,14 +6511,7 @@ async function atualizarChatAtivo() {
                     await syncCoinsFromDatabase();
                     feedback.textContent = `🎉 Código resgatado! +${valor} moedas.`;
                 } else if (tipo === 'item') {
-                    const user = JSON.parse(localStorage.getItem('user') || '{}');
-                    const itensComprados = Array.isArray(user.itensComprados) ? user.itensComprados : [];
-                    if (!itensComprados.includes(itemId)) {
-                        itensComprados.push(itemId);
-                        user.itensComprados = itensComprados;
-                        localStorage.setItem('user', JSON.stringify(user));
-                    }
-                    localStorage.setItem(`item-${itemId}`, 'owned');
+                    markOwnedItem(itemId);
                     await syncItemsFromDatabase();
                     feedback.textContent = `🎉 Código resgatado! Item desbloqueado: ${itemId}.`;
                 } else if (tipo === 'spins') {
@@ -6529,7 +6521,7 @@ async function atualizarChatAtivo() {
                     feedback.textContent = `🎉 Código resgatado! +${valor} giros.`;
                 } else if (tipo === 'jogo') {
                     unlockGame(jogoId);
-                    localStorage.setItem(jogoId, 'unlocked');
+                    markUnlockedGame(jogoId);
                     feedback.textContent = `🎉 Código resgatado! Jogo desbloqueado.`;
                 } else if (tipo === 'tempo-jogo') {
                     const atual = parseInt(localStorage.getItem('userPlaytime') || '0');
@@ -6609,7 +6601,7 @@ async function atualizarChatAtivo() {
         input.value = "";
         
         // Salva no navegador para não perder ao atualizar
-        localStorage.setItem(gameId, "unlocked");
+        markUnlockedGame(gameId);
     }
 }
 
@@ -6896,8 +6888,7 @@ async function atualizarChatAtivo() {
             const cards = Array.from(document.querySelectorAll('.game-card:not(.hidden):not(.secret-hidden)'));
             if (cards.length > 0) {
                 if (!localStorage.getItem('ach-sortudo')) {
-                    conquistaAnimacao('sortudo');
-                    localStorage.setItem('ach-sortudo', 'true');
+                    unlockAchievement('sortudo', { showAnimation: true });
                     await addCoins(200);
                     updateCoinsDisplay();
                     setInterval(() => {
@@ -6906,7 +6897,7 @@ async function atualizarChatAtivo() {
                     }, 3000);
                 } else {
                     const randomCard = cards[Math.floor(Math.random() * cards.length)];
-                    localStorage.setItem('ach-sortudo', 'true');
+                    unlockAchievement('sortudo');
                     window.location.href = randomCard.href;
                 }
             }
@@ -6924,7 +6915,7 @@ async function atualizarChatAtivo() {
             if (valor === 1) {
                 await addCoins(100);
                 updateCoinsDisplay();
-                conquistaAnimacao('detetive');
+                unlockAchievement('detetive', { showAnimation: true });
                 setTimeout(() => {
                     window.location.href = 'https://playtankisandbox.github.io';
                 }, 3000);
@@ -7018,18 +7009,75 @@ function conquistaAnimacao(tipo) {
     }, 3000);
 }
 
+        function markUnlockedGame(gameId) {
+            ensureTrustedMutation('markUnlockedGame');
+
+            const normalizedId = String(gameId || '').trim();
+            if (!normalizedId) return false;
+
+            localStorage.setItem(normalizedId, 'unlocked');
+            return true;
+        }
+
+        function markOwnedItem(itemId) {
+            ensureTrustedMutation('markOwnedItem');
+
+            const normalizedId = String(itemId || '').trim();
+            if (!normalizedId) return false;
+
+            localStorage.setItem(`item-${normalizedId}`, 'owned');
+
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!Array.isArray(user.itensComprados)) {
+                user.itensComprados = [];
+            }
+            if (!user.itensComprados.includes(normalizedId)) {
+                user.itensComprados.push(normalizedId);
+            }
+            localStorage.setItem('user', JSON.stringify(user));
+
+            return true;
+        }
+
+        function unlockAchievement(achievementId, options = {}) {
+            ensureTrustedMutation('unlockAchievement');
+
+            const normalizedId = String(achievementId || '').trim();
+            if (!normalizedId) return false;
+
+            const storageKey = `ach-${normalizedId}`;
+            if (localStorage.getItem(storageKey) === 'true') {
+                return true;
+            }
+
+            localStorage.setItem(storageKey, 'true');
+            checkAchievements();
+            if (options.showAnimation) {
+                conquistaAnimacao(normalizedId);
+            }
+
+            return true;
+        }
+
         function unlockGame(id) {
+            ensureTrustedMutation('unlockGame');
+
+            const normalizedId = String(id || '').trim();
+            if (!normalizedId) return false;
+
             // Mostra no Grid
-            const gameCard = document.getElementById(id);
+            const gameCard = document.getElementById(normalizedId);
             if (gameCard) gameCard.classList.remove('secret-hidden');
 
             // Mostra na Sidebar
-            const sideItem = document.getElementById('side-' + id);
+            const sideItem = document.getElementById('side-' + normalizedId);
             if (sideItem) sideItem.classList.remove('secret-hidden');
             
+            markUnlockedGame(normalizedId);
             // Re-aplica os filtros para garantir que o jogo secreto recém desbloqueado obedeça ao estado atual
             filterGames();
             checkAchievements();
+            return true;
         }
 
         // === SISTEMA DE MOEDAS ===
@@ -7056,31 +7104,102 @@ function conquistaAnimacao(tipo) {
             { id: 'spins-100', name: 'Giros da Roleta (100x)', desc: 'Giros com desconto IMENSO!', icon: '🎡', price: 7500, isSpins: true, quantity: 100 },
         ];
 
+        const MAX_ALLOWED_COIN_DELTA = 10000;
+        const MAX_ALLOWED_XP_DELTA = 10000;
+        const MAX_ALLOWED_SPIN_DELTA = 100;
+        const SENSITIVE_STORAGE_KEYS = new Set(['userCoins', 'userRank', 'userXp', 'premiumXp', 'userPlaytime', 'score']);
+        const SENSITIVE_STORAGE_PATTERNS = [/^item-/i, /^ach-/i, /^secret/i];
+        const originalFetch = window.fetch ? window.fetch.bind(window) : null;
+        const originalSetItem = Storage.prototype.setItem;
+
+        function isTrustedMutationCall() {
+            const stack = new Error().stack || '';
+            const suspiciousTokens = ['eval', 'anonymous', 'console', 'vm', 'about:blank'];
+            return !suspiciousTokens.some(token => stack.toLowerCase().includes(token));
+        }
+
+        function isSensitiveStorageKey(key) {
+            const normalizedKey = String(key || '').trim();
+            if (!normalizedKey) return false;
+            if (SENSITIVE_STORAGE_KEYS.has(normalizedKey)) return true;
+            return SENSITIVE_STORAGE_PATTERNS.some(pattern => pattern.test(normalizedKey));
+        }
+
+        function ensureTrustedMutation(actionName) {
+            if (!isTrustedMutationCall()) {
+                console.warn(`[SECURITY] Bloqueado: ${actionName}`);
+                throw new Error('Ação não permitida neste contexto.');
+            }
+        }
+
+        if (originalFetch) {
+            window.fetch = async function(resource, options = {}) {
+                const requestUrl = typeof resource === 'string'
+                    ? resource
+                    : (resource && typeof resource.url === 'string' ? resource.url : '');
+                const isSensitiveRequest = /\/(admin\/|sincronizar-moedas|atualizar-xp|user\/spins|jogos-secretos|itens-comprados|mudar-cor-borda|usar-codigo)/i.test(requestUrl);
+
+                if (isSensitiveRequest && !isTrustedMutationCall()) {
+                    console.warn(`[SECURITY] Bloqueado: requisição sensível para ${requestUrl}`);
+                    throw new Error('Ação não permitida neste contexto.');
+                }
+
+                return originalFetch(resource, options);
+            };
+        }
+
+        Storage.prototype.setItem = function(key, value) {
+            const normalizedKey = String(key || '').trim();
+            if (isSensitiveStorageKey(normalizedKey) && !isTrustedMutationCall()) {
+                console.warn(`[SECURITY] Bloqueado: escrita em ${normalizedKey}`);
+                return;
+            }
+            return originalSetItem.call(this, normalizedKey, String(value));
+        };
+
         function getCoins() {
             return parseInt(localStorage.getItem('userCoins') || '0');
         }
 
         async function setCoins(amount) {
-            // Validar que é um número válido
-            amount = parseInt(amount) || 0;
-            if (amount < 0) amount = 0;
-            
-            localStorage.setItem('userCoins', amount);
+            ensureTrustedMutation('setCoins');
+
+            const current = getCoins();
+            const target = Math.max(0, parseInt(amount) || 0);
+            const delta = target - current;
+
+            if (Math.abs(delta) > MAX_ALLOWED_COIN_DELTA) {
+                console.warn(`[SECURITY] Bloqueado: tentativa de alterar moedas em ${delta}`);
+                return false;
+            }
+
+            localStorage.setItem('userCoins', target);
             updateCoinsDisplay();
-            
-            // Sincronizar com o backend se logado
+
             const token = localStorage.getItem('token');
             if (token) {
-                await syncCoinsToDatabase(amount);
-                // ✅ Sincronizar dados simples após mudança
+                await syncCoinsToDatabase(target);
                 await syncSimpleDataToServer();
             }
+
+            return true;
         }
 
         async function addCoins(amount) {
+            ensureTrustedMutation('addCoins');
+
+            const safeAmount = parseInt(amount) || 0;
+            if (safeAmount <= 0) return false;
+            if (safeAmount > MAX_ALLOWED_COIN_DELTA) {
+                console.warn(`[SECURITY] Bloqueado: tentativa de adicionar ${safeAmount} moedas`);
+                return false;
+            }
+
             const current = getCoins();
-            await setCoins(current + amount);
+            return setCoins(current + safeAmount);
         }
+
+        window.AddCoins = addCoins;
 
         async function syncCoinsFromDatabase() {
             const token = localStorage.getItem('token');
@@ -7142,7 +7261,7 @@ function conquistaAnimacao(tipo) {
                     if (data.ok && data.itens) {
                         // Sincronizar itens comprados do backend com localStorage
                         data.itens.forEach(itemId => {
-                            localStorage.setItem(`item-${itemId}`, 'owned');
+                            markOwnedItem(itemId);
                         });
                         
                         // Sincronizar cor da borda do perfil
@@ -7211,7 +7330,7 @@ function conquistaAnimacao(tipo) {
                     if (data.ok && data.jogosSecretos) {
                         // Sincronizar jogos secretos do backend com localStorage
                         data.jogosSecretos.forEach(jogoId => {
-                            localStorage.setItem(jogoId, 'unlocked');
+                            markUnlockedGame(jogoId);
                             unlockGame(jogoId);
                         });
                         
@@ -7240,7 +7359,7 @@ function conquistaAnimacao(tipo) {
                     if (data.ok && data.achievements) {
                         // Sincronizar achievements do backend com localStorage
                         data.achievements.forEach(achievementId => {
-                            localStorage.setItem(`ach-${achievementId}`, 'true');
+                            unlockAchievement(achievementId);
                         });
                         
                         console.log(`[SYNC] ${data.achievements.length} conquistas sincronizadas do servidor:`, data.achievements);
@@ -7281,11 +7400,21 @@ function conquistaAnimacao(tipo) {
         }
 
         async function syncCoinsToDatabase(amount) {
+            ensureTrustedMutation('syncCoinsToDatabase');
+
             const token = localStorage.getItem('token');
             if (!token) return false; // Não sincroniza se não estiver logado
             
             try {
                 amount = parseInt(amount) || 0;
+                const current = getCoins();
+                const delta = amount - current;
+
+                if (Math.abs(delta) > MAX_ALLOWED_COIN_DELTA) {
+                    console.warn(`[SECURITY] Bloqueado: tentativa de sincronizar moedas em ${delta}`);
+                    return false;
+                }
+
                 const API_URL = "https://login-nqot.onrender.com";
                 const res = await fetch(`${API_URL}/sincronizar-moedas`, {
                     method: 'POST',
@@ -7317,12 +7446,18 @@ function conquistaAnimacao(tipo) {
         }
 
         async function awardXp(amount) {
+            ensureTrustedMutation('awardXp');
+
             const token = localStorage.getItem('token');
             if (!token) return false; // Não sincroniza se não estiver logado
             
             try {
                 amount = parseInt(amount) || 0;
                 if (amount <= 0) return false;
+                if (amount > MAX_ALLOWED_XP_DELTA) {
+                    console.warn(`[SECURITY] Bloqueado: tentativa de adicionar ${amount} XP`);
+                    return false;
+                }
                 
                 const API_URL = "https://login-nqot.onrender.com";
                 const res = await fetch(`${API_URL}/atualizar-xp`, {
@@ -7356,6 +7491,8 @@ function conquistaAnimacao(tipo) {
                 return false;
             }
         }
+
+        window.AwardXP = awardXp;
 
         function updateCoinsDisplay() {
             const coins = getCoins();
@@ -7552,7 +7689,7 @@ function undertaleShopAction(action) {
             const allgames = localStorage.getItem('item-all-games')
             if (allgames !== 'owned') {
             customalert("Você recebeu o item 1x Desbloquear Todos os jogos de Dogue", 10)
-            localStorage.setItem('item-all-games', 'owned')
+            markOwnedItem('all-games');
             }
         }
     }
@@ -7780,7 +7917,7 @@ function typeWriter(text, elementId = 'dialogText') {
             }
             
             await setCoins(coins - price);
-            localStorage.setItem(`item-${itemId}`, 'owned');
+            markOwnedItem(itemId);
             
             // Registrar compra no backend se logado
             if (token) {
@@ -8679,7 +8816,7 @@ function closeSpamtonShop(){
                         }
                     }
                 } else {
-                    localStorage.setItem(`item-${reward.item}`, 'owned');
+                    markOwnedItem(reward.item);
                 }
             }
             
@@ -10174,7 +10311,7 @@ function closeSpamtonShop(){
                 
                 // Salvar no localStorage também
                 if (temCor) {
-                    localStorage.setItem(`item-cor-${cor.id}`, 'owned');
+                    markOwnedItem(`cor-${cor.id}`);
                 }
                 
                 div.innerHTML = `
@@ -10263,22 +10400,37 @@ function closeSpamtonShop(){
         }
 
         async function saveSpinsToDatabase(spins) {
+            ensureTrustedMutation('saveSpinsToDatabase');
+
             const token = localStorage.getItem('token');
             if (!token) return;
 
             try {
+                const target = Math.max(0, parseInt(spins) || 0);
+                const delta = target - spinsRemaining;
+
+                if (Math.abs(delta) > MAX_ALLOWED_SPIN_DELTA) {
+                    console.warn(`[SECURITY] Bloqueado: tentativa de alterar giros em ${delta}`);
+                    return false;
+                }
+
                 await fetch(`${API_ADMIN}/user/spins`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ spins })
+                    body: JSON.stringify({ spins: target })
                 });
+
+                return true;
             } catch (err) {
                 console.error('Erro ao salvar giros:', err);
+                return false;
             }
         }
+
+        window.AddSpins = saveSpinsToDatabase;
 
         function updateSpinsDisplay() {
             const element = document.getElementById('spinsCount');
@@ -10535,7 +10687,7 @@ function closeSpamtonShop(){
             itensComprados.push(reward.itemId);
             user.itensComprados = itensComprados;
             localStorage.setItem('user', JSON.stringify(user));
-            localStorage.setItem(`item-${reward.itemId}`, 'owned');
+            markOwnedItem(reward.itemId);
         } else {
             // Se já tem o item, acumula moedas compensatórias
             moedasGanhasNesseGiro = 250;
@@ -10605,7 +10757,7 @@ function closeSpamtonShop(){
                     itensComprados.push(reward.itemId);
                     user.itensComprados = itensComprados;
                     localStorage.setItem('user', JSON.stringify(user));
-                    localStorage.setItem(`item-${reward.itemId}`, 'owned');
+                    markOwnedItem(reward.itemId);
                     
                     document.getElementById('wheelRewardText').innerHTML = `🎁 <strong>${reward.text}</strong> 🎁<br><span style="font-size: 0.9rem; color: #22c55e;">Adicionado ao seu inventário!</span>`;
                 } else {
@@ -10728,7 +10880,7 @@ function closeSpamtonShop(){
             PROFILE_BORDER_COLORS.forEach(cor => {
                 const isSaved = localStorage.getItem(`item-cor-${cor.id}`) === 'owned';
                 if (isSaved) {
-                    localStorage.setItem(`item-${cor.id}`, 'owned');
+                    markOwnedItem(cor.id);
                 }
             });
         }
@@ -10897,7 +11049,7 @@ function ToggleFastSpin() {
             if (localStorage.getItem('item-all-games') === 'owned') {
                 const allSecretGames = ['secret1', 'secret2', 'secret3', 'secret4', 'secret5'];
                 allSecretGames.forEach(gameId => {
-                    localStorage.setItem(gameId, 'unlocked');
+                    markUnlockedGame(gameId);
                     unlockGame(gameId);
                 });
             }
