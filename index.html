@@ -1776,22 +1776,22 @@
             gap: 6px;
         }
 
-        .role-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 22px;
-            height: 22px;
-            padding: 0 7px;
-            border-radius: 999px;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #f8fafc;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            transition: transform 0.2s ease, background 0.2s ease;
-            cursor: default;
-        }
+      .role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 30px;
+    /* padding: 0 7px; */
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    /* color: #f8fafc; */
+    /* background: rgba(255, 255, 255, 0.08); */
+    /* border: 1px solid rgba(255, 255, 255, 0.18); */
+    transition: transform 0.2s ease, background 0.2s ease;
+    cursor: default;
+}
 
         .role-badge:hover {
             transform: translateY(-1px);
@@ -5916,8 +5916,8 @@ function getRoleBadgeHtml(nome, isAdmin = false) {
     const role = nome === 'Dogue' ? 'Dono' : (isAdmin ? 'Moderador' : null);
     if (!role) return '';
     const badgeClass = role === 'Dono' ? 'dono' : 'moderador';
-    const emoji = role === 'Dono' ? '👑' : '🛡️';
-    return `<span class="role-badge ${badgeClass}" title="${role}">${emoji}</span>`;
+    const emoji = role === 'Dono' ? 'owner' : 'admin';
+    return `<img class="role-badge ${badgeClass}" title="${role}" src="images/gui/${role.toLowerCase()}badge.png" />`;
 }
 
 // Funções para abrir e fechar o modal do chat
