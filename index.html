@@ -582,6 +582,11 @@
                 </div>
                 <div id="rankDisplay"></div>
             </div>
+            <div class="profile-pic-modal-buttons">
+                <button class="btn-save" onclick="updateProfilePictureFromUrl()">✓ Confirmar</button>
+                <button class="btn-cancel" onclick="closeProfilePictureModal()">✕ Cancelar</button>
+                <button class="btn-save" onclick="promptChangePassword()" style="margin-top:8px;">🔐 Trocar senha</button>
+            </div>
             
             <div class="user-actions-section">
                 <button class="panel-btn panel-btn-danger" onclick="logoutUser()">🚪 SAIR</button>
@@ -595,14 +600,9 @@
             <div class="profile-pic-modal-title">🖼️ Alterar Foto de Perfil</div>
             <label class="profile-pic-modal-label">Cole o link da sua imagem:</label>
             <input type="text" id="profilePicUrl" placeholder="https://exemplo.com/minha-foto.jpg" autocomplete="off">
-            <label class="profile-pic-modal-label" style="margin-top:8px;">Escreva uma bio curta (visível no perfil):</label>
-            <textarea id="profileBio" placeholder="Sobre mim..." style="min-height:60px; resize:vertical;"></textarea>
-            <div class="profile-pic-modal-buttons">
-                <button class="btn-save" onclick="updateProfilePictureFromUrl()">✓ Confirmar</button>
-                <button class="btn-cancel" onclick="closeProfilePictureModal()">✕ Cancelar</button>
-                <button class="btn-save" onclick="promptChangePassword()" style="margin-top:8px;">🔐 Trocar senha</button>
-            </div>
         </div>
+        <label class="profile-pic-modal-label" style="margin-top:8px;">Escreva uma bio curta (visível no perfil):</label>
+        <textarea id="profileBio" placeholder="Sobre mim..." style="min-height:60px; resize:vertical;"></textarea>
     </div>
 
     <!-- Modal de Visualização de Perfil -->
