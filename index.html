@@ -13,7 +13,7 @@
     <meta property="og:description" content="A Neeexusbr é uma plataforma de jogos com várias funções, como chat em tempo real, conquistas exclusivas e jogos exclusivos.">
     <meta property="og:url" content="https://neeexusbr.github.io/games">
     <meta property="og:type" content="website">
-    <script src="main.js"></script>
+    <script src="main2.js"></script>
     <link rel="stylesheet" href="style.css">
 
     <!-- Dados Estruturados (Ficha técnica para algoritmos de IA) -->
@@ -88,6 +88,7 @@
 <ol style="font-size: 0.8rem;">
   <li>Novos jogos: "Granny Multiplayer" e "Ultimate Custom Night"</li>
   <li>Corrigido alguns bugs sobre o texto de bem-vindo</li>
+  <li>Badges de Moderador e Dono</li>
 </ol>
             <button onclick="closeFirstVisitPopup()">Fechar</button>
         </div>
@@ -149,8 +150,8 @@
                                 <option value="tempo-jogo">⏱️ Dar tempo de jogo</option>
                             </select>
                             <input type="number" class="admin-input" id="codigoPromocionalValor" placeholder="Valor / quantidade" min="1">
-                            <input type="text" class="admin-input" id="codigoPromocionalItem" placeholder="ID do item (opcional)">
-                            <input type="text" class="admin-input" id="codigoPromocionalJogo" placeholder="ID do jogo (opcional)">
+                            <input type="text" class="admin-input" id="codigoPromocionalItem" placeholder="ID do item (ex: premium-xp)">
+                            <input type="text" class="admin-input" id="codigoPromocionalJogo" placeholder="ID do jogo (ex: secret1)">
                             <input type="datetime-local" class="admin-input" id="codigoPromocionalExpira">
                             <input type="number" class="admin-input" id="codigoPromocionalMaxUsos" placeholder="Máximo de usos" min="1" value="1">
                             <label style="display: flex; align-items: center; gap: 8px; color: #cbd5e1; font-size: 0.9rem;">
@@ -421,6 +422,21 @@
                     </div>
 
                     <div class="admin-section">
+                        <h3>♾️ Recursos Infinitos</h3>
+                        <div class="admin-form">
+                            <input type="text" class="admin-input" id="adminInfiniteUser" placeholder="Nome do usuário">
+                            <select class="admin-input" id="adminInfiniteType">
+                                <option value="moedas">💎 Apenas gemas</option>
+                                <option value="giros">🎡 Apenas giros</option>
+                                <option value="ambos" selected>♾️ Ambos</option>
+                            </select>
+                            <label style="display:flex; align-items:center; gap:8px; color:#cbd5e1; font-size:0.9rem;">
+                                <input type="checkbox" id="adminInfiniteActive">
+                                Ativar recursos infinitos
+                            </label>
+                            <button class="admin-btn" onclick="adminSetInfiniteResources()">Aplicar</button>
+                        </div>
+
                         <h3>🎰 Adicionar Giros na Roleta</h3>
                         <div class="admin-form">
                             <input type="text" class="admin-input" id="adminUserSpins" placeholder="Nome do usuário">
@@ -579,9 +595,37 @@
             <div class="profile-pic-modal-title">🖼️ Alterar Foto de Perfil</div>
             <label class="profile-pic-modal-label">Cole o link da sua imagem:</label>
             <input type="text" id="profilePicUrl" placeholder="https://exemplo.com/minha-foto.jpg" autocomplete="off">
+            <label class="profile-pic-modal-label" style="margin-top:8px;">Escreva uma bio curta (visível no perfil):</label>
+            <textarea id="profileBio" placeholder="Sobre mim..." style="min-height:60px; resize:vertical;"></textarea>
             <div class="profile-pic-modal-buttons">
                 <button class="btn-save" onclick="updateProfilePictureFromUrl()">✓ Confirmar</button>
                 <button class="btn-cancel" onclick="closeProfilePictureModal()">✕ Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Visualização de Perfil -->
+    <div id="profileViewModal" class="profile-view-modal" onclick="closeProfileView(event)">
+        <div class="profile-view-content" onclick="event.stopPropagation();">
+            <button class="profile-view-close" onclick="closeProfileView()">✕</button>
+            <div class="profile-view-top">
+                <div id="profileViewPic" class="profile-view-pic">👤</div>
+                <div>
+                    <div id="profileViewName" class="profile-view-name">Usuário</div>
+                    <div id="profileViewTag" class="profile-view-tag">Tag</div>
+                </div>
+            </div>
+            <div class="profile-view-bio" id="profileViewBio">—</div>
+            <div class="profile-view-achievements" id="profileViewAchievements">
+                <h4>Conquistas</h4>
+                <div id="profileViewAchievementsList" style="display:flex; gap:8px; flex-wrap:wrap;"></div>
+            </div>
+            <div class="profile-view-admin-actions" id="profileViewAdminActions" style="display:none; margin-top:12px;">
+                <h4>Ações do Dono</h4>
+                <div style="display:flex; gap:8px;">
+                    <button class="admin-btn admin-btn-emergency" id="profileBanBtn" onclick="adminBanFromProfile()">🔨 Banir</button>
+                    <button class="admin-btn admin-btn-emergency" id="profileDeleteBtn" onclick="adminDeleteFromProfile()">🗑️ Excluir Conta</button>
+                </div>
             </div>
         </div>
     </div>

@@ -4361,3 +4361,33 @@ button.door {
             text-align: center;
             text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
+
+/* === Modal de Visualização de Perfil === */
+.profile-view-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(2,2,8,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+.profile-view-modal.active { display:flex; }
+.profile-view-content {
+    background: var(--card-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 18px;
+    width: 360px;
+    border-radius: 10px;
+    color: var(--text-color);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+}
+.profile-view-close { float: right; background: none; border: none; color: var(--text-color); font-size: 1.1rem; cursor: pointer; }
+.profile-view-top { display:flex; gap:12px; align-items:center; margin-bottom:8px; }
+.profile-view-pic { width:78px; height:78px; border-radius:50%; background: #222; display:flex; align-items:center; justify-content:center; font-size:34px; }
+.profile-view-name { font-weight:700; font-size:1.1rem; }
+.profile-view-tag { font-size:0.85rem; color:var(--gold); }
+.profile-view-bio { margin-top:8px; color:#cbd5e1; font-size:0.95rem; min-height:44px; }
+.profile-view-achievements h4 { margin:10px 0 6px 0; color:var(--accent-color); }
+.profile-view-achievements-list { display:flex; gap:8px; }
+.profile-view-admin-actions { margin-top:10px; }
