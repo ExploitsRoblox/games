@@ -1725,17 +1725,6 @@
             box-shadow: 0 0 10px rgba(207, 57, 57, 0.5);
         }
 
-        .chat-tab-content {
-            display: none;
-            flex-direction: column;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .chat-tab-content.active {
-            display: flex;
-        }
-
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -2011,7 +2000,6 @@
             display: none;
             flex: 1;
             overflow: hidden;
-            display: flex;
             flex-direction: column;
         }
 

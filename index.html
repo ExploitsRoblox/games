@@ -13,7 +13,7 @@
     <meta property="og:description" content="A Neeexusbr é uma plataforma de jogos com várias funções, como chat em tempo real, conquistas exclusivas e jogos exclusivos.">
     <meta property="og:url" content="https://neeexusbr.github.io/games">
     <meta property="og:type" content="website">
-    <script src="main.js"></script>
+    <script src="main2.js"></script>
     <link rel="stylesheet" href="style.css">
 
     <!-- Dados Estruturados (Ficha técnica para algoritmos de IA) -->
@@ -283,12 +283,12 @@
                 <button class="inventory-close" onclick="closeInventory()">✕</button>
             </div>
             <div class="inventory-section">
-                <h3>🎨 Cores de Borda de Perfil</h3>
-                <div class="color-grid" id="inventoryColors"></div>
-            </div>
-            <div class="inventory-section">
                 <h3>🎡 Roleta da Sorte</h3>
                 <button class="wheel-button" onclick="openWheel(); closeInventory();" style="width: 100%;">🎰 Abrir Roleta</button>
+            </div>
+            <div class="inventory-section">
+                <h3>🎨 Cores de Borda de Perfil</h3>
+                <div class="color-grid" id="inventoryColors"></div>
             </div>
 </button>
         </div>
@@ -812,12 +812,12 @@
             </div>
             
             <div class="chat-tabs">
-                <button class="chat-tab active" data-chat-tab="global" data-tab="global">Global</button>
-                <button class="chat-tab" data-chat-tab="privado" data-tab="privado">Mensagens</button>
+                <button class="chat-tab active" data-chat-tab="global" data-tab="global" onclick="switchChatTab('global')">Global</button>
+                <button class="chat-tab" data-chat-tab="privado" data-tab="privado" onclick="switchChatTab('privado')">Mensagens</button>
             </div>
             
             <!-- Chat Global -->
-            <div class="chat-tab-content active" data-chat-content="global" data-chat-global>
+            <div class="chat-tab-content active" data-chat-content="global"  id="chat-tab-global" data-chat-global>
                 <div class="chat-messages"></div>
                 <div class="chat-input-area">
                     <input type="text" class="chat-input" placeholder="Mensagem global...">
@@ -826,7 +826,7 @@
             </div>
             
             <!-- Chat Privado -->
-            <div class="chat-tab-content" data-chat-content="privado">
+            <div class="chat-tab-content" data-chat-content="privado" id="chat-tab-privado">
                 <div style="display: flex; gap: 0; height: 100%;">
                     <div class="private-conversations-list" style="width: 30%; border-right: 1px solid #444; max-height: 400px; overflow-y: auto;">
                         <!-- Carregado dinamicamente -->
