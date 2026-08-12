@@ -1266,8 +1266,23 @@
         }
         
         .shop-item-undertale-name {
-            font-family: 'Courier New', Courier, monospace;
+            font-family: Arial, Helvetica, sans-serif;
             font-weight: 100;
+            outline-color: #000;
+            outline-width: 2px;
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .shop-item-undertale-desc {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 10;
+            font-size: smaller;
             outline-color: #000;
             outline-width: 2px;
             margin-bottom: 5px;
@@ -1373,6 +1388,27 @@
             border-bottom: 2px solid rgba(207, 57, 57, 0.2);
             padding: 0;
         }
+        
+        .notifications-tabs::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        /* 2. O "fundo" da barra (a pista por onde o scroll corre) */
+.notifications-tabs::-webkit-scrollbar-track {
+    background: #4000d4; /* Cor de fundo da pista */
+    border-radius: 10px; /* Deixa os cantos arredondados */
+}
+
+/* 3. O "botão" (a parte que o usuário clica e arrasta) */
+.notifications-tabs::-webkit-scrollbar-thumb {
+    background: rgb(53, 8, 8);
+    border-radius: 10px; /* Deixa o botão arredondado */
+}
+
+/* 4. Efeito visual quando o usuário passa o mouse por cima do botão */
+.notifications-tabs::-webkit-scrollbar-thumb:hover {
+    background: #db4040; /* Escurece a cor ao passar o mouse */
+}
         
         .notifications-tab {
             flex: 1;
@@ -1769,6 +1805,18 @@
             background: rgba(251, 191, 36, 0.18);
             border-color: rgba(251, 191, 36, 0.35);
             color: #fef3c7;
+        }
+
+        .role-badge.testador {
+            background: rgba(59, 130, 246, 0.18);
+            border-color: rgba(59, 130, 246, 0.35);
+            color: #bfdbfe;
+        }
+
+        .role-badge.diretor {
+            background: rgba(168, 85, 247, 0.18);
+            border-color: rgba(168, 85, 247, 0.35);
+            color: #ede9fe;
         }
 
         .chat-message-time {
@@ -3979,6 +4027,23 @@ button.door {
             z-index: 10000;
             animation: fadeIn 0.3s ease-in-out;
         }
+
+        .first-visit-popup button[onclick="closeFirstVisitPopup()"] {
+            background: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+        }
+
 
         .first-visit-overlay.show {
             display: flex;

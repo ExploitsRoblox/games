@@ -13,7 +13,7 @@
     <meta property="og:description" content="A Neeexusbr é uma plataforma de jogos com várias funções, como chat em tempo real, conquistas exclusivas e jogos exclusivos.">
     <meta property="og:url" content="https://neeexusbr.github.io/games">
     <meta property="og:type" content="website">
-    <script src="main.js"></script>
+    <script src="main2.js"></script>
     <link rel="stylesheet" href="style.css">
 
     <!-- Dados Estruturados (Ficha técnica para algoritmos de IA) -->
@@ -82,12 +82,14 @@
     <div id="firstVisitOverlay" class="first-visit-overlay">
         <div class="first-visit-popup">
             <h1 style="font-size: 1.6rem;">UPDATE 1.96</h1>
-            <p style="font-size: 0.8rem;">
+            <p style="font-size: 1.3rem;">
   Confira as novidades da atualização!
 </p>
 <ol style="font-size: 0.8rem;">
   <li>Sistema de perfil</li>
   <li>Ranks Infinitos</li>
+  <li>Descrições dos itens</li>
+  <li>Não precisa mais pagar pra reusar tag</li>
   <li>Em breve: Suporte De Gamepad (Parcialmente Feito)</li>
 </ol>
             <button onclick="closeFirstVisitPopup()">Fechar</button>
@@ -104,6 +106,9 @@
             
             <!-- Abas de Notificações -->
             <div class="notifications-tabs">
+                <button class="notifications-tab" onclick="switchNotificationTab('users')">
+                    👥 Listar Usuários
+                </button>
                 <button class="notifications-tab active" onclick="switchNotificationTab('pending')">
                     📋 Solicitações Pendentes
                 </button>
@@ -133,6 +138,11 @@
                 <!-- Aba: Histórico de Compras -->
                 <div id="tab-purchases" class="notifications-tab-content">
                     <div id="adminComprasList" class="notifications-list"></div>
+                </div>
+
+                <!-- Aba: Listar usuários -->
+                <div id="tab-users" class="notifications-tab-content">
+                    <div class="admin-users-list" id="adminUsersList"></div>
                 </div>
 
                 <!-- Aba: Gerar Código -->
@@ -562,7 +572,7 @@
             
             <div class="user-profile-section">
                 <img id="userProfilePic" class="user-profile-pic" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23a855f7'/%3E%3Ctext x='50' y='60' text-anchor='middle' font-size='40' fill='white'%3E👤%3C/text%3E%3C/svg%3E" alt="Perfil" onclick="openProfilePictureModal()">
-                <div class="user-profile-name" id="userNameDisplay">Visitante</div>
+                <div class="user-profile-name" id="userNameDisplay" onclick="renderProfileModal(localStorage.getItem('usuarioLogado')); closeUserPanel()">Visitante</div>
                 <div class="user-profile-name" id="userTagDisplay" style="font-size: 12px;">Tag</div>
             </div>
             
@@ -582,13 +592,9 @@
                 </div>
                 <div id="rankDisplay"></div>
             </div>
-            <div class="profile-pic-modal-buttons">
-                <button class="btn-save" onclick="updateProfilePictureFromUrl()">✓ Confirmar</button>
-                <button class="btn-cancel" onclick="closeProfilePictureModal()">✕ Cancelar</button>
-                <button class="btn-save" onclick="promptChangePassword()" style="margin-top:8px;">🔐 Trocar senha</button>
-            </div>
-            
+        
             <div class="user-actions-section">
+                <button class="panel-btn" onclick="promptChangePassword()" style="margin-top:8px;">🔐 Trocar senha</button>
                 <button class="panel-btn panel-btn-danger" onclick="logoutUser()">🚪 SAIR</button>
             </div>
         </div>
@@ -600,9 +606,13 @@
             <div class="profile-pic-modal-title">🖼️ Alterar Foto de Perfil</div>
             <label class="profile-pic-modal-label">Cole o link da sua imagem:</label>
             <input type="text" id="profilePicUrl" placeholder="https://exemplo.com/minha-foto.jpg" autocomplete="off">
+            <label class="profile-pic-modal-label" style="margin-top:8px;">Escreva uma bio curta (visível no perfil):</label>
+            <textarea id="profileBio" placeholder="Sobre mim..." style="min-height:60px; resize:vertical;"></textarea>
+            <div class="profile-pic-modal-buttons">
+                <button class="btn-save" onclick="updateProfilePictureFromUrl()">✓ Confirmar</button>
+                <button class="btn-cancel" onclick="closeProfilePictureModal()">✕ Cancelar</button>
+            </div>
         </div>
-        <label class="profile-pic-modal-label" style="margin-top:8px;">Escreva uma bio curta (visível no perfil):</label>
-        <textarea id="profileBio" placeholder="Sobre mim..." style="min-height:60px; resize:vertical;"></textarea>
     </div>
 
     <!-- Modal de Visualização de Perfil -->
