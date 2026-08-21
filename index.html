@@ -10,7 +10,7 @@
     <meta name="author" content="Dogue">
     <meta name=”keywords” content=”nexus games,
 jogos, github jogos, sala do futuro”>
-    
+
     <!-- Configuração para o Google Bard/Gemini e Redes Sociais -->
     <meta property="og:title" content="Neeexusbr Games">
     <meta property="og:description" content="A Neeexusbr é uma plataforma de jogos com várias funções, como chat em tempo real, conquistas exclusivas e jogos exclusivos.">
@@ -82,23 +82,90 @@ jogos, github jogos, sala do futuro”>
     </header>
     
     <!-- Popup Primeira Visita -->
-    <div id="firstVisitOverlay" class="first-visit-overlay">
-        <div class="first-visit-popup">
-            <h1 style="font-size: 1.6rem;">UPDATE 1.96</h1>
-            <p style="font-size: 1.3rem;">
-  Confira as novidades da atualização!
-</p>
-<ol style="font-size: 0.8rem;">
-  <li>Sistema de perfil</li>
-  <li>Ranks Infinitos</li>
-  <li>Descrições dos itens</li>
-  <li>Bordas finalmente arrumadas</li>
-  <li>Trocar senha e nome de usuário</li>
-  <li>Suporte De Gamepad</li>
-</ol>
-            <button onclick="closeFirstVisitPopup()">Fechar</button>
+    <div id="firstVisitOverlay" class="first-visit-overlay show">
+    <div class="first-visit-popup">
+
+        <div class="update-header">
+            <span class="update-tag">PATCH NOTES</span>
+            <h1>UPDATE <span>1.97</span></h1>
+            <div class="update-line"></div>
         </div>
+
+        <p class="update-subtitle">O que tem de novo?</p>
+
+        <div class="update-list">
+
+            <div class="update-item">
+                <div class="update-number">01</div>
+                <div class="update-icon">🛒</div>
+                <div class="update-content">
+                    <strong>Rework na loja</strong>
+                    <span>A loja recebeu uma reformulação visual.</span>
+                </div>
+            </div>
+
+            <div class="update-item new">
+                <div class="update-number">02</div>
+                <div class="update-icon">🦇</div>
+                <div class="update-content">
+                    <strong>Novo personagem: Kevin</strong>
+                    <span>Conheça o novo gerente da loja.</span>
+                </div>
+                <span class="update-badge">NOVO</span>
+            </div>
+
+            <div class="update-item">
+                <div class="update-number">03</div>
+                <div class="update-icon">🏆</div>
+                <div class="update-content">
+                    <strong>Descrições dos ranks</strong>
+                    <span>Agora os ranks possuem descrições no placar.</span>
+                </div>
+            </div>
+
+            <div class="update-item fixed">
+                <div class="update-number">04</div>
+                <div class="update-icon">🎰</div>
+                <div class="update-content">
+                    <strong>Bug da roleta corrigido</strong>
+                    <span>Problema da roleta foi finalmente resolvido.</span>
+                </div>
+                <span class="update-badge fixed-badge">FIX</span>
+            </div>
+
+            <div class="update-item xp-item">
+                <div class="update-number">05</div>
+
+                <div class="update-icon xp-icon">
+                    <img src="images/ranks/xp1000.png" alt="1000 XP">
+                </div>
+
+                <div class="update-content">
+                    <strong>Novo item: 1000 XP</strong>
+                    <span>Disponível agora na loja.</span>
+                </div>
+
+                <span class="update-badge xp-badge">1000 XP</span>
+            </div>
+
+            <div class="update-item upcoming">
+                <div class="update-number">06</div>
+                <div class="update-icon">🔧</div>
+                <div class="update-content">
+                    <strong>Sincronização da bio</strong>
+                    <span>Correção planejada para uma próxima atualização.</span>
+                </div>
+                <span class="update-badge soon-badge">EM BREVE</span>
+            </div>
+
+        </div>
+
+        <button class="update-close" onclick="closeFirstVisitPopup()">
+            FECHAR
+        </button>
+
     </div>
+</div>
     
     <!-- Modal de Notificações -->
     <div id="notificationsModal" class="notifications-modal" onclick="closeNotifications(event)">
@@ -188,8 +255,11 @@ jogos, github jogos, sala do futuro”>
             
             <!-- Sans Character -->
             <div class="sans-character">
-                <img src="images/sprites/spritedog.png" alt="Sans">
+                <img src="images/sprites/kevinidle.png" alt="Sans">
             </div>
+
+    
+            <img class="shop-frontground" style="z-index: 1; position: absolute;" src="images/backgrounds/shopfg.png" alt="Sans">
             
             <!-- Shop Items Grid (Hidden by default) -->
             <div class="shop-items-grid" id="shopItemsGrid"></div>
@@ -197,9 +267,7 @@ jogos, github jogos, sala do futuro”>
             <!-- Dialog Box -->
             <div class="undertale-dialogbox">
                 <div class="dialog-text" id="dialogText">
-                * Au Au
-                * Sou dogue
-                * quer ração?
+                * Carregando...
                 </div>
                 <div class="dialog-options">
                     <button class="dialog-btn" id="comprar" onclick="undertaleShopAction('comprar')">Comprar</button>
