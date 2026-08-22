@@ -82,12 +82,12 @@ jogos, github jogos, sala do futuro”>
     </header>
     
     <!-- Popup Primeira Visita -->
-    <div id="firstVisitOverlay" class="first-visit-overlay show">
+    <div id="firstVisitOverlay" class="first-visit-overlay">
     <div class="first-visit-popup">
 
         <div class="update-header">
             <span class="update-tag">PATCH NOTES</span>
-            <h1>UPDATE <span>1.97</span></h1>
+            <h1>UPDATE <span>1.98</span></h1>
             <div class="update-line"></div>
         </div>
 
@@ -95,64 +95,66 @@ jogos, github jogos, sala do futuro”>
 
         <div class="update-list">
 
-            <div class="update-item">
+            <div class="update-item fixed">
                 <div class="update-number">01</div>
                 <div class="update-icon">🛒</div>
                 <div class="update-content">
-                    <strong>Rework na loja</strong>
-                    <span>A loja recebeu uma reformulação visual.</span>
+                    <strong>Bugs na loja</strong>
+                    <span>Corrigido bugs da loja (Botões).</span>
                 </div>
+                <span class="update-badge fixed-badge">FIX</span>
             </div>
 
             <div class="update-item new">
                 <div class="update-number">02</div>
-                <div class="update-icon">🦇</div>
+                <div class="update-icon">🎇</div>
                 <div class="update-content">
-                    <strong>Novo personagem: Kevin</strong>
-                    <span>Conheça o novo gerente da loja.</span>
+                    <strong>Destaques</strong>
+                    <span>Os destaques da semana voltaram!</span>
                 </div>
                 <span class="update-badge">NOVO</span>
             </div>
 
-            <div class="update-item">
+            <div class="update-item new">
                 <div class="update-number">03</div>
                 <div class="update-icon">🏆</div>
                 <div class="update-content">
                     <strong>Descrições dos ranks</strong>
                     <span>Agora os ranks possuem descrições no placar.</span>
                 </div>
-            </div>
-
-            <div class="update-item fixed">
-                <div class="update-number">04</div>
-                <div class="update-icon">🎰</div>
-                <div class="update-content">
-                    <strong>Bug da roleta corrigido</strong>
-                    <span>Problema da roleta foi finalmente resolvido.</span>
-                </div>
-                <span class="update-badge fixed-badge">FIX</span>
+                 <span class="update-badge">NOVO</span>
             </div>
 
             <div class="update-item xp-item">
-                <div class="update-number">05</div>
+                <div class="update-number">04</div>
 
                 <div class="update-icon xp-icon">
                     <img src="images/ranks/xp1000.png" alt="1000 XP">
                 </div>
 
                 <div class="update-content">
-                    <strong>Novo item: 1000 XP</strong>
-                    <span>Disponível agora na loja.</span>
+                    <strong>Bug do Item</strong>
+                    <span>Corrijido bug do item "1000 xp" que só possibilitava a compra dele uma vez.</span>
                 </div>
 
                 <span class="update-badge xp-badge">1000 XP</span>
             </div>
 
             <div class="update-item upcoming">
-                <div class="update-number">06</div>
+                <div class="update-number">05</div>
                 <div class="update-icon">🔧</div>
                 <div class="update-content">
                     <strong>Sincronização da bio</strong>
+                    <span>Correção planejada para uma próxima atualização.</span>
+                </div>
+                <span class="update-badge soon-badge">EM BREVE</span>
+            </div>
+
+            <div class="update-item upcoming">
+                <div class="update-number">06</div>
+                <div class="update-icon">🔧</div>
+                <div class="update-content">
+                    <strong>Suporte de Gamepad</strong>
                     <span>Correção planejada para uma próxima atualização.</span>
                 </div>
                 <span class="update-badge soon-badge">EM BREVE</span>
@@ -369,7 +371,7 @@ jogos, github jogos, sala do futuro”>
     <!-- Modal de Roleta -->
     <div id="wheelModal" class="wheel-modal" onclick="closeWheel(event)">
         <div class="wheel-content" onclick="event.stopPropagation();">
-            <div class="wheel-container">
+            <div class="wheel-container" id="wheel-cont">
                 <img class="wheel-spinner" id="wheelSpinner" src="images/sprites/wheel.png" alt="Wheel Sprite" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
                 <div class="wheel-pointer"></div>
             </div>
@@ -922,12 +924,14 @@ jogos, github jogos, sala do futuro”>
     </div>
 
     <main id="mainid">
-        <!-- <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">Metas de Jogo</span>
-        <div class="featured-banner">
-            <h2 style="margin: 0; font-size: 2rem;">Objetivo: Alcance 50 pontos em Jogo de UFO</h2>
-            <p id="50goaltext" style="margin: 5px 0 0 0;">0/50</p>
-        </div> -->
         <p id="welcomeP" style="font-size: 2.4rem; font-family: 'Quad';">Bem-vindo(a),</p>
+
+        <span style="background: var(--accent-color); color: #000; padding: 5px 10px; width: fit-content; border-radius: 5px; font-weight: bold; margin-bottom: 10px;">Destaques da Semana</span>
+        <div class="featured-banner" onclick="destaque()">
+            <h2 style="margin: 0; font-size: 2rem;">Tanki Online</h2>
+            <p id="50goaltext" style="margin: 5px 0 0 0;">Derrote o seus amigos na batalha!</p>
+        </div>
+        
 
         <div class="grid-container" id="gameGrid">
             <a href="https://neeexusbr.github.io/apostilas" class="game-card" data-name="Apostilas" data-category="educativo">
