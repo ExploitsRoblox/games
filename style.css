@@ -256,7 +256,7 @@
             position: absolute;
             top: -8px;
             right: -8px;
-            background: var(--error-color);
+            background: transparent;
             color: white;
             border-radius: 50%;
             width: 24px;
@@ -271,6 +271,7 @@
 
         .notification-badge.active {
             display: flex;
+            background: var(--error-color);
         }
 
         /* Responsivo */

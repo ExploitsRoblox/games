@@ -70,9 +70,7 @@ jogos, github jogos, sala do futuro”>
                 <div class="coins-display" id="coinsDisplay">0
                     <img id="crystalicon" class="crystal-icon" src="images/ranks/crystals/crystal.png" alt="Crystal">
                 </div>
-                <button id="notificationsBtn" class="navbar-notifications-btn" style="display: none" onclick="openNotifications()">
-                    🔔 
-                    <span class="notification-badge" id="notificationBadge"></span>
+                <button id="notificationsBtn" class="navbar-notifications-btn" style="display: none" onclick="openNotifications()">🔔<span class="notification-badge" id="notificationBadge"></span>
                 </button>
                 <button id="userPanelBtn" class="user-panel-btn" style="display: none;" onclick="toggleUserPanel()"></button>
                 <button id="expandbtn" class="navbar-btn" onclick="toggleButtons()" style="border: 2px solid white">☰</button>
@@ -173,7 +171,7 @@ jogos, github jogos, sala do futuro”>
     <div id="notificationsModal" class="notifications-modal" onclick="closeNotifications(event)">
         <div class="notifications-content" onclick="event.stopPropagation();">
             <div class="notifications-header">
-                <h2>🔔 Notificações</h2>
+                <h2>👑 Menu do Dono</h2>
                 <button class="notifications-close" onclick="closeNotifications()">✕</button>
             </div>
             
@@ -499,12 +497,6 @@ jogos, github jogos, sala do futuro”>
 
                 <!-- TAB 2: Gerenciamento Avançado (Apenas Dono) -->
                 <div class="admin-tab-content" id="adminOwnerSection">
-                    <div class="admin-section">
-                        <h3>👥 Listar Usuários</h3>
-                        <button class="admin-btn" onclick="adminListUsers()">Carregar Usuários</button>
-                        <div class="admin-users-list" id="adminUsersList"></div>
-                    </div>
-
                     <div class="admin-section">
                         <h3>♾️ Recursos Infinitos</h3>
                         <div class="admin-form">
@@ -1204,6 +1196,7 @@ jogos, github jogos, sala do futuro”>
                 </div>
             </div>
         </div>
+    <p id="gameCounter">0 jogos atualmente!</p>
     <div class="atua">
        <h2 id="updateText"></h2>
     </div>
