@@ -16,7 +16,7 @@ jogos, github jogos, sala do futuro”>
     <meta property="og:description" content="A Neeexusbr é uma plataforma de jogos com várias funções, como chat em tempo real, conquistas exclusivas e jogos exclusivos.">
     <meta property="og:url" content="https://neeexusbr.github.io/games">
     <meta property="og:type" content="website">
-    <script src="main.js"></script>
+    <script src="main2.js"></script>
     <link rel="stylesheet" href="style.css">
 
     <!-- Dados Estruturados (Ficha técnica para algoritmos de IA) -->
@@ -370,8 +370,13 @@ jogos, github jogos, sala do futuro”>
     <div id="wheelModal" class="wheel-modal" onclick="closeWheel(event)">
         <div class="wheel-content" onclick="event.stopPropagation();">
             <div class="wheel-container" id="wheel-cont">
-                <img class="wheel-spinner" id="wheelSpinner" src="images/sprites/wheel.png" alt="Wheel Sprite" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
-                <div class="wheel-pointer"></div>
+                <!-- Lootbox Grid -->
+                <div class="lootbox-grid-wrapper">
+                    <div class="lootbox-grid" id="lootboxGrid">
+                        <!-- Os quadrados serão gerados pelo JavaScript -->
+                    </div>
+                    <div class="lootbox-indicator"></div>
+                </div>
             </div>
             <div class="wheel-info" id="wheelRewardText">Clique em girar para começar!</div>
             <div class="wheel-info" id="spinsLeft">Giros disponíveis: <span id="spinsCount">0</span></div>
@@ -380,11 +385,10 @@ jogos, github jogos, sala do futuro”>
     <label for="fastSpin" id="fastSpinStatus" style="color: lime; cursor: pointer; display: none;">
         FAST SPIN: ON
     </label>
-            <button class="wheel-button" id="spinBtn" onclick="startSpin()">GIRAR</button>
-            <button class="wheel-close" onclick="closeWheel()">Fechar</button>
+            <button class="tanki-button" id="spinBtn" onclick="startSpin()">GIRAR</button>
+            <button class="tanki-button" onclick="closeWheel()">Fechar</button>
            
         </div> 
-        <div class="jevil"><img src="images/sprites/jevil.png" alt="Jevil"></div>
         <button class="door" onclick="opendoor()"><img src="images/sprites/door.jpg" alt="Door"></img></button>
     </div>
     
@@ -655,6 +659,10 @@ jogos, github jogos, sala do futuro”>
                 <div class="stat-item">
                     <span class="stat-label">Itens Comprados</span>
                     <span class="stat-value" id="unlockedGamesDisplay">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Giros</span>
+                    <span class="stat-value" id="spinRemainingDisplay">0</span>
                 </div>
                 <div id="rankDisplay"></div>
             </div>
