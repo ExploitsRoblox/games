@@ -16,7 +16,7 @@ jogos, github jogos, sala do futuro”>
     <meta property="og:description" content="A Neeexusbr é uma plataforma de jogos com várias funções, como chat em tempo real, conquistas exclusivas e jogos exclusivos.">
     <meta property="og:url" content="https://neeexusbr.github.io/games">
     <meta property="og:type" content="website">
-    <script src="main.js"></script>
+    <script src="main2.js"></script>
     <link rel="stylesheet" href="style.css">
 
     <!-- Dados Estruturados (Ficha técnica para algoritmos de IA) -->
@@ -78,7 +78,6 @@ jogos, github jogos, sala do futuro”>
             </div>
         </div>
     </header>
-    
     <!-- Popup Primeira Visita -->
     <div id="firstVisitOverlay" class="first-visit-overlay">
     <div class="first-visit-popup">
@@ -165,7 +164,23 @@ jogos, github jogos, sala do futuro”>
         </button>
 
     </div>
-</div>
+    </div>
+
+    <div id="tankiOverlay" class="tanki-overlay">
+    <div class="tanki-top">OBRIGADO</div>
+    <div class="tanki-window">
+        <img src="images/sprites/thankyou.png" alt="Obrigado">
+        <ol style="color: lime;">
+            <li>100 Gemas</li>
+            <li>Item: Jogos Secretos</li>
+            <li>Item: Conta Premium</li>
+            <li>100 minutos de Tempo de jogo</li>
+        </ol>
+        <button class="tanki-button" onclick="closeTankiWindow()">
+            FECHAR
+        </button>
+    </div>
+    </div>
     
     <!-- Modal de Notificações -->
     <div id="notificationsModal" class="notifications-modal" onclick="closeNotifications(event)">
@@ -233,6 +248,7 @@ jogos, github jogos, sala do futuro”>
                             <input type="number" class="admin-input" id="codigoPromocionalValor" placeholder="Valor / quantidade" min="1">
                             <input type="text" class="admin-input" id="codigoPromocionalItem" placeholder="ID do item (ex: premium-xp)">
                             <input type="text" class="admin-input" id="codigoPromocionalJogo" placeholder="ID do jogo (ex: secret1)">
+                            <textarea class="admin-input" id="codigoPromocionalRecompensas" placeholder="Lista de recompensas em JSON (opcional): [{&quot;tipo&quot;:&quot;moedas&quot;,&quot;valor&quot;:100},{&quot;tipo&quot;:&quot;spins&quot;,&quot;valor&quot;:5},{&quot;tipo&quot;:&quot;item&quot;,&quot;itemId&quot;:&quot;premium-xp&quot;}]" style="min-height:90px; resize:vertical;"></textarea>
                             <input type="datetime-local" class="admin-input" id="codigoPromocionalExpira">
                             <input type="number" class="admin-input" id="codigoPromocionalMaxUsos" placeholder="Máximo de usos" min="1" value="1">
                             <label style="display: flex; align-items: center; gap: 8px; color: #cbd5e1; font-size: 0.9rem;">
@@ -662,7 +678,7 @@ jogos, github jogos, sala do futuro”>
                 </div>
                 <div class="stat-item">
                     <span class="stat-label">Giros</span>
-                    <span class="stat-value" id="spinRemainingDisplay">0</span>
+                    <span class="stat-value" id="spinsRemainingDisplay">0</span>
                 </div>
                 <div id="rankDisplay"></div>
             </div>
@@ -1228,11 +1244,11 @@ jogos, github jogos, sala do futuro”>
                 </div>
             </div>
         </div>
-    <p id="gameCounter">0 jogos atualmente!</p>
+    <p id="gameCounter"></p>
     <div class="atua">
        <h2 id="updateText"></h2>
     </div>
-    <footer id="weekend-footer" class="wk-footer">Final de semana! 2x XP e 2x Gemas!</footer>
+    <footer id="weekend-footer" style="display: none;" class="wk-footer">Final de semana! 2x XP e 2x Gemas!</footer>
     </main>
 </body>
 </html>

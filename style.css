@@ -72,6 +72,96 @@
      border-image-width: 1rem;      */
 }
 
+.tanki-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(5, 3, 12, 0.78);
+    backdrop-filter: blur(5px);
+
+    z-index: 9999;
+    padding: 20px;
+
+    /* ESCONDIDO POR PADRÃO */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity .25s ease,
+        visibility .25s ease;
+}
+
+/* MOSTRAR */
+.tanki-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+}
+.tanki-top {
+    color: #cdcdcd;
+    text-shadow: 0 0 10px rgb(0, 0, 0);
+    top: -2.05rem;
+    font-family: "Quad";
+    left: 50%;
+    top: -13%;
+    z-index: 10;
+    box-sizing: border-box;
+    min-width: 10rem;
+    padding: 0.5rem 0.625rem;
+    white-space: nowrap;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    box-shadow: rgb(0, 0, 0) 0px 0px 1.3rem 0.1rem inset;
+    align-items: center;
+    background: url(images/backgrounds/dark_grey.jpg) padding-box padding-box, linear-gradient(rgba(255, 255, 255, 0.25) 0%, rgba(0, 0, 0, 0.5) 100%) border-box border-box;
+    border-radius: 0.4375rem 0.4375rem 0.4375rem 0px;
+    border-top-left-radius: 0.4375rem;
+    border-top-right-radius: 0.4375rem;
+    border-bottom-right-radius: 0.4375rem;
+    border-bottom-left-radius: 0px;
+    border-image-width: 0.75rem;
+    animation: updatePopupIn .35s ease-out;
+    border-image-slice: 10;
+    border-image-repeat: unset;
+    border-image-source: url(images/button.svg);
+}
+ .tanki-window {
+    width: min(580px, 95vw);
+    max-height: 90vh;
+    display: flex;
+
+    padding: 28px 30px 25px;
+
+    overflow-y: auto;
+
+    /* background: url('images/backgrounds/dark_grey.jpg'); */
+    background: rgb(0, 34, 0);
+    border-radius: 0.4375rem 0.4375rem 0.4375rem 0px;
+    border-top-left-radius: 0.4375rem;
+    border-top-right-radius: 0.4375rem;
+    border-bottom-right-radius: 0.4375rem;
+    border-bottom-left-radius: 0px;
+    border-image-width: 0.75rem;
+    border-image-slice: 10;
+    border-image-repeat: unset;
+    border-image-source: url(images/border.png);
+    color: white;
+
+    animation: updatePopupIn .35s ease-out;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
 #container-div img {
     width: 150px;
 }
@@ -81,6 +171,7 @@
 .tanki-button {
     transform: scale(0.95);
 }
+
 
         .navbar-container {
             display: flex;
