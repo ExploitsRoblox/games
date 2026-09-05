@@ -16,7 +16,7 @@ jogos, github jogos, sala do futuro”>
     <meta property="og:description" content="A Neeexusbr é uma plataforma de jogos com várias funções, como chat em tempo real, conquistas exclusivas e jogos exclusivos.">
     <meta property="og:url" content="https://neeexusbr.github.io/games">
     <meta property="og:type" content="website">
-    <script src="main.js"></script>
+    <script src="main2.js"></script>
     <link rel="stylesheet" href="style.css">
 
     <!-- Dados Estruturados (Ficha técnica para algoritmos de IA) -->
@@ -238,17 +238,32 @@ jogos, github jogos, sala do futuro”>
                         <div class="admin-form" style="display: grid; gap: 10px;">
                             <input type="text" class="admin-input" id="codigoPromocionalCode" placeholder="Código (ex: NEXUS2026)">
                             <input type="text" class="admin-input" id="codigoPromocionalDescricao" placeholder="Descrição do código">
-                            <select class="admin-input" id="codigoPromocionalTipo">
-                                <option value="moedas">💎 Dar gemas</option>
-                                <option value="item">🎁 Dar item específico</option>
-                                <option value="spins">🎡 Dar giros</option>
-                                <option value="jogo">🔓 Desbloquear jogo</option>
-                                <option value="tempo-jogo">⏱️ Dar tempo de jogo</option>
-                            </select>
-                            <input type="number" class="admin-input" id="codigoPromocionalValor" placeholder="Valor / quantidade" min="1">
-                            <input type="text" class="admin-input" id="codigoPromocionalItem" placeholder="ID do item (ex: premium-xp)">
-                            <input type="text" class="admin-input" id="codigoPromocionalJogo" placeholder="ID do jogo (ex: secret1)">
-                            <textarea class="admin-input" id="codigoPromocionalRecompensas" placeholder="Lista de recompensas em JSON (opcional): [{&quot;tipo&quot;:&quot;moedas&quot;,&quot;valor&quot;:100},{&quot;tipo&quot;:&quot;spins&quot;,&quot;valor&quot;:5},{&quot;tipo&quot;:&quot;item&quot;,&quot;itemId&quot;:&quot;premium-xp&quot;}]" style="min-height:90px; resize:vertical;"></textarea>
+                            <div class="promo-rewards-builder">
+                                <div class="promo-rewards-builder-header">
+                                    <div>
+                                        <strong>Recompensas do código</strong>
+                                        <span>Adicione quantas recompensas quiser, inclusive repetidas.</span>
+                                    </div>
+                                    <button type="button" class="admin-btn promo-add-reward-btn" onclick="adicionarTipoRecompensa()">＋ Adicionar tipo de recompensa</button>
+                                </div>
+                                <div id="codigoPromocionalRecompensasLista" class="promo-rewards-list">
+                                    <div class="promo-reward-row">
+                                        <select class="admin-input promo-reward-type" onchange="atualizarCamposRecompensa(this)">
+                                            <option value="moedas">💎 Gemas</option>
+                                            <option value="item">🎁 Item</option>
+                                            <option value="spins">🎡 Giros</option>
+                                            <option value="jogo">🔓 Jogo</option>
+                                            <option value="tempo-jogo">⏱️ Tempo de jogo</option>
+                                        </select>
+                                        <input type="number" class="admin-input promo-reward-value" placeholder="Quantidade" min="1">
+                                        <input type="text" class="admin-input promo-reward-item" placeholder="ID do item (ex: premium-xp)" hidden>
+                                        <input type="text" class="admin-input promo-reward-game" placeholder="ID do jogo (ex: secret1)" hidden>
+                                        <button type="button" class="promo-remove-reward-btn" onclick="removerTipoRecompensa(this)" title="Remover recompensa" aria-label="Remover recompensa">✕</button>
+                                    </div>
+                                </div>
+                                <label class="promo-json-preview-label" for="codigoPromocionalRecompensasJson">JSON gerado automaticamente</label>
+                                <textarea class="admin-input promo-json-preview" id="codigoPromocionalRecompensasJson" readonly></textarea>
+                            </div>
                             <input type="datetime-local" class="admin-input" id="codigoPromocionalExpira">
                             <input type="number" class="admin-input" id="codigoPromocionalMaxUsos" placeholder="Máximo de usos" min="1" value="1">
                             <label style="display: flex; align-items: center; gap: 8px; color: #cbd5e1; font-size: 0.9rem;">
